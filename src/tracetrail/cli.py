@@ -124,7 +124,8 @@ def compare(args: argparse.Namespace) -> int:
         raise ValueError("No cases selected")
     models = args.models or list(MODELS)
     data = {
-        "suite_id": "tracetrail-synthetic-v1",
+        "suite_id": json.loads(manifest.read_text())["suite_id"],
+        "case_manifest_path": manifest.relative_to(root).as_posix(),
         "created_at": datetime.now(UTC).isoformat(),
         "case_manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest(),
         "protocol": PROTOCOL,
@@ -179,7 +180,7 @@ def parser() -> argparse.ArgumentParser:
         else:
             command.add_argument("--filter", default="{}", help="Exact Query JSON object")
     demo = commands.add_parser("demo")
-    demo.add_argument("--manifest", type=Path, default=Path("evaluation/cases.json"))
+    demo.add_argument("--manifest", type=Path, default=Path("evaluation/cases-v2.json"))
     demo.add_argument("--case", required=True)
     demo.add_argument("--model", default=MODELS[0])
     demo.add_argument("--strategy", choices=("adaptive", "fixed"), default="adaptive")
@@ -197,7 +198,7 @@ def parser() -> argparse.ArgumentParser:
     run.add_argument("--model", default=MODELS[0])
     run.add_argument("--output", type=Path, default=Path("local-results/investigation.json"))
     batch = commands.add_parser("compare")
-    batch.add_argument("--manifest", type=Path, default=Path("evaluation/cases.json"))
+    batch.add_argument("--manifest", type=Path, default=Path("evaluation/cases-v2.json"))
     batch.add_argument("--models", nargs="+")
     batch.add_argument("--split", choices=("all", "development", "heldout"), default="all")
     batch.add_argument("--case", action="append")

@@ -167,11 +167,17 @@ def evaluate_local(
     from tracetrail.evaluation import load_cases, score_run
 
     source = Path(results_path)
-    root = Path(fixture_root)
-    manifest_path = root / "evaluation" / "cases.json"
-    manifest_digest = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+    root = Path(fixture_root).resolve()
     source_bytes = source.read_bytes()
     batch = json.loads(source_bytes)
+    manifest_name = batch.get("case_manifest_path", "evaluation/cases.json")
+    if not isinstance(manifest_name, str):
+        raise ValueError("The case manifest path must be a relative path under evaluation.")
+    manifest_relative = Path(manifest_name)
+    manifest_path = (root / manifest_relative).resolve()
+    if manifest_relative.is_absolute() or not manifest_path.is_relative_to(root / "evaluation"):
+        raise ValueError("The case manifest path must be a relative path under evaluation.")
+    manifest_digest = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
     if batch.get("case_manifest_sha256") != manifest_digest:
         raise ValueError("The results do not match the current case manifest.")
     cases = {case["id"]: case for case in load_cases(manifest_path)}
@@ -277,6 +283,7 @@ def evaluate_local(
         "inference_rerun": False,
         "source_results_sha256": hashlib.sha256(source_bytes).hexdigest(),
         "case_manifest_sha256": manifest_digest,
+        "case_manifest_path": str(manifest_path.relative_to(root)),
         "suite_id": batch["suite_id"],
         "status": "evaluation_failed" if evaluation_failed else "completed",
         "evaluated_runs": serialized_rows,

@@ -1,4 +1,10 @@
-# Synthetic evaluation
+# Frozen local evaluation
+
+The active suite is `tracetrail-synthetic-v2`, selected by `evaluation/cases-v2.json`.
+Its fixtures are in `fixtures/v2/`. The v1 suite and its hashes remain available
+for earlier runs. V1 includes fixture errors described in [CloudTrail semantics](../docs/cloudtrail.md).
+Use v2 for new comparisons. Both suites contain two development and two held-out cases.
+
 
 This suite tests investigation of a small supplied CloudTrail log window. All
 accounts, identities, IP addresses, resources, and API events are invented.
@@ -15,7 +21,7 @@ use documentation ranges. The fixtures use the repository's MIT license.
 One development record contains an instruction in a role description. It is
 untrusted log data. It must not control the investigator.
 
-`cases.json` defines the questions, fixed hypotheses, relevant event IDs, and
+`cases-v2.json` defines the questions, fixed hypotheses, relevant event IDs, and
 claim annotations. Each fixture has a SHA-256 hash of its exact file bytes.
 `load_cases` checks those hashes and verifies each annotated field against the
 source record. Citations use
@@ -30,8 +36,8 @@ suite is no longer an untouched test set for the changed version.
 
 Do not edit this frozen suite in place after results are recorded. A later suite
 must have a new ID and keep old fixtures, annotations, and results available.
-`fixtures/build_synthetic.py` can reproduce the current bytes from its invented
-record definitions. It has no model, AWS, or network calls.
+`fixtures/build_synthetic_v2.py` reproduces the current bytes from the preserved
+invented v1 definitions and documented AWS field corrections. It has no model, AWS, or network calls.
 
 ## What the scorer checks
 

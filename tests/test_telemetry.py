@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import shutil
 import socket
 from pathlib import Path
 from typing import TypedDict
@@ -148,10 +149,9 @@ def test_graph_tool_and_nested_runnable_spans_saved(tmp_path, network_forbidden)
     assert tool_span["outputs"] == {"output": 5}
 
 
-def _test_batch():
+def _test_batch(manifest_path=ROOT / "evaluation" / "cases.json"):
     from tracetrail.evaluation import load_cases
 
-    manifest_path = ROOT / "evaluation" / "cases.json"
     manifest = json.loads(manifest_path.read_text())
     case = load_cases(manifest_path)[0]
     # An intentionally failed, test-only run. No inference result is fabricated.
@@ -204,4 +204,37 @@ def test_offline_evaluation_rejects_changed_input_hash(tmp_path):
     result_path = tmp_path / "test-only-results.json"
     result_path.write_text(json.dumps(batch))
     with pytest.raises(ValueError, match="case manifest"):
+        evaluate_local(result_path, ROOT)
+
+
+def test_offline_evaluation_uses_recorded_versioned_manifest(tmp_path, network_forbidden):
+    fixture_root = tmp_path / "test-only-suite"
+    shutil.copytree(ROOT / "fixtures", fixture_root / "fixtures")
+    manifest_path = fixture_root / "evaluation" / "cases-test-version.json"
+    manifest_path.parent.mkdir()
+    manifest = json.loads((ROOT / "evaluation" / "cases.json").read_text())
+    manifest["suite_id"] = "tracetrail-test-only-versioned-suite"
+    manifest_path.write_text(json.dumps(manifest))
+    batch, _ = _test_batch(manifest_path)
+    batch["case_manifest_path"] = "evaluation/cases-test-version.json"
+    result_path = tmp_path / "test-only-versioned-results.json"
+    result_path.write_text(json.dumps(batch))
+    report = evaluate_local(result_path, fixture_root)
+    document = json.loads(Path(report["path"]).read_text())
+    assert document["suite_id"] == manifest["suite_id"]
+    assert document["case_manifest_path"] == batch["case_manifest_path"]
+    assert document["case_manifest_sha256"] == batch["case_manifest_sha256"]
+    assert document["status"] == "completed"
+
+
+@pytest.mark.parametrize(
+    "manifest_name",
+    ["../evaluation/cases.json", "/tmp/cases.json", "fixtures/dev-role-pivot.json", {}],
+)
+def test_offline_evaluation_rejects_manifest_outside_evaluation(tmp_path, manifest_name):
+    batch, _ = _test_batch()
+    batch["case_manifest_path"] = manifest_name
+    result_path = tmp_path / "test-only-results.json"
+    result_path.write_text(json.dumps(batch))
+    with pytest.raises(ValueError, match="relative path under evaluation"):
         evaluate_local(result_path, ROOT)

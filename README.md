@@ -18,9 +18,9 @@ The default model is `qwen3.8:27b-q4_K_M`. The approved comparison models are `g
 The default demo writes `local-results/demo.json` with private file permissions. This directory is excluded from Git. The report contains the model's findings, exact field observations, a timeline, query history, errors, model metadata, and local execution traces. Failed model outputs remain visible. A new run uses a new filename when the requested result file already exists. An invalid or truncated output does not produce a replacement report.
 
 ```sh
-uv run tracetrail query fixtures/dev-role-pivot.json \
+uv run tracetrail query fixtures/v2/dev-role-pivot.json \
   --filter '{"event_name":"AssumeRole","limit":5}'
-uv run tracetrail resolve fixtures/dev-role-pivot.json \
+uv run tracetrail resolve fixtures/v2/dev-role-pivot.json \
   10000000-0000-4000-8000-000000000003
 uv run tracetrail compare --output local-results/comparison.json
 uv run tracetrail local-evaluate local-results/comparison.json
@@ -52,7 +52,7 @@ Hosted tracing is disabled, including ambient tracing settings and inherited cal
 
 ## Compare methods and models
 
-The [frozen synthetic suite](evaluation/README.md) has two development cases and two held-out cases. All events, accounts, credentials, and names are invented. The fixtures represent API sequences, not real incidents.
+The active `tracetrail-synthetic-v2` [frozen synthetic suite](evaluation/README.md) has two development cases and two held-out cases. All events, accounts, credentials, and names are invented. The fixtures represent API sequences, not real incidents. V2 corrects the original suite's STS flags and issuance times, and removes an unrealistic read-only status response. V1 remains available for old result hashes. See [CloudTrail semantics and limits](docs/cloudtrail.md).
 
 The adaptive method lets the model choose queries. The fixed method always searches the seed identity, source address, and access key in a one-hour window on each side of the seed. Both methods use the same evidence tools, record limits, report prompt, and report schema. The adaptive method also makes planning calls. Those calls count toward its latency and model cost. All three models receive the same frozen prompts, cases, schemas, and budgets. Qwen is the reference for the method comparison.
 

@@ -10,4 +10,3 @@ local-logs/
 local-results/
 *.db
 .DS_Store
-

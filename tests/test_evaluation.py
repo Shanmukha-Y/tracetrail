@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import copy
+import hashlib
+import importlib.util
 import json
+from datetime import datetime
 from pathlib import Path
 
 import pytest
@@ -11,6 +14,7 @@ import pytest
 from tracetrail.evaluation import load_cases, score_run
 
 MANIFEST = Path(__file__).resolve().parents[1] / "evaluation/cases.json"
+V2_MANIFEST = MANIFEST.with_name("cases-v2.json")
 
 
 def cases():
@@ -42,7 +46,12 @@ def constructed_report(case: dict) -> dict:
         for h in case["hypotheses"]
     ]
     observations = [
-        {"citation": by_id[o["event_id"]], "field": o["field"], "value": copy.deepcopy(o["value"])}
+        {
+            "citation": by_id[o["event_id"]],
+            "field": o["field"],
+            "present": o.get("present", True),
+            "value": copy.deepcopy(o["value"]),
+        }
         for annotation in case["annotations"]
         for o in annotation["required_observations"]
     ]
@@ -309,3 +318,113 @@ def test_loader_checks_annotation_against_raw_field(tmp_path):
     manifest_path.write_text(json.dumps(manifest))
     with pytest.raises(ValueError, match="Annotated field"):
         load_cases(manifest_path)
+
+
+@pytest.mark.parametrize("case_index", range(4))
+def test_corrected_v2_fixture_claims_pass_exact_support(case_index):
+    case = load_cases(V2_MANIFEST)[case_index]
+    metrics = score_run(case, constructed_report(case))
+    assert metrics["suite_id"] == "tracetrail-synthetic-v2"
+    assert metrics["supported_annotation_rate"] == 1
+    assert metrics["unsupported_claims"] == 0
+
+
+def test_v2_read_only_semantics_and_session_issuance_are_consistent():
+    orphan_count = 0
+    for case in load_cases(V2_MANIFEST):
+        records = case["_fixture_records"]
+        issuance = {}
+        earliest_session = {}
+        for record in records:
+            if record["eventName"] == "AssumeRole":
+                assert record["readOnly"] is True
+                if "errorCode" not in record:
+                    response = record["responseElements"]
+                    assert isinstance(response, dict)
+                    assert "secretAccessKey" not in response["credentials"]
+                    issuance[response["credentials"]["accessKeyId"]] = record["eventTime"]
+            elif record["readOnly"] is True:
+                assert record["responseElements"] is None
+            identity = record["userIdentity"]
+            if identity["type"] == "AssumedRole":
+                key = identity["accessKeyId"]
+                earliest_session[key] = min(
+                    earliest_session.get(key, record["eventTime"]), record["eventTime"]
+                )
+        for record in records:
+            identity = record["userIdentity"]
+            if identity["type"] != "AssumedRole":
+                continue
+            key = identity["accessKeyId"]
+            created = identity["sessionContext"]["attributes"]["creationDate"]
+            if key in issuance:
+                assert created == issuance[key]
+            else:
+                orphan_count += 1
+                assert created == earliest_session[key]
+            assert datetime.fromisoformat(created.replace("Z", "+00:00")) <= datetime.fromisoformat(
+                record["eventTime"].replace("Z", "+00:00")
+            )
+    assert orphan_count == 1
+
+
+def test_v2_status_request_cannot_establish_trail_state():
+    case = next(c for c in load_cases(V2_MANIFEST) if c["id"] == "dev-maintenance")
+    annotations = {a["claim_id"]: a for a in case["annotations"]}
+    assert annotations["persistent_disruption"]["expected_status"] == "uncertain"
+    assert all(
+        o["field"] != "responseElements.isLogging"
+        for annotation in case["annotations"]
+        for o in annotation["required_observations"]
+    )
+    status_record = next(r for r in case["_fixture_records"] if r["eventName"] == "GetTrailStatus")
+    assert status_record["responseElements"] is None
+    report = constructed_report(case)
+    status_finding = next(f for f in report["findings"] if f["claim_id"] == "persistent_disruption")
+    status_finding["status"] = "refuted"
+    metrics = score_run(case, report)
+    assert metrics["unsupported_claims"] == 1
+
+
+def test_v2_no_api_error_claim_requires_observed_field_absence():
+    case = next(c for c in load_cases(V2_MANIFEST) if c["id"] == "dev-maintenance")
+    report = constructed_report(case)
+    missing_error = next(o for o in report["observations"] if o["present"] is False)
+    missing_error["present"] = True
+    metrics = score_run(case, report)
+    assert metrics["invalid_observation_count"] == 1
+    assert metrics["unsupported_claims"] == 1
+
+
+def test_v2_builder_is_repeatable_and_keeps_v1_bytes(tmp_path):
+    root = MANIFEST.parent.parent
+    for case in load_cases(MANIFEST):
+        target = tmp_path / case["fixture"]
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((root / case["fixture"]).read_bytes())
+    copied_manifest = tmp_path / "evaluation/cases.json"
+    copied_manifest.parent.mkdir()
+    copied_manifest.write_bytes(MANIFEST.read_bytes())
+    v1_files = [copied_manifest, *sorted((tmp_path / "fixtures").glob("*.json"))]
+    original = {path: path.read_bytes() for path in v1_files}
+    spec = importlib.util.spec_from_file_location(
+        "fixture_builder_v2_test_only", root / "fixtures/build_synthetic_v2.py"
+    )
+    assert spec and spec.loader
+    builder = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(builder)
+    builder.ROOT = tmp_path
+    builder.V1_MANIFEST = copied_manifest
+    builder.build()
+    generated_manifest = tmp_path / "evaluation/cases-v2.json"
+    assert generated_manifest.read_bytes() == V2_MANIFEST.read_bytes()
+    generated = load_cases(generated_manifest)
+    for case in generated:
+        assert (tmp_path / case["fixture"]).read_bytes() == (root / case["fixture"]).read_bytes()
+    builder.build()
+    assert generated_manifest.read_bytes() == V2_MANIFEST.read_bytes()
+    for path, payload in original.items():
+        assert path.read_bytes() == payload
+    assert hashlib.sha256(copied_manifest.read_bytes()).hexdigest() == (
+        "2271b38c065aea28868f5b1578a2b9368ed5f82f684afb02bdf05d8b68a012e7"
+    )

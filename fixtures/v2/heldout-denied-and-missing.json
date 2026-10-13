@@ -1,0 +1,91 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "errorCode": "AccessDenied",
+      "errorMessage": "Synthetic request was denied.",
+      "eventCategory": "Management",
+      "eventID": "10000000-0000-4000-8000-000000000201",
+      "eventName": "StopLogging",
+      "eventSource": "cloudtrail.amazonaws.com",
+      "eventTime": "2026-01-20T15:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "90000000-0000-4000-8000-000000000201",
+      "requestParameters": {
+        "name": "arn:aws:cloudtrail:us-east-1:000000000000:trail/synthetic-main"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.71",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICHLD0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/export-helper",
+        "principalId": "AIDASYNTHETICEXPORT-HELPER",
+        "type": "IAMUser",
+        "userName": "export-helper"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "errorCode": "AccessDenied",
+      "errorMessage": "Synthetic request was denied.",
+      "eventCategory": "Management",
+      "eventID": "10000000-0000-4000-8000-000000000202",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-01-20T15:01:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "90000000-0000-4000-8000-000000000202",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/IncidentAdmin",
+        "roleSessionName": "unknown-session"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.71",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICHLD0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/export-helper",
+        "principalId": "AIDASYNTHETICEXPORT-HELPER",
+        "type": "IAMUser",
+        "userName": "export-helper"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "10000000-0000-4000-8000-000000000203",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-01-20T15:02:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "90000000-0000-4000-8000-000000000203",
+      "requestParameters": null,
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.31",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICNOI0004",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/inventory",
+        "principalId": "AIDASYNTHETICINVENTORY",
+        "type": "IAMUser",
+        "userName": "inventory"
+      }
+    }
+  ]
+}

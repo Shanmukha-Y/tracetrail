@@ -21,7 +21,13 @@ The development comparison in `local-results/development-v2.json` recorded eight
 
 The citation format supplied to models was then changed to short local aliases. Each report alias resolves to the original file hash and record index. The final stored report uses full citations. This change reduces output length and does not relax field or citation validation.
 
-The final protocol is `tracetrail-v3`. The first real Qwen adaptive run completed with no validation errors. Its local trace has 3 model spans and 1 query-tool span. The observation schema now distinguishes absent fields from fields with a JSON null. The final comparison uses all four frozen cases across the three models, with a Qwen fixed-search control for each case. No prompt or case changes will be made from held-out outputs. Full results will be recorded after the comparison completes. Raw model outputs, logs, and traces stay in the ignored local results directory.
+The final protocol is `tracetrail-v3`. The first real Qwen adaptive run completed with no validation errors. Its local trace has 3 model spans and 1 query-tool span. The observation schema now distinguishes absent fields from fields with a JSON null. The final comparison uses the corrected `tracetrail-synthetic-v2` suite with the same frozen `tracetrail-v3` prompt and budgets. The older v1 comparison was stopped while waiting for the model lock; its 13 completed cell records remain intact, and it is not a complete benchmark. No prompt changes were made from held-out outputs. All eight actual Qwen v2 investigations have completed with valid reports. Gemma and Mistral use the same four cases next. Full results will be recorded after the comparison completes. Raw model outputs, logs, and traces stay in the ignored local results directory.
+
+## CloudTrail fixture review
+
+Independent review against official AWS documentation found incorrect STS read-only flags, credential issuance dates, and a read-only GetTrailStatus response in v1. The separate v2 suite corrects these fields. Its maintenance hypotheses keep trail state uncertain, since ordinary CloudTrail logs omit that API response. V1 fixtures, annotations, hashes, and results remain intact. These corrections came from AWS documentation, not held-out model outputs. See [the evidence guide](cloudtrail.md).
+
+The v2 manifest hash is `c30eb66718886e6a3d80efe1f034bf913634c9e839873e6fcb30d8f222e90446`.
 
 ## Release checks still open
 
@@ -34,3 +40,7 @@ The final protocol is `tracetrail-v3`. The first real Qwen adaptive run complete
 - Confirm a clean remote commit and CI for that exact commit.
 
 A full local LangSmith server and UI remain outside this increment. Official self-hosting requires an Enterprise add-on license. The application does not upload to a hosted service or configure a licensed deployment. Offline SDK evaluation and disk traces do not need an account or key.
+
+## Support metric interpretation
+
+The `unsupported_claims` counter reports failures of the strict field and citation annotations. A missing required observation or citation can fail this check even when the status label is correct. It is not a count of proven semantic hallucinations. The scorer does not evaluate planner reasons or narrative limitations. Development-only human review found incomplete search windows, premature finishes, and language that overstated what an absent API error establishes. These remain release risks.

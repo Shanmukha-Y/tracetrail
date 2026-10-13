@@ -89,6 +89,12 @@ run. The output file ends in `.langsmith-local.json` and contains real SDK
 evaluation traces and feedback. Its replay timestamps describe evaluation,
 while the original model execution timestamps remain in the stored result.
 
+Evaluation selects the `case_manifest_path` recorded in the result batch. The
+path must be relative to the repository root and stay under `evaluation/`.
+Older batches without this field use `evaluation/cases.json`. The evaluator
+does not move a historical result to a newer suite or substitute new fixture
+records when the original hashes differ.
+
 The SDK requires a client object even for offline feedback handling. TraceTrail
 uses the real client with a transport that rejects every HTTP request, an empty
 key, and no automatic batching. Both standard and newer API transports are
