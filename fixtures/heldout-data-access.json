@@ -1,0 +1,210 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "10000000-0000-4000-8000-000000000301",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-01-21T09:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "90000000-0000-4000-8000-000000000301",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/DataAudit",
+        "roleSessionName": "audit-19"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/DataAudit/audit-19",
+          "assumedRoleId": "AROASYNTHETIC:audit-19"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICHLD0002",
+          "expiration": "2026-01-21T10:00:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.99",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICHLD0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/auditor",
+        "principalId": "AIDASYNTHETICAUDITOR",
+        "type": "IAMUser",
+        "userName": "auditor"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Data",
+      "eventID": "10000000-0000-4000-8000-000000000302",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-01-21T09:01:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": false,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "90000000-0000-4000-8000-000000000302",
+      "requestParameters": {
+        "bucketName": "synthetic-records",
+        "key": "exports/sample.json"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "198.51.100.99",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICHLD0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/DataAudit/audit-19",
+        "principalId": "AROASYNTHETIC:audit-19",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-01-12T10:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/DataAudit",
+            "principalId": "AROASYNTHETIC",
+            "type": "Role",
+            "userName": "DataAudit"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "errorCode": "AccessDenied",
+      "errorMessage": "Synthetic request was denied.",
+      "eventCategory": "Data",
+      "eventID": "10000000-0000-4000-8000-000000000303",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-01-21T09:02:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": false,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "90000000-0000-4000-8000-000000000303",
+      "requestParameters": {
+        "bucketName": "synthetic-records",
+        "key": "restricted/secret.json"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "198.51.100.99",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICHLD0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/DataAudit/audit-19",
+        "principalId": "AROASYNTHETIC:audit-19",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-01-12T10:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/DataAudit",
+            "principalId": "AROASYNTHETIC",
+            "type": "Role",
+            "userName": "DataAudit"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "errorCode": "AccessDenied",
+      "errorMessage": "Synthetic request was denied.",
+      "eventCategory": "Data",
+      "eventID": "10000000-0000-4000-8000-000000000304",
+      "eventName": "DeleteObject",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-01-21T09:03:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": false,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "90000000-0000-4000-8000-000000000304",
+      "requestParameters": {
+        "bucketName": "synthetic-records",
+        "key": "exports/sample.json"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "198.51.100.99",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICHLD0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/DataAudit/audit-19",
+        "principalId": "AROASYNTHETIC:audit-19",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-01-12T10:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/DataAudit",
+            "principalId": "AROASYNTHETIC",
+            "type": "Role",
+            "userName": "DataAudit"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Data",
+      "eventID": "10000000-0000-4000-8000-000000000305",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-01-21T09:02:30Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": false,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "90000000-0000-4000-8000-000000000305",
+      "requestParameters": {
+        "bucketName": "synthetic-records",
+        "key": "exports/unrelated.json"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.55",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICNOI0005",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/BackupRead/backup",
+        "principalId": "AROASYNTHETIC:backup",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-01-12T10:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/BackupRead",
+            "principalId": "AROASYNTHETIC",
+            "type": "Role",
+            "userName": "BackupRead"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    }
+  ]
+}

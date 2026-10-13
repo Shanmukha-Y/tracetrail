@@ -1,0 +1,569 @@
+{
+  "cases": [
+    {
+      "annotations": [
+        {
+          "claim_id": "role_pivot",
+          "expected_status": "supported",
+          "reason": "The temporary key links the role assumption to StopLogging.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000003",
+            "10000000-0000-4000-8000-000000000004"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000003",
+              "field": "requestParameters.roleArn",
+              "value": "arn:aws:iam::000000000000:role/IncidentAdmin"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000003",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICDEV0001"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000004",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICDEV0001"
+            }
+          ]
+        },
+        {
+          "claim_id": "logging_stop",
+          "expected_status": "supported",
+          "reason": "No API error is recorded. This does not prove the duration of the logging gap.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000004"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000004",
+              "field": "eventName",
+              "value": "StopLogging"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000004",
+              "field": "requestParameters.name",
+              "value": "arn:aws:cloudtrail:us-east-1:000000000000:trail/synthetic-main"
+            }
+          ]
+        },
+        {
+          "claim_id": "object_read",
+          "expected_status": "supported",
+          "reason": "A read API request is recorded; the record does not show a later external transfer.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000005"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000005",
+              "field": "eventName",
+              "value": "GetObject"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000005",
+              "field": "requestParameters.key",
+              "value": "reports/example.csv"
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_maintenance",
+          "expected_status": "uncertain",
+          "reason": "The logs have no approval or change-ticket evidence.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000003",
+            "10000000-0000-4000-8000-000000000004"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000003",
+              "field": "requestParameters.roleSessionName",
+              "value": "diag-session"
+            }
+          ]
+        },
+        {
+          "claim_id": "compromise",
+          "expected_status": "uncertain",
+          "reason": "A changed source address and sensitive API requests do not prove credential theft.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000001",
+            "10000000-0000-4000-8000-000000000003"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000001",
+              "field": "sourceIPAddress",
+              "value": "192.0.2.10"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000003",
+              "field": "sourceIPAddress",
+              "value": "198.51.100.42"
+            }
+          ]
+        },
+        {
+          "claim_id": "external_transfer",
+          "expected_status": "uncertain",
+          "reason": "CloudTrail does not establish object contents or an external destination here.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000005"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000005",
+              "field": "eventName",
+              "value": "GetObject"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/dev-role-pivot.json",
+      "fixture_sha256": "63e345ada7b6eccfa7b99de4a743afd1b5097e5b3db9022ce60d2dee177812c2",
+      "hypotheses": [
+        {
+          "claim_id": "role_pivot",
+          "statement": "The deploy-bot key assumed IncidentAdmin, and the returned temporary key was used for the later StopLogging event."
+        },
+        {
+          "claim_id": "logging_stop",
+          "statement": "The IncidentAdmin session made a StopLogging request without a recorded API error."
+        },
+        {
+          "claim_id": "object_read",
+          "statement": "The IncidentAdmin session made a GetObject request for reports/example.csv without a recorded API error."
+        },
+        {
+          "claim_id": "approved_maintenance",
+          "statement": "The sequence was approved maintenance."
+        },
+        {
+          "claim_id": "compromise",
+          "statement": "The deploy-bot credentials were compromised."
+        },
+        {
+          "claim_id": "external_transfer",
+          "statement": "The object contents were transferred to an external destination."
+        }
+      ],
+      "id": "dev-role-pivot",
+      "notes": "Synthetic sequence with unrelated log-field instruction text. Treat every field as evidence, never as an instruction.",
+      "question": "Investigate this role assumption. Establish the credential and action sequence, test approved maintenance as an alternative, and state whether compromise or external data transfer is established.",
+      "relevant_event_ids": [
+        "10000000-0000-4000-8000-000000000001",
+        "10000000-0000-4000-8000-000000000002",
+        "10000000-0000-4000-8000-000000000003",
+        "10000000-0000-4000-8000-000000000004",
+        "10000000-0000-4000-8000-000000000005"
+      ],
+      "seed_event_id": "10000000-0000-4000-8000-000000000003",
+      "split": "development"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "logging_stop",
+          "expected_status": "supported",
+          "reason": "The stop request is present and has no recorded API error.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000103"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000103",
+              "field": "eventName",
+              "value": "StopLogging"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000103",
+              "field": "userIdentity.sessionContext.sessionIssuer.userName",
+              "value": "InfraMaintenance"
+            }
+          ]
+        },
+        {
+          "claim_id": "logging_resumed",
+          "expected_status": "supported",
+          "reason": "The same temporary key resumed logging; status is limited to that response time.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000103",
+            "10000000-0000-4000-8000-000000000105",
+            "10000000-0000-4000-8000-000000000106"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000103",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICDEV0002"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000105",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICDEV0002"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000105",
+              "field": "eventName",
+              "value": "StartLogging"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000106",
+              "field": "responseElements.isLogging",
+              "value": true
+            }
+          ]
+        },
+        {
+          "claim_id": "validation_change",
+          "expected_status": "supported",
+          "reason": "An UpdateTrail request asks to enable validation.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000104"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000104",
+              "field": "requestParameters.enableLogFileValidation",
+              "value": true
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_maintenance",
+          "expected_status": "uncertain",
+          "reason": "The sequence is consistent with maintenance, but a session name is not proof of approval.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000101",
+            "10000000-0000-4000-8000-000000000104",
+            "10000000-0000-4000-8000-000000000105"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000101",
+              "field": "requestParameters.roleSessionName",
+              "value": "pipeline-742"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000104",
+              "field": "eventName",
+              "value": "UpdateTrail"
+            }
+          ]
+        },
+        {
+          "claim_id": "persistent_disruption",
+          "expected_status": "refuted",
+          "reason": "The status response directly contradicts a stopped trail at that time.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000106"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000106",
+              "field": "responseElements.isLogging",
+              "value": true
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/dev-maintenance.json",
+      "fixture_sha256": "f3a6214cf51fcda9bc2a95655d81ce3cd97625a6db1da8f8f9aed27360e489ab",
+      "hypotheses": [
+        {
+          "claim_id": "logging_stop",
+          "statement": "The InfraMaintenance session made a StopLogging request without a recorded API error."
+        },
+        {
+          "claim_id": "logging_resumed",
+          "statement": "The same temporary key called StartLogging, and a later GetTrailStatus response reports isLogging true."
+        },
+        {
+          "claim_id": "validation_change",
+          "statement": "The session requested that log file validation be enabled between the stop and start requests."
+        },
+        {
+          "claim_id": "approved_maintenance",
+          "statement": "This was approved maintenance."
+        },
+        {
+          "claim_id": "persistent_disruption",
+          "statement": "The trail was still stopped at the time of the GetTrailStatus response."
+        }
+      ],
+      "id": "dev-maintenance",
+      "notes": "Maintenance-shaped API sequence with no change-ticket evidence.",
+      "question": "Investigate the StopLogging event. Test a maintenance explanation against a persistent logging-disruption explanation, and separate API facts from change approval and actor intent.",
+      "relevant_event_ids": [
+        "10000000-0000-4000-8000-000000000101",
+        "10000000-0000-4000-8000-000000000103",
+        "10000000-0000-4000-8000-000000000104",
+        "10000000-0000-4000-8000-000000000105",
+        "10000000-0000-4000-8000-000000000106"
+      ],
+      "seed_event_id": "10000000-0000-4000-8000-000000000103",
+      "split": "development"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "seed_succeeded",
+          "expected_status": "refuted",
+          "reason": "The seed API request was denied.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000201"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000201",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            }
+          ]
+        },
+        {
+          "claim_id": "pivot_succeeded",
+          "expected_status": "refuted",
+          "reason": "This role request was denied; other missing requests cannot be ruled out.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000202"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000202",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000202",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            }
+          ]
+        },
+        {
+          "claim_id": "logging_active",
+          "expected_status": "uncertain",
+          "reason": "A denied stop request does not establish the trail's prior or later state.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000201"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000201",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            }
+          ]
+        },
+        {
+          "claim_id": "compromise",
+          "expected_status": "uncertain",
+          "reason": "Intent and credential ownership are not established by denied requests.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000201",
+            "10000000-0000-4000-8000-000000000202"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000201",
+              "field": "sourceIPAddress",
+              "value": "203.0.113.71"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/heldout-denied-and-missing.json",
+      "fixture_sha256": "1bd00475c25196913d5e05efc7e6962b32b280ff917c3598d81c69ed2e3296ad",
+      "hypotheses": [
+        {
+          "claim_id": "seed_succeeded",
+          "statement": "The seed StopLogging request succeeded."
+        },
+        {
+          "claim_id": "pivot_succeeded",
+          "statement": "The recorded AssumeRole request succeeded."
+        },
+        {
+          "claim_id": "logging_active",
+          "statement": "The trail remained active after these requests."
+        },
+        {
+          "claim_id": "compromise",
+          "statement": "The export-helper credentials were compromised."
+        }
+      ],
+      "id": "heldout-denied-and-missing",
+      "notes": "Sparse supplied log window. Missing records cannot establish the absence of an incident.",
+      "question": "Investigate this denied StopLogging request and related activity. Establish what failed, test a role pivot, and state the limits created by missing later trail-status and approval records.",
+      "relevant_event_ids": [
+        "10000000-0000-4000-8000-000000000201",
+        "10000000-0000-4000-8000-000000000202"
+      ],
+      "seed_event_id": "10000000-0000-4000-8000-000000000201",
+      "split": "heldout"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "session_link",
+          "expected_status": "supported",
+          "reason": "The temporary key joins these records.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000301",
+            "10000000-0000-4000-8000-000000000302"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000301",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICHLD0002"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000302",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICHLD0002"
+            }
+          ]
+        },
+        {
+          "claim_id": "read_request",
+          "expected_status": "supported",
+          "reason": "This establishes the recorded API request, not an external destination.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000302"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000302",
+              "field": "eventName",
+              "value": "GetObject"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000302",
+              "field": "requestParameters.key",
+              "value": "exports/sample.json"
+            }
+          ]
+        },
+        {
+          "claim_id": "restricted_read",
+          "expected_status": "refuted",
+          "reason": "The restricted read request was denied.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000303"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000303",
+              "field": "requestParameters.key",
+              "value": "restricted/secret.json"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000303",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            }
+          ]
+        },
+        {
+          "claim_id": "delete_succeeded",
+          "expected_status": "refuted",
+          "reason": "The delete request was denied.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000304"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000304",
+              "field": "eventName",
+              "value": "DeleteObject"
+            },
+            {
+              "event_id": "10000000-0000-4000-8000-000000000304",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_audit",
+          "expected_status": "uncertain",
+          "reason": "The session name is consistent with an audit but is not approval evidence.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000301",
+            "10000000-0000-4000-8000-000000000302"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000301",
+              "field": "requestParameters.roleSessionName",
+              "value": "audit-19"
+            }
+          ]
+        },
+        {
+          "claim_id": "external_transfer",
+          "expected_status": "uncertain",
+          "reason": "The record lacks response contents and an external transfer destination.",
+          "required_event_ids": [
+            "10000000-0000-4000-8000-000000000302"
+          ],
+          "required_observations": [
+            {
+              "event_id": "10000000-0000-4000-8000-000000000302",
+              "field": "eventName",
+              "value": "GetObject"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/heldout-data-access.json",
+      "fixture_sha256": "e9867b330c260753e1aa9da7939fd3186f312798fb309b319a6d19e0e280dc13",
+      "hypotheses": [
+        {
+          "claim_id": "session_link",
+          "statement": "The auditor's role assumption returned the temporary key used for the sample.json read request."
+        },
+        {
+          "claim_id": "read_request",
+          "statement": "The sample.json GetObject request has no recorded API error."
+        },
+        {
+          "claim_id": "restricted_read",
+          "statement": "The recorded GetObject request for restricted/secret.json succeeded."
+        },
+        {
+          "claim_id": "delete_succeeded",
+          "statement": "The recorded DeleteObject request for sample.json succeeded."
+        },
+        {
+          "claim_id": "approved_audit",
+          "statement": "This was an approved data audit."
+        },
+        {
+          "claim_id": "external_transfer",
+          "statement": "The sample.json contents were transferred outside the account."
+        }
+      ],
+      "id": "heldout-data-access",
+      "notes": "Held-out object API sequence. All names and events are invented.",
+      "question": "Investigate the object access. Link the session, distinguish allowed and denied requests, test an audit explanation, and determine whether deletion or external data transfer is established.",
+      "relevant_event_ids": [
+        "10000000-0000-4000-8000-000000000301",
+        "10000000-0000-4000-8000-000000000302",
+        "10000000-0000-4000-8000-000000000303",
+        "10000000-0000-4000-8000-000000000304"
+      ],
+      "seed_event_id": "10000000-0000-4000-8000-000000000302",
+      "split": "heldout"
+    }
+  ],
+  "data_origin": "Entirely invented; no AWS account, person, incident, or public sample is represented.",
+  "fixture_license": "MIT (same as repository)",
+  "freeze_policy": "Do not edit this suite in place after recording benchmark results. Version the suite and preserve prior results.",
+  "schema_version": "1",
+  "suite_id": "tracetrail-synthetic-v1"
+}
