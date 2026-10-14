@@ -110,3 +110,10 @@ states that self-hosting is an Enterprise add-on and requires a license.
 TraceTrail does not install a server, accept service terms, set up billing, or
 create credentials. A full local LangSmith UI is therefore unavailable in this
 increment. Offline SDK evaluation and disk traces work without that server.
+
+The environment was checked on 2026-10-14 using presence flags only. Neither
+`LANGSMITH_API_KEY` nor `LANGCHAIN_API_KEY` was present. No workspace ID, project
+setting, or repository `.env` file was present. This does not prove that the
+user has no account. Hosted tracing would require existing authorized access,
+an approved destination, and explicit permission to export synthetic traces.
+No hosted request was made. Private logs must stay local.

@@ -1,0 +1,470 @@
+{
+  "cases": [
+    {
+      "annotations": [
+        {
+          "claim_id": "caller_source_change",
+          "expected_status": "supported",
+          "reason": "The exact original key occurs in both events, separated by three and a half hours.",
+          "required_event_ids": [
+            "30000000-0000-4000-8000-000000000601",
+            "30000000-0000-4000-8000-000000000602"
+          ],
+          "required_observations": [
+            {
+              "event_id": "30000000-0000-4000-8000-000000000601",
+              "field": "eventName",
+              "value": "GetCallerIdentity"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000601",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV3D0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV3D0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000601",
+              "field": "userIdentity.userName",
+              "value": "release-helper"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "userIdentity.userName",
+              "value": "release-helper"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000601",
+              "field": "sourceIPAddress",
+              "value": "192.0.2.112"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "sourceIPAddress",
+              "value": "198.51.100.121"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000601",
+              "field": "eventTime",
+              "value": "2026-02-03T08:30:00Z"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "eventTime",
+              "value": "2026-02-03T12:00:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "returned_key_join",
+          "expected_status": "supported",
+          "reason": "The response key links the parent and child requests despite their different source addresses.",
+          "required_event_ids": [
+            "30000000-0000-4000-8000-000000000602",
+            "30000000-0000-4000-8000-000000000603"
+          ],
+          "required_observations": [
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV3D0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000603",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV3D0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000603",
+              "field": "eventName",
+              "value": "StopLogging"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000603",
+              "field": "sourceIPAddress",
+              "value": "203.0.113.44"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "eventTime",
+              "value": "2026-02-03T12:00:00Z"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000603",
+              "field": "eventTime",
+              "value": "2026-02-03T12:02:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "logging_activity",
+          "expected_status": "supported",
+          "reason": "The API activity is present; the GetTrailStatus response state is not logged.",
+          "required_event_ids": [
+            "30000000-0000-4000-8000-000000000602",
+            "30000000-0000-4000-8000-000000000603",
+            "30000000-0000-4000-8000-000000000604"
+          ],
+          "required_observations": [
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV3D0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000603",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV3D0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000604",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV3D0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000603",
+              "field": "eventName",
+              "value": "StopLogging"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000603",
+              "field": "requestParameters.name",
+              "value": "arn:aws:cloudtrail:us-east-1:000000000000:trail/synthetic-v3-main"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000603",
+              "field": "errorCode",
+              "present": false,
+              "value": null
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000604",
+              "field": "eventName",
+              "value": "GetTrailStatus"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000603",
+              "field": "eventTime",
+              "value": "2026-02-03T12:02:00Z"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000604",
+              "field": "eventTime",
+              "value": "2026-02-03T12:03:00Z"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000604",
+              "field": "readOnly",
+              "value": true
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000604",
+              "field": "requestParameters.name",
+              "value": "arn:aws:cloudtrail:us-east-1:000000000000:trail/synthetic-v3-main"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000604",
+              "field": "responseElements",
+              "value": null
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_change",
+          "expected_status": "uncertain",
+          "reason": "A session name and API sequence do not establish approval, ownership, or intent.",
+          "required_event_ids": [
+            "30000000-0000-4000-8000-000000000602",
+            "30000000-0000-4000-8000-000000000603"
+          ],
+          "required_observations": [
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000602",
+              "field": "requestParameters.roleSessionName",
+              "value": "change-review-18"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000603",
+              "field": "eventName",
+              "value": "StopLogging"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v3/dev-caller-and-child-pivot.json",
+      "fixture_sha256": "5c83b0e9f408bce20165e0b19f7ac5d38db159ab8055bd819d0cfa956a364761",
+      "hypotheses": [
+        {
+          "claim_id": "caller_source_change",
+          "statement": "The same release-helper access key was used for GetCallerIdentity from 192.0.2.112 and for AssumeRole from 198.51.100.121 more than one hour later."
+        },
+        {
+          "claim_id": "returned_key_join",
+          "statement": "The temporary key returned by AssumeRole was used for the later StopLogging request from 203.0.113.44."
+        },
+        {
+          "claim_id": "logging_activity",
+          "statement": "The returned-key session called StopLogging without a recorded API error and later requested GetTrailStatus; that read-only event records no trail status."
+        },
+        {
+          "claim_id": "approved_change",
+          "statement": "The role assumption and logging change were approved maintenance."
+        }
+      ],
+      "id": "dev-caller-and-child-pivot",
+      "notes": "Invented development case for earlier caller and later child retrieval. The other callers share source addresses but not credentials or principals.",
+      "question": "Investigate the role assumption and its caller context. Follow the temporary credentials into later logging activity, compare source addresses, and test an approved-maintenance explanation without assuming trail state or intent.",
+      "relevant_event_ids": [
+        "30000000-0000-4000-8000-000000000601",
+        "30000000-0000-4000-8000-000000000602",
+        "30000000-0000-4000-8000-000000000603",
+        "30000000-0000-4000-8000-000000000604"
+      ],
+      "seed_event_id": "30000000-0000-4000-8000-000000000602",
+      "split": "development"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "issuer_join",
+          "expected_status": "supported",
+          "reason": "The exact returned credential joins the records despite their different addresses.",
+          "required_event_ids": [
+            "30000000-0000-4000-8000-000000000702",
+            "30000000-0000-4000-8000-000000000703"
+          ],
+          "required_observations": [
+            {
+              "event_id": "30000000-0000-4000-8000-000000000702",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000703",
+              "field": "eventName",
+              "value": "GetObject"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000702",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV3H0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000703",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV3H0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000702",
+              "field": "sourceIPAddress",
+              "value": "198.51.100.212"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000703",
+              "field": "sourceIPAddress",
+              "value": "203.0.113.213"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000702",
+              "field": "eventTime",
+              "value": "2026-02-06T09:00:00Z"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000703",
+              "field": "eventTime",
+              "value": "2026-02-06T09:05:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "original_caller_context",
+          "expected_status": "supported",
+          "reason": "The same original caller key links the earlier request to the issuance request.",
+          "required_event_ids": [
+            "30000000-0000-4000-8000-000000000701",
+            "30000000-0000-4000-8000-000000000702"
+          ],
+          "required_observations": [
+            {
+              "event_id": "30000000-0000-4000-8000-000000000701",
+              "field": "eventName",
+              "value": "ListBuckets"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000702",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000701",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV3H0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000702",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV3H0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000701",
+              "field": "userIdentity.userName",
+              "value": "audit-runner"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000702",
+              "field": "userIdentity.userName",
+              "value": "audit-runner"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000701",
+              "field": "sourceIPAddress",
+              "value": "192.0.2.211"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000702",
+              "field": "sourceIPAddress",
+              "value": "198.51.100.212"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000701",
+              "field": "eventTime",
+              "value": "2026-02-06T07:45:00Z"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000702",
+              "field": "eventTime",
+              "value": "2026-02-06T09:00:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "deletion_succeeded",
+          "expected_status": "refuted",
+          "reason": "The logged DeleteBucket request was denied. No deletion success is established.",
+          "required_event_ids": [
+            "30000000-0000-4000-8000-000000000703",
+            "30000000-0000-4000-8000-000000000704"
+          ],
+          "required_observations": [
+            {
+              "event_id": "30000000-0000-4000-8000-000000000703",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV3H0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000704",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV3H0001"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000704",
+              "field": "eventName",
+              "value": "DeleteBucket"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000704",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000703",
+              "field": "eventTime",
+              "value": "2026-02-06T09:05:00Z"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000704",
+              "field": "eventTime",
+              "value": "2026-02-06T09:07:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_audit",
+          "expected_status": "uncertain",
+          "reason": "The supplied records have no audit approval or actor-intent evidence.",
+          "required_event_ids": [
+            "30000000-0000-4000-8000-000000000702",
+            "30000000-0000-4000-8000-000000000703"
+          ],
+          "required_observations": [
+            {
+              "event_id": "30000000-0000-4000-8000-000000000702",
+              "field": "requestParameters.roleSessionName",
+              "value": "review-37"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000703",
+              "field": "eventName",
+              "value": "GetObject"
+            },
+            {
+              "event_id": "30000000-0000-4000-8000-000000000703",
+              "field": "requestParameters.key",
+              "value": "exports/monthly-example.json"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v3/heldout-issued-key-chain.json",
+      "fixture_sha256": "cf83b7614093547d27520885fcfed5e3de076022c1f9af55ee991d1ba3f33d63",
+      "hypotheses": [
+        {
+          "claim_id": "issuer_join",
+          "statement": "The GetObject request used the temporary key issued by the earlier AssumeRole request, and the two requests used different source IP addresses."
+        },
+        {
+          "claim_id": "original_caller_context",
+          "statement": "The original audit-runner key appears in the earlier ListBuckets request from 192.0.2.211 and in AssumeRole from 198.51.100.212."
+        },
+        {
+          "claim_id": "deletion_succeeded",
+          "statement": "The later DeleteBucket request by the same temporary key succeeded."
+        },
+        {
+          "claim_id": "approved_audit",
+          "statement": "The object access was an approved audit."
+        }
+      ],
+      "id": "heldout-issued-key-chain",
+      "notes": "Fresh held-out invented case. The seed uses a returned key from an issuer at a different address. Other principals produce similar API activity.",
+      "question": "Investigate this object request. Find how its temporary credentials were issued, examine the original caller and later sensitive activity, and test whether the records establish an approved audit. Keep denied API requests separate from successful actions and do not infer intent from session names.",
+      "relevant_event_ids": [
+        "30000000-0000-4000-8000-000000000701",
+        "30000000-0000-4000-8000-000000000702",
+        "30000000-0000-4000-8000-000000000703",
+        "30000000-0000-4000-8000-000000000704"
+      ],
+      "seed_event_id": "30000000-0000-4000-8000-000000000703",
+      "split": "heldout"
+    }
+  ],
+  "data_origin": "Entirely invented fresh cases; no AWS account, person, incident, or public sample is represented. v1 and v2 remain preserved prior suites.",
+  "design_notes": "Small cases for earlier caller retrieval, returned-key child retrieval, and issued-key parent retrieval. Source changes and distractors are explicit record facts. Approval is not established by CloudTrail activity.",
+  "fixture_license": "MIT (same as repository)",
+  "freeze_policy": "Freeze this manifest and fixture hashes before first inference. Do not edit them in place after recording results. Keep prior suites and failures.",
+  "schema_version": "1",
+  "suite_id": "tracetrail-synthetic-v3"
+}

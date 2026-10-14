@@ -12,6 +12,8 @@ from typing import Any
 from langchain_core.tools import BaseTool, StructuredTool
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
+MAX_QUERY_OFFSET = 50_000
+
 
 class StoreError(ValueError):
     """An input or evidence lookup failed without changing any log file."""
@@ -32,6 +34,10 @@ class Query(BaseModel):
     source_ip: str | None = Field(default=None, description="Exact sourceIPAddress value.")
     event_name: str | None = Field(default=None, description="Exact CloudTrail eventName.")
     access_key: str | None = Field(default=None, description="Exact userIdentity accessKeyId.")
+    issued_access_key: str | None = Field(
+        default=None,
+        description="Exact responseElements.credentials.accessKeyId issued by this event.",
+    )
     session_issuer: str | None = Field(
         default=None, description="Exact sessionContext sessionIssuer ARN."
     )
@@ -44,8 +50,19 @@ class Query(BaseModel):
     limit: int = Field(
         default=10, ge=1, le=20, strict=True, description="Maximum returned records, from 1 to 20."
     )
+    offset: int = Field(
+        default=0,
+        ge=0,
+        le=MAX_QUERY_OFFSET,
+        strict=True,
+        description=(
+            "Skip this many matching records, from 0 to 50000. Keep other filters unchanged."
+        ),
+    )
 
-    @field_validator("principal", "source_ip", "event_name", "access_key", "session_issuer")
+    @field_validator(
+        "principal", "source_ip", "event_name", "access_key", "issued_access_key", "session_issuer"
+    )
     @classmethod
     def nonempty_filter(cls, value: str | None) -> str | None:
         if value is not None and (not value.strip() or len(value) > 2048):
@@ -133,7 +150,14 @@ class CloudTrailStore:
         self._times: dict[str, datetime] = {}
         self._indexes: dict[str, dict[str, set[str]]] = {
             field: {}
-            for field in ("principal", "source_ip", "event_name", "access_key", "session_issuer")
+            for field in (
+                "principal",
+                "source_ip",
+                "event_name",
+                "access_key",
+                "issued_access_key",
+                "session_issuer",
+            )
         }
 
     @property
@@ -262,6 +286,11 @@ class CloudTrailStore:
                 store._by_id[event_id] = evidence
                 store._by_ref[ref] = evidence
                 store._times[ref] = timestamp
+                response = record.get("responseElements")
+                credentials = response.get("credentials") if isinstance(response, dict) else None
+                issued_key = (
+                    credentials.get("accessKeyId") if isinstance(credentials, dict) else None
+                )
                 pivots = {
                     "principal": [
                         identity.get(field) for field in ("arn", "principalId", "userName")
@@ -269,6 +298,7 @@ class CloudTrailStore:
                     "source_ip": [record.get("sourceIPAddress")],
                     "event_name": [record.get("eventName")],
                     "access_key": [identity.get("accessKeyId")],
+                    "issued_access_key": [issued_key],
                     "session_issuer": [context.get("sessionIssuer", {}).get("arn")],
                 }
                 for field, values in pivots.items():
@@ -287,7 +317,7 @@ class CloudTrailStore:
         return deepcopy(evidence)
 
     def query(self, query: Query) -> dict[str, Any]:
-        """Return matching evidence in time order and report any truncation."""
+        """Return one page in time order. Other query fields define the page sequence."""
         if not isinstance(query, Query):
             raise StoreError("invalid_query", "query must be a validated Query object.")
         # Pydantic model_copy and model_construct can bypass field validation.
@@ -313,11 +343,19 @@ class CloudTrailStore:
             and (query.end_time is None or self._times[ref] <= query.end_time)
         ]
         matches.sort(key=lambda ref: (self._times[ref], ref))
-        return {
-            "records": [deepcopy(self._by_ref[ref]) for ref in matches[: query.limit]],
+        page = matches[query.offset : query.offset + query.limit]
+        page_end = query.offset + len(page)
+        has_more = page_end < len(matches)
+        offset_limit_reached = has_more and page_end > MAX_QUERY_OFFSET
+        result = {
+            "records": [deepcopy(self._by_ref[ref]) for ref in page],
             "matched": len(matches),
-            "truncated": len(matches) > query.limit,
+            "truncated": has_more,
+            "next_offset": page_end if has_more and not offset_limit_reached else None,
         }
+        if offset_limit_reached:
+            result["offset_limit_reached"] = True
+        return result
 
     def tools(self) -> list[BaseTool]:
         """Create LangChain tools that have no AWS, shell, or write access."""
@@ -343,11 +381,18 @@ class CloudTrailStore:
                 description=(
                     "Query local CloudTrail evidence. All supplied filters must match exactly. "
                     "principal matches userIdentity ARN, principalId, or userName. "
+                    "access_key matches the calling userIdentity accessKeyId. "
+                    "issued_access_key matches responseElements.credentials.accessKeyId "
+                    "to find the event that issued a session key. "
                     "session_issuer matches the session issuer ARN. "
                     "Time bounds are inclusive and require a timezone. "
                     "Returns original records with citations, total matched count, "
-                    "and truncation status. "
-                    "Use a limit from 1 to 20. Empty results mean no match in these loaded logs."
+                    "truncation status, and next_offset. "
+                    "Use a limit from 1 to 20. For another page, explicitly submit next_offset "
+                    "as offset with the same filters and time bounds. "
+                    "offset_limit_reached means more records exist beyond the offset budget; "
+                    "no next_offset is available then. "
+                    "Empty results mean no match at this offset in these loaded logs."
                 ),
                 args_schema=Query,
                 handle_validation_error=_validation_error,

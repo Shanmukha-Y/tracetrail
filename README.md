@@ -10,7 +10,7 @@ Use Python 3.11 or later, [uv](https://docs.astral.sh/uv/), and a local [Ollama]
 
 ```sh
 uv sync --frozen
-uv run tracetrail demo --case dev-role-pivot
+uv run tracetrail demo --manifest evaluation/cases-v3.json --case dev-caller-and-child-pivot
 ```
 
 The default model is `qwen3.8:27b-q4_K_M`. The approved comparison models are `gemma4:31b-it-q4_K_M` and `mistral-small3.2:24b`. These tags must already resolve to local GGUF weights. TraceTrail checks raw Ollama metadata for remote routing, rejects other tags, ignores proxy settings and ambient API credentials, and disables HTTP redirects. It does not download models. Model use is sequential, with a process lock and an unload after each run. Stop other model sessions before a comparison.
@@ -24,6 +24,8 @@ uv run tracetrail resolve fixtures/v2/dev-role-pivot.json \
   10000000-0000-4000-8000-000000000003
 uv run tracetrail compare --output local-results/comparison.json
 uv run tracetrail local-evaluate local-results/comparison.json
+uv run tracetrail compare --manifest evaluation/cases-v3.json \
+  --output local-results/fresh-comparison.json
 ```
 
 To investigate your own file or directory, put the logs in the ignored `local-logs/` directory. Supply a seed event ID, a question, and a local JSON list of hypotheses. Each hypothesis needs a `claim_id` and a `statement`; it must not contain an answer label.
@@ -34,7 +36,7 @@ uv run tracetrail investigate local-logs/cloudtrail/ \
   --hypotheses local-logs/hypotheses.json
 ```
 
-Keep the hypotheses file outside a directory that you pass as a CloudTrail input. The store expects each input JSON file to contain a `Records` array. Query tools make exact matches on identity, access key, session issuer, source address, event name, and time. Inputs have size and event budgets. A query returns at most 20 records and reports truncation. No query text is executed as code.
+Keep the hypotheses file outside a directory that you pass as a CloudTrail input. The store expects each input JSON file to contain a `Records` array. Query tools make exact matches on identity, caller access key, issued access key, session issuer, source address, event name, and time. `issued_access_key` finds the STS record whose `responseElements.credentials.accessKeyId` matches a temporary key. Inputs have size and event budgets. A query returns at most 20 records and reports truncation. To fetch another page, submit its `next_offset` with the same filters. Each page uses one query. No query text is executed as code.
 
 ## Evidence and conclusions
 
@@ -44,6 +46,20 @@ An investigation can use at most three evidence queries and four model calls. It
 
 A correct citation alone does not establish that a conclusion is true. CloudTrail API activity does not prove a person's intent, approval, credential theft, or an external data transfer. Missing records do not establish that an incident did not occur. Narrative limitations require human review.
 
+The planner sees candidate filters derived from returned records and the scopes of queries it attempted. This inventory never searches the store or selects events for the report. The model can investigate earlier caller activity, later use of a returned key, or the event that issued an observed key. A searched filter does not imply complete coverage. Filters, time bounds, errors, pagination, and remaining candidates stay visible in the report.
+
+```mermaid
+flowchart LR
+    S[Seed record] --> P[Model chooses a query or finishes]
+    P -->|query| T[Read-only evidence tool]
+    T -->|budget remains| P
+    P -->|finish| R[Model report]
+    T -->|budget exhausted| R
+    S --> F[Three fixed seed searches]
+    F --> R
+    R --> V[Exact record validation and cited timeline]
+```
+
 ## Local tracing and evaluation
 
 Each investigation captures real LangChain/LangGraph execution spans in a local callback collector. The LangSmith SDK can also score the saved outputs with `evaluate(upload_results=False)`. The offline evaluation recomputes the annotated metrics and writes SDK evaluation traces and feedback beside the input file. It replays saved outputs and makes no new inference calls.
@@ -52,9 +68,11 @@ Hosted tracing is disabled, including ambient tracing settings and inherited cal
 
 ## Compare methods and models
 
-The active `tracetrail-synthetic-v2` [frozen synthetic suite](evaluation/README.md) has two development cases and two held-out cases. All events, accounts, credentials, and names are invented. The fixtures represent API sequences, not real incidents. V2 corrects the original suite's STS flags and issuance times, and removes an unrealistic read-only status response. V1 remains available for old result hashes. See [CloudTrail semantics and limits](docs/cloudtrail.md).
+The [frozen synthetic suites](evaluation/README.md) preserve their exact fixtures and annotations. All four earlier v2 cases are now exposed regression data. The new v3 suite has one development case and one held-out case, frozen before protocol v4 inference. It tests caller context outside a one-hour window, changed source addresses, returned-key activity, and reverse key-issuance lookup. All events, accounts, credentials, and names are invented. The fixtures represent API sequences, not real incidents. V2's field corrections and the original v1 bytes remain available for historical results. See [CloudTrail semantics and limits](docs/cloudtrail.md).
 
 The adaptive method lets the model choose queries. The fixed method always searches the seed identity, source address, and access key in a one-hour window on each side of the seed. Both methods use the same evidence tools, record limits, report prompt, and report schema. The adaptive method also makes planning calls. Those calls count toward its latency and model cost. All three models receive the same frozen prompts, cases, schemas, and budgets. Qwen is the reference for the method comparison.
+
+The [v4 protocol fingerprint](evaluation/protocol-v4.json) records source, schema, prompt, and manifest hashes. V4 changes query capabilities, instructions, and the report token allowance together. A comparison cannot isolate the contribution of one change. Results on the fresh suite remain small-sample evidence, even when every report validates.
 
 Metrics cover relevant-event precision and recall, exact evidence support for fixed propositions, unsupported assertions, insufficient evidence, tool errors, query count, model calls, and latency. The scorer checks the required records and field observations for each proposition. It does not act as a general natural-language judge. Saved failures stay in the evaluation denominator. A small synthetic suite cannot establish production reliability.
 

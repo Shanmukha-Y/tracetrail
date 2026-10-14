@@ -16,6 +16,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, ConfigDict, Field
 
+from tracetrail.coverage import evidence_coverage
 from tracetrail.local_model import verify_local_weights
 from tracetrail.store import CloudTrailStore, Query
 from tracetrail.telemetry import local_context, serialize_local_trace
@@ -24,11 +25,11 @@ REFERENCE_MODEL = "qwen3.8:27b-q4_K_M"
 MODELS = (REFERENCE_MODEL, "gemma4:31b-it-q4_K_M", "mistral-small3.2:24b")
 OLLAMA_URL = "http://127.0.0.1:11434"
 PROTOCOL = {
-    "version": "tracetrail-v3",
+    "version": "tracetrail-v4",
     "temperature": 0,
     "seed": 42,
     "num_ctx": 16384,
-    "num_predict": 2400,
+    "num_predict": 3200,
     "max_queries": 3,
     "query_limit": 20,
     "model_timeout_seconds": 150,
@@ -47,10 +48,24 @@ Use exact citations from returned evidence. Distinguish observed fields from int
 Use only returned records; never invent events, citations, identities, or external context.
 No AWS, shell, network, remediation, or attack tool is available.
 """
-PLAN = """Choose one next evidence query, or finish if further queries have little value.
-Adapt to prior evidence. Pivot on access keys, assumed-role identities, session issuer, source IP,
-and time. Query fields are exact matches, combined with AND. Use only keys/identities actually
-observed in records. requestParameters.roleArn may lead to session_issuer queries.
+PLAN = """Choose one next evidence query, or finish with a reason for leaving remaining scope open.
+Test missing links before treating missing context as insufficient evidence. Consider caller
+activity
+before a role assumption, subsequent use of returned temporary keys, and the issuer of an observed
+temporary key. An IP address can change between these events. A one-hour window can omit context.
+The coverage inventory contains observed-only candidate filters and actual attempted query scopes.
+It does not select queries for you. Choose the query that best tests a supplied explanation.
+access_key matches userIdentity.accessKeyId (uses of a key); issued_access_key matches
+responseElements.credentials.accessKeyId (the event that issued it). session_issuer matches only
+userIdentity.sessionContext.sessionIssuer.arn, never eventSource or the STS service name.
+The seed's caller key and a returned child key have different roles. Use exact observed values,
+without combining filters
+that would accidentally exclude the related identity or changed source address.
+Query fields are exact matches, combined with AND. Null fields impose no filter. Time bounds are
+inclusive. Use limit=20. Truncated results have a next_offset; choose a continuation if useful,
+keeping all other filters unchanged. Each page consumes one query from the same bounded budget.
+Only returned records are evidence. No query proves anything outside its filters or loaded files.
+Do not repeat a successful identical query or stop just because one narrow query returned zero.
 Tool query_events accepts query fields; get_event accepts identifier (eventID or exact ref).
 Return a reason and the claim_id whose explanation you test. A query failure is evidence of a
 query failure only. Do not retry the same failed query without changing it.
@@ -61,14 +76,24 @@ contradicts it. Otherwise use uncertain. In particular, activity alone cannot es
 intent, approved maintenance, or completed data exfiltration. Do not introduce new claim_ids.
 Preserve each supplied hypothesis statement exactly in the finding.statement field.
 Do not paraphrase it or add claims to it. The status tests this statement.
-Cite only evidence actually returned. Put uncertainty and alternatives in limitations.
+Cite only evidence actually returned. Cite the relevant context even for uncertain findings;
+uncertainty about intent or approval does not make the observed activity irrelevant.
+Review each returned record for relevance, including earlier caller and session issuance context.
+Put uncertainty, remaining unsearched pivots, query scope, and alternatives in limitations.
 Record atomic observed facts as observations: exact citation, dotted JSON field path, exact value.
 A field that exists uses present=true and its exact value. A field that is absent uses
 present=false and value=null. Missing errorCode is different from errorCode with a null value.
-Include the fields that support your conclusion, such as eventName, errorCode, sourceIPAddress,
-userIdentity.arn, userIdentity.accessKeyId, requestParameters.roleArn, and resource fields.
+Include the fields that support EACH finding, such as eventName, errorCode, sourceIPAddress,
+userIdentity.arn, userIdentity.accessKeyId, userIdentity.sessionContext.sessionIssuer.arn,
+requestParameters.roleArn,
+requestParameters.roleSessionName, responseElements.credentials.accessKeyId, and resource fields.
+Check each cited event's necessary linking fields, error fields, and relevant API parameters.
+An absent errorCode establishes only that no top-level errorCode was recorded. Inspect
+responseElements for error details; it does not verify success, authorization, or intent.
+GetTrailStatus responseElements=null does not establish the trail's logging state. API calls to
+start or stop logging alone do not prove a persistent state. Missing response fields remain unknown.
 Use short E0, E1 citation aliases exactly as provided. They resolve to original file hashes.
-Limit observations to the fields needed to explain the supplied claims. Use at most 24.
+Limit observations to the fields needed to explain the supplied claims. Use at most 32.
 Timeline is built separately from selected_event_refs. Give limitations.
 """
 PROMPT_SHA256 = hashlib.sha256((SYSTEM + PLAN + FINAL).encode()).hexdigest()
@@ -268,6 +293,9 @@ def investigate(
             "seed": compact(seed),
             "evidence": [compact(item) for item in state["evidence"]],
             "tool_history": history_summary,
+            "coverage": evidence_coverage(
+                [compact(item) for item in state["evidence"]], history_summary
+            ),
             "remaining_queries": PROTOCOL["max_queries"] - state["query_count"],
         }
         encoded_payload = json.dumps(payload, sort_keys=True)
@@ -454,6 +482,11 @@ def investigate(
         "timeline": timeline,
         "evidence": state["evidence"],
         "tool_history": state["tool_history"],
+        "coverage": evidence_coverage(state["evidence"], state["tool_history"]),
+        "validation_scope": {
+            "citations_and_observation_values": "exact-record-validation",
+            "narrative_and_finding_meaning": "not-semantically-verified",
+        },
         "model_history": state["model_history"],
         "failures": state["failures"],
         "query_count": state["query_count"],

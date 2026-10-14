@@ -109,6 +109,7 @@ def test_query_reports_total_count_and_truncation(tmp_path):
         "records": [],
         "matched": 0,
         "truncated": False,
+        "next_offset": None,
     }
 
 
@@ -119,9 +120,18 @@ def test_query_reports_total_count_and_truncation(tmp_path):
         {"limit": 21},
         {"limit": True},
         {"limit": "10"},
+        {"offset": -1},
+        {"offset": 50_001},
+        {"offset": True},
+        {"offset": "20"},
+        {"offset": 1.0},
+        {"offset": None},
         {"principal": ""},
         {"source_ip": " "},
         {"principal": "a" * 2049},
+        {"issued_access_key": " "},
+        {"issued_access_key": "a" * 2049},
+        {"issued_access_key": True},
         {"start_time": "2026-01-01T10:00:00"},
         {"start_time": 1700000000},
         {"start_time": "2026-01-02T10:00:00Z", "end_time": "2026-01-01T10:00:00Z"},
@@ -133,9 +143,10 @@ def test_query_rejects_invalid_bounds_and_unknown_fields(kwargs):
         Query(**kwargs)
 
 
-def test_copied_query_cannot_bypass_limit_validation(tmp_path):
+@pytest.mark.parametrize("update", [{"limit": 1000}, {"offset": 50_001}, {"offset": True}])
+def test_copied_query_cannot_bypass_limit_validation(tmp_path, update):
     store = CloudTrailStore.load(write_log(tmp_path, [event()]))
-    invalid_query = Query().model_copy(update={"limit": 1000})
+    invalid_query = Query().model_copy(update=update)
     with pytest.raises(StoreError) as caught:
         store.query(invalid_query)
     assert caught.value.code == "invalid_query"
@@ -252,3 +263,170 @@ def test_query_outputs_cannot_mutate_store(tmp_path):
     result = store.query(Query())
     result["records"][0]["record"]["userIdentity"].clear()
     assert store.get("event-1")["record"] == deepcopy(original)
+
+
+def test_issued_access_key_reverse_pivot_distinguishes_caller_and_session(tmp_path):
+    issued = "ASIA_SYNTHETIC_SESSION"
+    caller = "AKIA_SYNTHETIC_CALLER"
+    issuance = event(
+        "issuance",
+        eventName="AssumeRole",
+        eventSource="sts.amazonaws.com",
+        eventTime="2026-01-01T09:00:00Z",
+        userIdentity={"arn": "arn:aws:iam::123456789012:user/tester", "accessKeyId": caller},
+        responseElements={"credentials": {"accessKeyId": issued}},
+    )
+    use = event("session-use")
+    use["userIdentity"]["accessKeyId"] = issued
+    store = CloudTrailStore.load(write_log(tmp_path, [issuance, use]))
+    reverse = store.query(Query(issued_access_key=issued))
+    assert [item["event_id"] for item in reverse["records"]] == ["issuance"]
+    assert reverse["records"][0]["record"] == issuance
+    forward = store.query(Query(access_key=issued))
+    assert [item["event_id"] for item in forward["records"]] == ["session-use"]
+    assert store.query(Query(issued_access_key=caller))["matched"] == 0
+    both = store.query(Query(access_key=caller, issued_access_key=issued))
+    assert both["matched"] == 1
+    assert both["records"][0]["event_id"] == "issuance"
+    assert store.query(Query(access_key=issued, issued_access_key=issued))["matched"] == 0
+    assert store.query(Query(issued_access_key="SYNTHETIC_SESSION"))["matched"] == 0
+
+
+@pytest.mark.parametrize(
+    "response",
+    [
+        None,
+        [],
+        "malformed",
+        {"credentials": None},
+        {"credentials": []},
+        {"credentials": "malformed"},
+        {"credentials": {"accessKeyId": True}},
+        {"credentials": {"accessKeyId": 123}},
+        {"credentials": {"accessKeyId": ["ASIA_SYNTHETIC_SESSION"]}},
+    ],
+)
+def test_malformed_response_credentials_skip_reverse_index_and_preserve_raw_record(
+    tmp_path, response
+):
+    malformed = event("malformed-response", responseElements=response)
+    valid = event(
+        "valid-response",
+        responseElements={"credentials": {"accessKeyId": "ASIA_SYNTHETIC_SESSION"}},
+    )
+    store = CloudTrailStore.load(write_log(tmp_path, [malformed, valid]))
+    output = store.query(Query(issued_access_key="ASIA_SYNTHETIC_SESSION"))
+    assert output["matched"] == 1
+    assert output["records"][0]["event_id"] == "valid-response"
+    assert store.get("malformed-response")["record"] == malformed
+
+
+def test_pagination_is_deterministic_across_duplicate_times_and_identical_filters(tmp_path):
+    records = [
+        event(f"event-{index}", eventTime=f"2026-01-01T10:00:{index:02d}Z") for index in range(45)
+    ]
+    records += [event(f"duplicate-{index}", eventTime="2026-01-01T10:00:19Z") for index in range(5)]
+    records += [
+        event("outside-time", eventTime="2026-01-01T11:00:00Z"),
+        event("outside-ip", sourceIPAddress="192.0.2.250"),
+    ]
+    path = write_log(tmp_path, records)
+    store = CloudTrailStore.load(path)
+    query = Query(
+        source_ip="192.0.2.4",
+        start_time="2026-01-01T10:00:00Z",
+        end_time="2026-01-01T10:00:44Z",
+        limit=20,
+    )
+    first = store.query(query)
+    assert first["matched"] == 50
+    assert len(first["records"]) == 20
+    assert first["truncated"] is True
+    assert first["next_offset"] == 20
+    second_query = query.model_copy(update={"offset": first["next_offset"]})
+    second = store.query(second_query)
+    assert second["matched"] == 50
+    assert len(second["records"]) == 20
+    assert second["truncated"] is True
+    assert second["next_offset"] == 40
+    assert store.query(second_query) == second
+    assert CloudTrailStore.load(path).query(second_query) == second
+    third = store.query(query.model_copy(update={"offset": second["next_offset"]}))
+    assert third["matched"] == 50
+    assert len(third["records"]) == 10
+    assert third["truncated"] is False
+    assert third["next_offset"] is None
+    combined = first["records"] + second["records"] + third["records"]
+    expected_ids = (
+        [f"event-{index}" for index in range(20)]
+        + [f"duplicate-{index}" for index in range(5)]
+        + [f"event-{index}" for index in range(20, 45)]
+    )
+    assert [item["event_id"] for item in combined] == expected_ids
+    assert len({item["ref"] for item in combined}) == 50
+    for item in combined:
+        assert store.get(item["ref"]) == item
+
+
+def test_pagination_ends_on_exact_page_boundary_and_preserves_total_past_end(tmp_path):
+    store = CloudTrailStore.load(write_log(tmp_path, [event(f"event-{i}") for i in range(40)]))
+    final = store.query(Query(limit=20, offset=20))
+    assert len(final["records"]) == 20
+    assert final["matched"] == 40
+    assert final["truncated"] is False
+    assert final["next_offset"] is None
+    for offset in (40, 41, 50_000):
+        output = store.query(Query(limit=20, offset=offset))
+        assert output == {
+            "records": [],
+            "matched": 40,
+            "truncated": False,
+            "next_offset": None,
+        }
+
+
+def test_custom_large_ingestion_does_not_offer_an_invalid_next_offset(tmp_path):
+    records = [
+        {
+            "eventID": f"event-{index}",
+            "eventName": "GetTrailStatus",
+            "eventSource": "cloudtrail.amazonaws.com",
+            "eventTime": "2026-01-01T10:00:00Z",
+        }
+        for index in range(50_021)
+    ]
+    store = CloudTrailStore.load(write_log(tmp_path, records), max_events=len(records))
+    output = store.query(Query(offset=50_000, limit=20))
+    assert len(output["records"]) == 20
+    assert output["matched"] == len(records)
+    assert output["truncated"] is True
+    assert output["next_offset"] is None
+    assert output["offset_limit_reached"] is True
+
+
+def test_real_query_tool_supports_reverse_key_pivot_and_explicit_page_offset(tmp_path):
+    records = [
+        event(
+            f"issued-{index}",
+            eventName="AssumeRole",
+            responseElements={"credentials": {"accessKeyId": "ASIA_SYNTHETIC_SESSION"}},
+        )
+        for index in range(3)
+    ]
+    store = CloudTrailStore.load(write_log(tmp_path, records))
+    tool = next(tool for tool in store.tools() if tool.name == "query_events")
+    first = tool.invoke({"issued_access_key": "ASIA_SYNTHETIC_SESSION", "limit": 2})
+    second = tool.invoke(
+        {"issued_access_key": "ASIA_SYNTHETIC_SESSION", "limit": 2, "offset": first["next_offset"]}
+    )
+    assert first["matched"] == second["matched"] == 3
+    assert first["next_offset"] == 2
+    assert second["next_offset"] is None
+    assert len(first["records"]) == 2
+    assert len(second["records"]) == 1
+    assert not {item["ref"] for item in first["records"]}.intersection(
+        item["ref"] for item in second["records"]
+    )
+    invalid = json.loads(tool.invoke({"offset": 50_001, "limit": 20}))
+    assert invalid["error"]["code"] == "invalid_tool_input"
+    assert "records" not in invalid

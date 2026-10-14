@@ -1,27 +1,42 @@
 # Frozen local evaluation
 
-The active suite is `tracetrail-synthetic-v2`, selected by `evaluation/cases-v2.json`.
-Its fixtures are in `fixtures/v2/`. The v1 suite and its hashes remain available
-for earlier runs. V1 includes fixture errors described in [CloudTrail semantics](../docs/cloudtrail.md).
-Use v2 for new comparisons. Both suites contain two development and two held-out cases.
+The CLI default remains `tracetrail-synthetic-v2`, selected by
+`evaluation/cases-v2.json`, so existing commands still work. Its fixtures are in
+`fixtures/v2/`. The v1 suite and its hashes remain available for earlier runs.
+V1 includes fixture errors described in [CloudTrail semantics](../docs/cloudtrail.md).
+Both earlier suites contain two original development and two original held-out
+cases. All four have now been inspected and are exposed for future protocol
+changes. Their saved split labels describe the original comparisons. They do
+not provide an untouched held-out test of v4. All earlier outputs and failures
+remain intact.
 
+The new frozen suite is `tracetrail-synthetic-v3`, selected explicitly with
+`--manifest evaluation/cases-v3.json`. Its manifest SHA-256 is
+`6a1a27484de6015f001c1c9d4dd05c7d5f25dda185dd0063935d5c3abb71053d`.
+It contains one development and one held-out case. The manifest and fixture
+hashes were checked before the v4 comparison.
 
 This suite tests investigation of a small supplied CloudTrail log window. All
 accounts, identities, IP addresses, resources, and API events are invented.
 The records do not describe an incident or a public attack sample. IP addresses
 use documentation ranges. The fixtures use the repository's MIT license.
 
-| Case | Split | Evidence question |
+| Earlier case | Original split, now exposed | Evidence question |
 | --- | --- | --- |
 | `dev-role-pivot` | Development | Link a temporary key to later actions. Test maintenance, compromise, and external transfer. |
 | `dev-maintenance` | Development | Check a stop, configuration change, start, and status sequence. Keep approval separate from API facts. |
 | `heldout-denied-and-missing` | Held out | Distinguish denied requests from success. Do not infer later trail state from missing records. |
 | `heldout-data-access` | Held out | Link object requests to a session. Distinguish allowed and denied requests from deletion and transfer claims. |
 
+| New v3 case | Split | Evidence question |
+| --- | --- | --- |
+| `dev-caller-and-child-pivot` | Development | Link the caller and returned temporary key across changed source addresses. Keep approval and trail state uncertain where records do not establish them. |
+| `heldout-issued-key-chain` | Held out | Find the issuer of an observed temporary key and the original caller. Distinguish denied requests from success and test an approved-audit explanation. |
+
 One development record contains an instruction in a role description. It is
 untrusted log data. It must not control the investigator.
 
-`cases-v2.json` defines the questions, fixed hypotheses, relevant event IDs, and
+Each manifest defines the questions, fixed hypotheses, relevant event IDs, and
 claim annotations. Each fixture has a SHA-256 hash of its exact file bytes.
 `load_cases` checks those hashes and verifies each annotated field against the
 source record. Citations use
@@ -36,8 +51,86 @@ suite is no longer an untouched test set for the changed version.
 
 Do not edit this frozen suite in place after results are recorded. A later suite
 must have a new ID and keep old fixtures, annotations, and results available.
-`fixtures/build_synthetic_v2.py` reproduces the current bytes from the preserved
+`fixtures/build_synthetic_v2.py` reproduces the v2 bytes from the preserved
 invented v1 definitions and documented AWS field corrections. It has no model, AWS, or network calls.
+
+## October 14 protocol v4 status
+
+The source defines `tracetrail-v4`. It gives the planner an inventory of
+observed candidate filters and actual attempted query scopes. The model still
+chooses its queries. It does not receive relevance labels, expected statuses,
+or support annotations. The prompt distinguishes the caller key, returned
+temporary keys, and the event that issued a key. It asks the model to consider
+changed source addresses and context outside a one-hour window. Pagination
+consumes the same three-query budget as other follow-up queries.
+
+Every model and method uses the same 3,200-token output allowance. The report
+prompt permits up to 32 observations, and the schema accepts up to 40. V4
+changes instructions, query capabilities, and output allowance together.
+An observed difference from v3 cannot isolate the coverage inventory's effect.
+
+Compare the installed local models with identical frozen prompts, tool
+schemas, decoding settings, cases, and budgets. Qwen is the reference model.
+Compare adaptive investigation with the fixed-search Qwen control separately.
+Keep model tags and weight digests, raw responses, tool transcripts, errors,
+timings, prompt and protocol hashes, and local trace trees. Preserve every
+attempted cell. Development and held-out results must stay separate.
+
+The [frozen protocol file](protocol-v4.json) records source and schema hashes,
+model tags, manifests, prompts, and budgets. Its file SHA-256 is
+`2ef24248b2bcc5607444dbb200139f90dc8aa356e3400e0b359daa5f723125b1`.
+The prompt SHA-256 is
+`1592e44d335c044e5f06b6ddfc0a0fbdb62431b42adee86e5f0240811ab37db2`.
+
+All eight exposed-case Qwen v4 regression investigations completed. Adaptive
+mean recall changed from 66.25% to 60.00%, and mean exact support changed from
+30.00% to 46.67%. Fixed search reached 95.00% recall and 50.83% exact support in
+v4. Adaptive still used one query per case and missed context. The coverage gap
+remains, and these exposed-case results do not establish an adaptive advantage.
+Both methods' maintenance reports still inferred trail state from a
+`StartLogging` request despite a null status response. See the complete measured
+regression and preserved v3 comparison in [progress](../docs/progress.md).
+
+The regression's actual trace trees contain 16 model spans and 16 query-tool
+spans. The genuine local SDK replay evaluated eight outputs and produced 176
+feedback items with `upload_results=false` and `inference_rerun=false`. Its
+source hash matches raw results SHA-256
+`e3277416799b390db76a8fced5b490c11ce19bd6d7815db045b834638f43da11`.
+
+All eight fresh-suite v4 investigations completed. Gemma and Mistral adaptive
+search each reached 100.00% precision and recall but 0.00% exact support. Qwen
+adaptive reached 100.00% precision, 87.50% recall, and 12.50% exact support. The
+fixed Qwen control reached 58.33% precision, 37.50% recall, and 0.00% exact
+support. These means cover two cases, not a large test population.
+
+In total, 31 of 32 findings for the supplied fixed propositions failed strict
+support requirements. Most
+failures were omitted fields or citations, with some wrong status labels.
+This is not a count of 31 proven semantic hallucinations. Human review found
+that Qwen recovered all four development records and emitted 15 exact
+observations, but still misread the direction of the caller timing comparison.
+Gemma and Mistral chose the correct fixed status labels, while their reports
+omitted required evidence support. Qwen's held-out investigation stopped after
+two queries and missed a later denied `DeleteBucket` request.
+
+The fresh raw traces contain 26 real model spans and 22 query-tool spans. The
+genuine offline SDK replay evaluated eight outputs and produced 176 feedback
+items with uploads and new inference disabled. Its source hash and feedback
+matched the saved results and recomputed metrics. Detailed development and
+held-out results, source hashes, and the actual CLI demonstration are in
+[progress](../docs/progress.md); versioned cell and split metrics are in
+[results-v4.json](results-v4.json).
+
+Final local source verification passed Ruff checks, formatting, and all 220
+tests. CI status tied to each commit is available in the
+repository [Actions workflow](https://github.com/Shanmukha-Y/tracetrail/actions/workflows/ci.yml).
+
+The fresh cases show higher adaptive retrieval coverage than this fixed-search
+control, with weak claim support. They do not establish a model winner, broad
+adaptive advantage, or reliability result. One run per cell does not measure
+response stability. One development case and one held-out case can expose
+failures but cannot establish production performance. Their outputs are now
+inspected and exposed for any later change that uses them.
 
 ## What the scorer checks
 
@@ -95,12 +188,34 @@ Run development investigations with installed local Ollama models:
 uv run tracetrail compare --split development --output local-results/development.json
 ```
 
+Select the new v3 development case explicitly:
+
+```sh
+uv run tracetrail compare --manifest evaluation/cases-v3.json --split development --output local-results/development-suite-v3.json
+```
+
 The runner records model responses, evidence, tool history, errors, versions,
 hashes, budgets, and timing. The scorer does not call a model. Constructed
 annotation-perfect reports and injected tool faults in `test_evaluation.py`
 are unit-test inputs. They are not model results or capability evidence.
 
-This four-case suite is too small to establish production performance. It can
+These small synthetic suites are too small to establish production performance. They can
 expose specific failures and support a repeatable local comparison. New data,
 more independent annotations, and human review are required before broader
 claims can be made.
+
+## Genuine local LangSmith SDK evaluation
+
+The local evaluator calls the real LangSmith SDK `evaluate()` function with
+local examples, `upload_results=False`, and `disable_evaluator_tracing=True`.
+It replays saved inference outputs and recomputes support against the manifest
+recorded in the batch. It makes no new model calls. The client transport rejects
+API requests. Tests also forbid socket connections while ambient tracing is
+enabled. SDK trace trees and feedback are saved to private local files.
+
+An offline SDK evaluation is not a hosted experiment or a hosted trace. Its
+timestamps describe replay and scoring; the stored result retains the original
+investigation timings. A full LangSmith server and UI remain separate and
+unconfigured. The local SDK workflow requires no account or key. See
+[integration details](../docs/integrations.md) and dated measured results in
+[progress](../docs/progress.md).

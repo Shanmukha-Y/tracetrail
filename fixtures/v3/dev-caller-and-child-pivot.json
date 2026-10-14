@@ -1,0 +1,202 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "30000000-0000-4000-8000-000000000601",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-02-03T08:30:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "93000000-0000-4000-8000-000000000601",
+      "requestParameters": null,
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.112",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v3-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV3D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/release-helper",
+        "principalId": "AIDA3D79E763534FB93A5",
+        "type": "IAMUser",
+        "userName": "release-helper"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "30000000-0000-4000-8000-000000000602",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-02-03T12:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "93000000-0000-4000-8000-000000000602",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/TrailOps",
+        "roleSessionName": "change-review-18"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/TrailOps/change-review-18",
+          "assumedRoleId": "AROA4A68ECF00BFAA155C:change-review-18"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICV3D0001",
+          "expiration": "2026-02-03T13:00:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.121",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v3-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV3D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/release-helper",
+        "principalId": "AIDA3D79E763534FB93A5",
+        "type": "IAMUser",
+        "userName": "release-helper"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "30000000-0000-4000-8000-000000000603",
+      "eventName": "StopLogging",
+      "eventSource": "cloudtrail.amazonaws.com",
+      "eventTime": "2026-02-03T12:02:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "93000000-0000-4000-8000-000000000603",
+      "requestParameters": {
+        "name": "arn:aws:cloudtrail:us-east-1:000000000000:trail/synthetic-v3-main"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.44",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v3-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV3D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/TrailOps/change-review-18",
+        "principalId": "AROA4A68ECF00BFAA155C:change-review-18",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-02-03T12:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/TrailOps",
+            "principalId": "AROA4A68ECF00BFAA155C",
+            "type": "Role",
+            "userName": "TrailOps"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "30000000-0000-4000-8000-000000000604",
+      "eventName": "GetTrailStatus",
+      "eventSource": "cloudtrail.amazonaws.com",
+      "eventTime": "2026-02-03T12:03:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "93000000-0000-4000-8000-000000000604",
+      "requestParameters": {
+        "name": "arn:aws:cloudtrail:us-east-1:000000000000:trail/synthetic-v3-main"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.44",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v3-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV3D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/TrailOps/change-review-18",
+        "principalId": "AROA4A68ECF00BFAA155C:change-review-18",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-02-03T12:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/TrailOps",
+            "principalId": "AROA4A68ECF00BFAA155C",
+            "type": "Role",
+            "userName": "TrailOps"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "30000000-0000-4000-8000-000000000605",
+      "eventName": "ListBuckets",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-02-03T12:01:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "93000000-0000-4000-8000-000000000605",
+      "requestParameters": null,
+      "responseElements": null,
+      "sourceIPAddress": "198.51.100.121",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v3-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV3N0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/inventory-bot",
+        "principalId": "AIDA807E2DBF28001F10C",
+        "type": "IAMUser",
+        "userName": "inventory-bot"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "30000000-0000-4000-8000-000000000606",
+      "eventName": "GetTrailStatus",
+      "eventSource": "cloudtrail.amazonaws.com",
+      "eventTime": "2026-02-03T12:03:30Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "93000000-0000-4000-8000-000000000606",
+      "requestParameters": {
+        "name": "arn:aws:cloudtrail:us-east-1:000000000000:trail/synthetic-v3-other"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.44",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v3-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV3N0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/status-reader",
+        "principalId": "AIDAEC0A375324E441700",
+        "type": "IAMUser",
+        "userName": "status-reader"
+      }
+    }
+  ]
+}

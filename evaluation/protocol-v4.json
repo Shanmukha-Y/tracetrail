@@ -1,0 +1,62 @@
+{
+  "expected_exposed_regression_runs": 8,
+  "expected_fresh_runs": 8,
+  "exposed_regression_manifest": {
+    "path": "evaluation/cases-v2.json",
+    "sha256": "c30eb66718886e6a3d80efe1f034bf913634c9e839873e6fcb30d8f222e90446"
+  },
+  "fresh_manifest": {
+    "path": "evaluation/cases-v3.json",
+    "sha256": "6a1a27484de6015f001c1c9d4dd05c7d5f25dda185dd0063935d5c3abb71053d"
+  },
+  "frozen_at": "2026-10-14T13:56:56.775261+00:00",
+  "hosted_uploads": false,
+  "limitations": [
+    "Only two fresh synthetic cases; no production reliability or model winner claim.",
+    "Earlier cases are exposed regression data.",
+    "Composite protocol change; no isolated attribution to the inventory.",
+    "Narrative semantics require human review."
+  ],
+  "models": [
+    "qwen3.8:27b-q4_K_M",
+    "gemma4:31b-it-q4_K_M",
+    "mistral-small3.2:24b"
+  ],
+  "prompt_sha256": "1592e44d335c044e5f06b6ddfc0a0fbdb62431b42adee86e5f0240811ab37db2",
+  "protocol": {
+    "citation_encoding": "local-alias-to-file-hash-index",
+    "max_prompt_payload_bytes": 48000,
+    "max_queries": 3,
+    "model_timeout_seconds": 150,
+    "num_ctx": 16384,
+    "num_predict": 3200,
+    "query_limit": 20,
+    "run_deadline_seconds": 600,
+    "seed": 42,
+    "structured_method": "json_schema",
+    "temperature": 0,
+    "thinking": false,
+    "version": "tracetrail-v4"
+  },
+  "reference_model": "qwen3.8:27b-q4_K_M",
+  "repeats_per_cell": 1,
+  "schema_sha256": {
+    "analysis": "06514b39e12beb26645d348cc0927052b46b6febcac7e2b67d1ad942eae755c7",
+    "decision": "5f9a75dbf9c0da05f0b72e44149f79cb62bcf80e4e55414ec41ebd1b8a1bccca",
+    "query": "11cec0cf3fed8037b0ab09a36a43212a58b07f57f77f3521e50d5bdba35772ad"
+  },
+  "source_sha256": {
+    "src/tracetrail/__init__.py": "3453b39ea3b1b7b85a24e0b95fd2a27a1b98222d2bad0765a31bfd17512e69fc",
+    "src/tracetrail/agent.py": "95c7d216b4e3f9de9de25eafa45a85537fef28fe3d255b4fef29efcb9e75986f",
+    "src/tracetrail/cli.py": "3cea2482f1a7a082a114302a67b70a7a16bbf8ce4e61e98a2e5c0baf293a95ce",
+    "src/tracetrail/coverage.py": "059c7f92f10d3bc52d844adad5864a43912d672df048dd4ae2ee08ffdf76da6e",
+    "src/tracetrail/evaluation.py": "e755383bc49e87edfceede571cf886382aec7ec3a2465637711dd8e9ba4bcce1",
+    "src/tracetrail/local_model.py": "a2a24421f791a99532e4d9df64cdc3144430aa65d058b9b1ac32942f14d28abd",
+    "src/tracetrail/store.py": "cd0a17f28dc80a2c301ad63d37f31dda02075140a542cd4b40ff110cfe514a02",
+    "src/tracetrail/telemetry.py": "3d640f543cd2d1b156772d87425b4ab0b2b453279d8a71fafc738010d94d2eef"
+  },
+  "strategies": {
+    "adaptive": "model-selected queries with observed-only scope inventory",
+    "fixed": "three seed-based identity/IP/key queries within plus or minus one hour"
+  }
+}
