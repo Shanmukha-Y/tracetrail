@@ -10,12 +10,174 @@ The repository stays private until the release checks pass. Workflow Sentinel is
 - Observed field validation, hypothesis status, cited timelines, raw failure retention, and private local files.
 - Three installed local model tags, sequential inference, raw remote-routing checks, proxy and redirect guards, and no ambient credential use.
 - Real local graph traces and genuine offline LangSmith SDK evaluation with blocked HTTP.
-- Preserved four-case synthetic suites and a new two-case v3 suite with field support annotations.
+- Preserved earlier synthetic suites and a frozen two-case v4 suite with field support annotations.
 - CI for lint, formatting, and tests without inference or hosted tracing.
+
+## October 15: selected-record facts and temporal context
+
+Protocol v5 separates model decisions from exact field extraction. The model
+selects records, finding statuses, citations, and limitations. After a valid
+selection, code copies typed JSON fields from those selected returned records.
+The code does not select additional events, use annotations, change findings,
+or infer approval, intent, success, or state. The output marks these facts as
+`selected-record-projection-v1`. Conclusions and narrative remain semantically
+unverified.
+
+The model receives evidence in UTC timestamp order and a separate table of
+signed seconds from the seed. Negative values precede the seed. Citation aliases
+remain stable in discovery order. This is timestamp assistance, not a claim of
+causality or a verified temporal conclusion.
+
+The projection preserves exact types, empty values, whole arrays, and missing
+versus null API fields. It fails explicitly on ambiguous paths or limit errors.
+The limits are 2,000 observations, one million bytes of compact ASCII-escaped
+JSON, depth 32, and 512 characters per field path. Invalid selections receive no
+extracted facts. The model cannot supply its own observation values through the
+new wire schema.
+
+The fresh `tracetrail-synthetic-v4` suite was reviewed and frozen before v5
+inference. It has one development and one held-out case. All records are
+invented, with native UTC timestamps. The earlier suites remain unchanged and
+are exposed regression material. The new manifest SHA-256 is
+`25514d27f154f01662a8f0657f11806c6273189d3d37155c6e6eff6b9d91af16`.
+
+The [v5 protocol](../evaluation/protocol-v5.json) records source and schema
+hashes, projection rules, prompts, models, and budgets. Its SHA-256 is
+`91adcc1f7e70d6793cc4a9a83f68396177385896789fe5dcb74b907f788b005b`.
+The prompt SHA-256 is
+`2f26e74763277a642ad5df16652a97c42693ad1fca01532a90d369652768f7c6`.
+All methods and models use the same extraction, chronology, report schema,
+three-query budget, and decoding settings. V5 changes these parts together.
+
+Local disk traces and genuine offline LangSmith SDK evaluation are the intended
+integration. No account, credential, hosted project, upload destination, server,
+or deployment is required. Hosted LangSmith is outside scope and is not a
+release blocker.
+
+### Reporting-only ablation
+
+A replay of the eight saved v4 suite-v3 outputs replaced only observations with
+selected-record projection. Findings, statuses, citations, selections, histories,
+and inference timings stayed identical. This made no inference calls and is not
+new v5 model evidence. Strict annotation failures fell from 31 to 17 of 32.
+
+| Earlier group | Original support | Reporting-only projected support |
+| --- | --- | --- |
+| Qwen adaptive | 12.5% | 62.5% |
+| Qwen fixed | 0% | 0% |
+| Gemma adaptive | 0% | 62.5% |
+| Mistral adaptive | 0% | 62.5% |
+
+The saved artifact is `local-results/reporting-ablation-v4.json`, SHA-256
+`43e3caec1b8a4e617c1c190f5aab0c3a68f80ced7c0ea6a75446af259426e67d`.
+This isolates a mechanical extraction benefit. It does not show improved model
+reasoning, query planning, or citation selection.
+
+### Actual exposed-case Qwen regression
+
+Four real v5 investigations completed on the two exposed v3 cases. The offline
+SDK replay verified all four outputs and produced 88 feedback items with
+uploads and new inference disabled. Actual inference traces contain nine model
+spans and nine tool spans. Saved metrics and feedback recomputed exactly.
+
+| Qwen adaptive | V4 actual | V4 reporting-only projection | V5 actual |
+| --- | --- | --- | --- |
+| Mean exact support | 12.5% | 62.5% | 75% |
+| Mean recall | 87.5% | 87.5% | 75% |
+| Mean status accuracy | 75% | 75% | 75% |
+
+V5 fixed-search mean support remained 0% and recall remained 37.5%. Adaptive
+v5 averaged 1.5 queries and 95.34 seconds; fixed averaged three queries and
+38.73 seconds. Higher support primarily reflects extracted fields. It does not
+establish a temporal reasoning fix. The adaptive development report still
+refuted missing caller history while saying it could not be verified. Another
+finish decision contained a query and said it would execute it, but returned
+`action=finish`. The graph honored that action and left the later denied request
+unretrieved. These failures remain visible.
+
+Regression raw results SHA-256:
+`c02f6f7f2c01e770146aa33c1c5fdfd4e7518c635395a2feb77ded9610220f07`.
+Offline SDK artifact SHA-256:
+`7e74fd9bf06dc0c1cac5da41f8257db72938b59156697ac85fabd1532440bff8`.
+
+### Fresh comparison and CLI validation
+
+Eight real investigations completed on the fresh v4 suite. There was one run
+per model, method, and case cell. Each group below contains two cases, one per
+split. Precision was 100% in every group. The unchanged scorer and frozen
+annotations recomputed exactly. The numeric results and hashes are saved in
+[results-v5.json](../evaluation/results-v5.json).
+
+| Model and method | Mean recall | Mean exact support | Mean status accuracy | Strict annotation failures | Mean queries | Mean model calls | Mean seconds |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Qwen adaptive | 87.5% | 62.5% | 87.5% | 3/8 | 2 | 4 | 110.83 |
+| Qwen fixed | 50% | 25% | 50% | 6/8 | 3 | 1 | 34.88 |
+| Gemma adaptive | 100% | 75% | 100% | 2/8 | 3 | 4 | 138.16 |
+| Mistral adaptive | 62.5% | 37.5% | 62.5% | 5/8 | 3 | 4 | 80.13 |
+
+The split rows remain separate in the numeric artifact. Qwen adaptive retrieved
+all four relevant development records, with 75% support and 100% status
+accuracy. On the held-out case it retrieved three of four relevant records,
+with 50% support and 75% status accuracy. It again refuted missing caller
+history while saying that history could not be verified. Its correct ordering
+of the development case across midnight does not establish a general temporal
+reasoning fix. These cases are now exposed for future development.
+
+Sixteen of 32 fresh findings failed strict annotations. Every failure included
+a missing required citation. Eight also had a status mismatch, and 12 lacked
+required field observations; these counts overlap. Required facts from
+unselected or unretrieved events remain missing. All emitted projected facts
+resolved exactly, but exact values do not verify finding meaning. This failure
+count is not a count of proven hallucinations. The sample is too small for a
+model ranking or a reliability claim.
+
+Fresh inference traces contain 26 model spans and 22 tool spans. The genuine
+offline SDK replay evaluated all eight outputs and produced 176 feedback items,
+with uploads and new inference disabled. The Qwen weight digest matches the
+preserved v4 baseline. Effective digests were constant within each model's
+batch. All frozen source, schema, prompt, and manifest hashes matched after
+the runs. No source or prompt changes were made during the comparison.
+
+Fresh raw results SHA-256:
+`81b39950761798f8d49cef49555338d648695918670c7c015cd3b5641e71744f`.
+Offline SDK artifact SHA-256:
+`c4b87252c549f3e2ae3318ea485f3817d87474defbfc6592a123c3745c3a26a2`.
+
+The real CLI demo used `dev-midnight-role-change` from the same manifest. It
+completed in 120.52 seconds with four model calls and two queries. It selected
+all four relevant events and emitted 113 exact observations. Precision, recall,
+and status accuracy were 100%; strict annotated support was 75%. This separate
+demonstration is not an additional benchmark cell. Its saved raw artifact is
+`local-results/demo-v5.json`, SHA-256
+`3c43cfa0d2842afedae2252cb058d9795deee3e4b8e44447d687a3654bb59a16`.
+
+This increment made 13 actual local investigations in total: four exposed-case
+regressions, eight fresh comparisons, and one demo. Their trace trees contain
+39 model spans and 33 tool spans. The 12 comparison outputs received 264 real
+offline SDK feedback items. Raw logs, model responses, and trace trees remain
+in ignored local files with mode `0600`. Only the synthetic fixtures, numeric
+summaries, protocol fingerprints, and artifact hashes are versioned. Ollama had
+no loaded models after the final demo.
+
+Local verification passed Ruff lint, formatting, and all 292 tests. Tests use
+clearly separated mocks where needed; capability evidence above comes from
+actual Ollama calls. Exact-commit CI is available in the repository
+[Actions workflow](https://github.com/Shanmukha-Y/tracetrail/actions/workflows/ci.yml).
+
+### Remaining release checks
+
+- Improve finding-specific citation selection without adding citations from
+  annotations or repairing failed model decisions after the fact.
+- Distinguish missing evidence from refutation, and retain contradictory
+  statuses, narrative, and unused-query failures as evidence.
+- Test premature finish decisions and temporal reasoning on more independent
+  cases, with repeated runs and manual semantic review.
+- Keep reporting gains separate from retrieval, planning, and reasoning gains.
+  Local SDK evaluation is complete; hosted credentials are not a blocker.
 
 ## October 14: protocol v4 and suite v3
 
-The source now defines `tracetrail-v4`. Its planner receives an inventory of
+The October 14 source defined `tracetrail-v4`. Its planner receives an inventory of
 observed candidate filters and actual attempted query scopes. The model still
 chooses its queries. The inventory does not supply answer annotations or force
 a search. The prompt distinguishes use of a caller key from use of a returned
@@ -256,7 +418,7 @@ The v2 manifest hash is `c30eb66718886e6a3d80efe1f034bf913634c9e839873e6fcb30d8f
 - Improve large-file performance and evidence selection for records that exceed the model prompt budget.
 - Broader release review remains separate from CI. Lint, formatting, and all 147 tests passed for the October 13 source increment. Final local v4 source verification passed Ruff checks, formatting, and all 220 tests. CI status tied to each commit is available in the repository [Actions workflow](https://github.com/Shanmukha-Y/tracetrail/actions/workflows/ci.yml).
 
-A full local LangSmith server and UI remain outside this increment. Official self-hosting requires an Enterprise add-on license. The application does not upload to a hosted service or configure a licensed deployment. Offline SDK evaluation and disk traces do not need an account or key.
+Local disk traces and offline LangSmith SDK evaluation are the intended integration. Hosted and self-hosted platform UI deployments are outside this local-only project. No credential, server, or upload setup is needed.
 
 ## Support metric interpretation
 

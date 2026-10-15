@@ -1,0 +1,475 @@
+{
+  "cases": [
+    {
+      "annotations": [
+        {
+          "claim_id": "caller_before_issuance",
+          "expected_status": "supported",
+          "reason": "The same caller key occurs at 23:49Z and 23:58Z on the same UTC date.",
+          "required_event_ids": [
+            "40000000-0000-4000-8000-000000000901",
+            "40000000-0000-4000-8000-000000000902"
+          ],
+          "required_observations": [
+            {
+              "event_id": "40000000-0000-4000-8000-000000000901",
+              "field": "eventName",
+              "value": "GetCallerIdentity"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000902",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000901",
+              "field": "userIdentity.userName",
+              "value": "release-auditor"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000902",
+              "field": "userIdentity.userName",
+              "value": "release-auditor"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000901",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV4D0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000902",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV4D0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000901",
+              "field": "eventTime",
+              "value": "2026-03-14T23:49:00Z"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000902",
+              "field": "eventTime",
+              "value": "2026-03-14T23:58:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "change_before_issuance",
+          "expected_status": "refuted",
+          "reason": "The key was issued three minutes before the change, across midnight UTC.",
+          "required_event_ids": [
+            "40000000-0000-4000-8000-000000000902",
+            "40000000-0000-4000-8000-000000000903"
+          ],
+          "required_observations": [
+            {
+              "event_id": "40000000-0000-4000-8000-000000000902",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "eventName",
+              "value": "UpdateRole"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000902",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV4D0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV4D0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000902",
+              "field": "eventTime",
+              "value": "2026-03-14T23:58:00Z"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "eventTime",
+              "value": "2026-03-15T00:01:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "empty_description_request",
+          "expected_status": "supported",
+          "reason": "The log records an empty string in the change request and no API error.",
+          "required_event_ids": [
+            "40000000-0000-4000-8000-000000000902",
+            "40000000-0000-4000-8000-000000000903"
+          ],
+          "required_observations": [
+            {
+              "event_id": "40000000-0000-4000-8000-000000000902",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000902",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV4D0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV4D0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "eventName",
+              "value": "UpdateRole"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "requestParameters.roleName",
+              "value": "CatalogReader"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "requestParameters.description",
+              "value": ""
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "errorCode",
+              "present": false,
+              "value": null
+            }
+          ]
+        },
+        {
+          "claim_id": "later_role_state",
+          "expected_status": "uncertain",
+          "reason": "GetRole logs the request with a null response, not the role's returned state.",
+          "required_event_ids": [
+            "40000000-0000-4000-8000-000000000903",
+            "40000000-0000-4000-8000-000000000904"
+          ],
+          "required_observations": [
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "eventName",
+              "value": "UpdateRole"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "requestParameters.roleName",
+              "value": "CatalogReader"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "requestParameters.description",
+              "value": ""
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000904",
+              "field": "eventName",
+              "value": "GetRole"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000904",
+              "field": "requestParameters.roleName",
+              "value": "CatalogReader"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000903",
+              "field": "eventTime",
+              "value": "2026-03-15T00:01:00Z"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000904",
+              "field": "eventTime",
+              "value": "2026-03-15T00:03:00Z"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000904",
+              "field": "readOnly",
+              "value": true
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000000904",
+              "field": "responseElements",
+              "value": null
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v4/dev-midnight-role-change.json",
+      "fixture_sha256": "d04ade3db094e1a32bd897a61dbac45ec530766eba5ce57c90156ba5503238e1",
+      "hypotheses": [
+        {
+          "claim_id": "caller_before_issuance",
+          "statement": "The original release-auditor key called GetCallerIdentity before it called AssumeRole."
+        },
+        {
+          "claim_id": "change_before_issuance",
+          "statement": "The UpdateRole request occurred before the AssumeRole request that issued its temporary access key."
+        },
+        {
+          "claim_id": "empty_description_request",
+          "statement": "The returned-key session requested an empty description for CatalogReader through UpdateRole without a recorded API error."
+        },
+        {
+          "claim_id": "later_role_state",
+          "statement": "CatalogReader had an empty description when the later GetRole request was made."
+        }
+      ],
+      "id": "dev-midnight-role-change",
+      "notes": "Fresh invented UTC cross-midnight development sequence. All raw timestamps use UTC Z; offset timestamp handling is tested through query bounds separately.",
+      "question": "Investigate the caller and returned credentials of this role assumption. Establish the order of related requests across the UTC date boundary, describe the requested role change, and separate that request from later role state. Keep other callers at shared IP addresses separate.",
+      "relevant_event_ids": [
+        "40000000-0000-4000-8000-000000000901",
+        "40000000-0000-4000-8000-000000000902",
+        "40000000-0000-4000-8000-000000000903",
+        "40000000-0000-4000-8000-000000000904"
+      ],
+      "seed_event_id": "40000000-0000-4000-8000-000000000902",
+      "split": "development"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "original_caller_order",
+          "expected_status": "supported",
+          "reason": "The same original key appears in the earlier location and later issuance requests.",
+          "required_event_ids": [
+            "40000000-0000-4000-8000-000000001001",
+            "40000000-0000-4000-8000-000000001002"
+          ],
+          "required_observations": [
+            {
+              "event_id": "40000000-0000-4000-8000-000000001001",
+              "field": "eventName",
+              "value": "GetBucketLocation"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001002",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001001",
+              "field": "userIdentity.userName",
+              "value": "archive-service"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001002",
+              "field": "userIdentity.userName",
+              "value": "archive-service"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001001",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV4H0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001002",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV4H0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001001",
+              "field": "eventTime",
+              "value": "2026-04-02T18:05:00Z"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001002",
+              "field": "eventTime",
+              "value": "2026-04-02T20:00:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "issued_key_link",
+          "expected_status": "supported",
+          "reason": "The exact returned key links the earlier issuance to the later data request.",
+          "required_event_ids": [
+            "40000000-0000-4000-8000-000000001002",
+            "40000000-0000-4000-8000-000000001003"
+          ],
+          "required_observations": [
+            {
+              "event_id": "40000000-0000-4000-8000-000000001002",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001003",
+              "field": "eventName",
+              "value": "GetObject"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001002",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV4H0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001003",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV4H0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001002",
+              "field": "sourceIPAddress",
+              "value": "198.51.100.152"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001003",
+              "field": "sourceIPAddress",
+              "value": "203.0.113.153"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001002",
+              "field": "eventTime",
+              "value": "2026-04-02T20:00:00Z"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001003",
+              "field": "eventTime",
+              "value": "2026-04-02T20:04:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "object_deletion_succeeded",
+          "expected_status": "refuted",
+          "reason": "The later request for the same bucket and key was denied, not completed.",
+          "required_event_ids": [
+            "40000000-0000-4000-8000-000000001003",
+            "40000000-0000-4000-8000-000000001004"
+          ],
+          "required_observations": [
+            {
+              "event_id": "40000000-0000-4000-8000-000000001003",
+              "field": "eventName",
+              "value": "GetObject"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001004",
+              "field": "eventName",
+              "value": "DeleteObject"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001003",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV4H0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001004",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV4H0001"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001003",
+              "field": "requestParameters.bucketName",
+              "value": "synthetic-archive-v4"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001004",
+              "field": "requestParameters.bucketName",
+              "value": "synthetic-archive-v4"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001003",
+              "field": "requestParameters.key",
+              "value": "retention/quarterly-example.parquet"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001004",
+              "field": "requestParameters.key",
+              "value": "retention/quarterly-example.parquet"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001003",
+              "field": "eventTime",
+              "value": "2026-04-02T20:04:00Z"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001004",
+              "field": "eventTime",
+              "value": "2026-04-02T20:06:00Z"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001004",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_retention",
+          "expected_status": "uncertain",
+          "reason": "The supplied API records contain no approval or retention-policy evidence.",
+          "required_event_ids": [
+            "40000000-0000-4000-8000-000000001002",
+            "40000000-0000-4000-8000-000000001003",
+            "40000000-0000-4000-8000-000000001004"
+          ],
+          "required_observations": [
+            {
+              "event_id": "40000000-0000-4000-8000-000000001002",
+              "field": "requestParameters.roleSessionName",
+              "value": "retention-check-84"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001003",
+              "field": "eventName",
+              "value": "GetObject"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001004",
+              "field": "eventName",
+              "value": "DeleteObject"
+            },
+            {
+              "event_id": "40000000-0000-4000-8000-000000001004",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v4/heldout-archive-role-chain.json",
+      "fixture_sha256": "d2e2e098ee4463638e443039110ad81d19133ce45d0300ca760b22a73cabe67f",
+      "hypotheses": [
+        {
+          "claim_id": "original_caller_order",
+          "statement": "The original archive-service key called GetBucketLocation before the AssumeRole request."
+        },
+        {
+          "claim_id": "issued_key_link",
+          "statement": "The GetObject request used the temporary key issued by the earlier AssumeRole request from a different source IP address."
+        },
+        {
+          "claim_id": "object_deletion_succeeded",
+          "statement": "The later DeleteObject request for the same object by that temporary key succeeded."
+        },
+        {
+          "claim_id": "approved_retention",
+          "statement": "The object access and denied deletion were approved retention maintenance."
+        }
+      ],
+      "id": "heldout-archive-role-chain",
+      "notes": "Fresh invented held-out archive sequence. Same-IP requests by other principals are distractors, not part of the credential chain.",
+      "question": "Investigate this archive object request. Find the issuing request and original caller context, follow the temporary key into later object activity, and test a retention-maintenance explanation. Distinguish denied requests from completed actions, and do not treat a session name as approval.",
+      "relevant_event_ids": [
+        "40000000-0000-4000-8000-000000001001",
+        "40000000-0000-4000-8000-000000001002",
+        "40000000-0000-4000-8000-000000001003",
+        "40000000-0000-4000-8000-000000001004"
+      ],
+      "seed_event_id": "40000000-0000-4000-8000-000000001003",
+      "split": "heldout"
+    }
+  ],
+  "data_origin": "Entirely invented fresh cases. No actual account, incident, person, private logs, or public attack sample is represented.",
+  "design_notes": "Native UTC timestamps, including a development midnight boundary. Offset-aware time inputs are tested separately in local query tests. Exact scalar source fields support fixed propositions; approval and unlogged read-only response state remain uncertain.",
+  "fixture_license": "MIT (same as repository)",
+  "freeze_policy": "Freeze reviewed manifest and fixture hashes before first inference. Preserve v1-v3 and all their results; none is a fresh held-out suite now. Do not edit this suite in place after recording results.",
+  "schema_version": "1",
+  "suite_id": "tracetrail-synthetic-v4"
+}

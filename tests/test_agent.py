@@ -9,7 +9,15 @@ import pytest
 from langchain_core.messages import AIMessage
 from pydantic import ValidationError
 
-from tracetrail.agent import Analysis, Decision, Observation, investigate, validate_analysis
+import tracetrail.agent as agent
+from tracetrail.agent import (
+    Analysis,
+    Decision,
+    Observation,
+    ReportSelection,
+    investigate,
+    validate_analysis,
+)
 from tracetrail.store import CloudTrailStore, Query
 
 
@@ -49,11 +57,12 @@ class TestOnlyModel:
                         "parsed": None,
                         "parsing_error": ValueError("Test-only schema failure"),
                     }
-                return {
-                    "raw": AIMessage(content=json.dumps(response, sort_keys=True)),
-                    "parsed": schema.model_validate(response),
-                    "parsing_error": None,
-                }
+                raw = AIMessage(content=json.dumps(response, sort_keys=True))
+                try:
+                    parsed = schema.model_validate(response)
+                except ValidationError as exc:
+                    return {"raw": raw, "parsed": None, "parsing_error": exc}
+                return {"raw": raw, "parsed": parsed, "parsing_error": None}
 
         return TestOnlyInvoker()
 
@@ -114,17 +123,23 @@ def decision(action="finish", *, query=None, identifier=None):
     }
 
 
-def analysis_for(store, event_ids=("seed",)):
+def selection_for(store, event_ids=("seed",)):
+    """Construct explicit test-only wire output without model field values."""
     refs = [store.get(event_id)["ref"] for event_id in event_ids]
     return {
         "findings": [
-            {
-                **hypothesis,
-                "status": "uncertain",
-                "citations": refs,
-            }
-            for hypothesis in HYPOTHESES
+            {**hypothesis, "status": "uncertain", "citations": refs} for hypothesis in HYPOTHESES
         ],
+        "selected_event_refs": refs,
+        "limitations": ["These records do not show intent or maintenance approval."],
+    }
+
+
+def analysis_for(store, event_ids=("seed",)):
+    """Construct a materialized report for direct validator tests only."""
+    selection = selection_for(store, event_ids)
+    return {
+        **selection,
         "observations": [
             {
                 "citation": ref,
@@ -132,11 +147,14 @@ def analysis_for(store, event_ids=("seed",)):
                 "value": store.get(ref)["record"]["eventName"],
                 "present": True,
             }
-            for ref in refs
+            for ref in selection["selected_event_refs"]
         ],
-        "selected_event_refs": refs,
-        "limitations": ["These records do not show intent or maintenance approval."],
     }
+
+
+def materialized_errors(store, report):
+    validated = Analysis.model_validate(report).model_dump(mode="json")
+    return validate_analysis(validated, store.records, HYPOTHESES)
 
 
 def run_test_graph(store, responses, *, strategy="adaptive"):
@@ -155,7 +173,7 @@ def run_test_graph(store, responses, *, strategy="adaptive"):
 
 
 def test_test_only_graph_stops_at_three_tools_and_four_model_calls(evidence_store):
-    report = analysis_for(evidence_store, ("seed", "earlier", "later"))
+    report = selection_for(evidence_store, ("seed", "earlier", "later"))
     result, model = run_test_graph(
         evidence_store,
         [
@@ -170,7 +188,12 @@ def test_test_only_graph_stops_at_three_tools_and_four_model_calls(evidence_stor
     assert result["query_count"] == 3
     assert result["model_calls"] == 4
     assert len(result["tool_history"]) == 3
-    assert [call["schema"] for call in model.calls] == [Decision, Decision, Decision, Analysis]
+    assert [call["schema"] for call in model.calls] == [
+        Decision,
+        Decision,
+        Decision,
+        ReportSelection,
+    ]
     assert len(model.responses) == 1
     assert len(result["evidence"]) == 3
     assert len({item["ref"] for item in result["evidence"]}) == 3
@@ -183,7 +206,7 @@ def test_test_only_model_graph_records_real_store_tool_span(evidence_store):
         [
             decision("query_events", query={"principal": PRINCIPAL}),
             decision(),
-            analysis_for(evidence_store),
+            selection_for(evidence_store),
         ],
     )
 
@@ -210,20 +233,25 @@ def test_test_only_model_graph_records_real_store_tool_span(evidence_store):
 
 
 def test_test_only_finish_uses_exact_seed_citations_and_observations(evidence_store):
-    report = analysis_for(evidence_store)
+    report = selection_for(evidence_store)
     result, model = run_test_graph(evidence_store, [decision(), report])
     assert result["status"] == "completed"
     assert result["query_count"] == 0
     assert result["model_calls"] == 2
     assert result["findings"] == report["findings"]
-    assert result["observations"] == report["observations"]
+    observed = {item["field"]: item for item in result["observations"]}
+    assert observed["eventName"]["value"] == "StopLogging"
+    assert observed["userIdentity.accessKeyId"]["value"] == "SYNTHETIC_KEY"
+    assert all(
+        item["citation"] == report["selected_event_refs"][0] for item in result["observations"]
+    )
     assert result["timeline"][0]["citation"] == evidence_store.get("seed")["ref"]
-    assert [call["schema"] for call in model.calls] == [Decision, Analysis]
+    assert [call["schema"] for call in model.calls] == [Decision, ReportSelection]
     assert result["failures"] == []
 
 
 def test_test_only_aliases_resolve_to_exact_records_and_keep_raw_response(evidence_store):
-    exact_report = analysis_for(evidence_store, ("later", "seed", "earlier"))
+    exact_report = selection_for(evidence_store, ("later", "seed", "earlier"))
     aliases = {
         evidence_store.get("seed")["ref"]: "E0",
         evidence_store.get("earlier")["ref"]: "E1",
@@ -235,8 +263,6 @@ def test_test_only_aliases_resolve_to_exact_records_and_keep_raw_response(eviden
     ]
     for finding in compact_report["findings"]:
         finding["citations"] = [aliases[ref] for ref in finding["citations"]]
-    for observation in compact_report["observations"]:
-        observation["citation"] = aliases[observation["citation"]]
     result, model = run_test_graph(
         evidence_store,
         [
@@ -249,12 +275,19 @@ def test_test_only_aliases_resolve_to_exact_records_and_keep_raw_response(eviden
     assert result["status"] == "completed"
     assert result["selected_event_refs"] == exact_report["selected_event_refs"]
     assert result["findings"] == exact_report["findings"]
-    assert result["observations"] == exact_report["observations"]
+    assert {item["citation"] for item in result["observations"]} == set(
+        exact_report["selected_event_refs"]
+    )
+    assert validate_analysis(result, result["evidence"], HYPOTHESES) == []
     assert result["tool_history"][1]["args"]["identifier"] == evidence_store.get("earlier")["ref"]
     assert result["tool_history"][1]["result"] == evidence_store.get("earlier")
     assert json.loads(result["model_history"][-1]["output"]) == compact_report
     planner_input = json.loads(model.calls[1]["messages"][-1].content)
-    assert [item["ref"] for item in planner_input["evidence"]] == ["E0", "E1", "E2"]
+    assert [item["ref"] for item in planner_input["evidence"]] == ["E1", "E0", "E2"]
+    assert [item["event_id"] for item in planner_input["evidence"]] == ["earlier", "seed", "later"]
+    assert [row["citation"] for row in planner_input["chronology"]] == ["E1", "E0", "E2"]
+    assert [row["seconds_from_seed"] for row in planner_input["chronology"]] == [-1800, 0, 1800]
+    assert planner_input["seed"]["ref"] == "E0"
     for item in planner_input["evidence"]:
         assert item["record"] == evidence_store.get(item["event_id"])["record"]
     assert [row["event_id"] for row in result["timeline"]] == ["earlier", "seed", "later"]
@@ -262,88 +295,67 @@ def test_test_only_aliases_resolve_to_exact_records_and_keep_raw_response(eviden
     assert result["failures"] == []
 
 
-def test_test_only_observation_rejects_integer_for_boolean(evidence_store):
+@pytest.mark.parametrize("value,valid", [(1, False), (True, True)])
+def test_materialized_observation_checks_exact_boolean(evidence_store, value, valid):
     report = analysis_for(evidence_store)
     report["observations"] = [
         {
             "citation": evidence_store.get("seed")["ref"],
             "field": "requestParameters.enabled",
-            "value": 1,
+            "value": value,
         }
     ]
-    result, _ = run_test_graph(evidence_store, [decision(), report])
-    assert result["status"] == "invalid"
-    assert any(error["code"] == "unsupported_observation" for error in result["failures"])
-    assert result["observations"][0]["value"] == 1
+    errors = materialized_errors(evidence_store, report)
+    assert bool(errors) is not valid
+    if not valid:
+        assert errors[0]["code"] == "unsupported_observation"
     assert evidence_store.get("seed")["record"]["requestParameters"]["enabled"] is True
 
 
-def test_test_only_observation_accepts_exact_boolean(evidence_store):
-    report = analysis_for(evidence_store)
-    report["observations"] = [
-        {
-            "citation": evidence_store.get("seed")["ref"],
-            "field": "requestParameters.enabled",
-            "value": True,
-        }
-    ]
-    result, _ = run_test_graph(evidence_store, [decision(), report])
-    assert result["status"] == "completed"
-    assert result["failures"] == []
-
-
 @pytest.mark.parametrize("field,replacement", [("checked", 0), ("count", True)])
-def test_test_only_nested_observation_rejects_equal_value_with_wrong_json_type(
+def test_materialized_nested_observation_rejects_wrong_json_type(
     evidence_store, field, replacement
 ):
     original = evidence_store.get("seed")["record"]["requestParameters"]["settings"]
     altered = deepcopy(original)
     altered["flags"][0][field] = replacement
-    assert altered == original  # Plain Python equality would miss the nested JSON type change.
+    assert altered == original
     report = analysis_for(evidence_store)
     report["observations"] = [
         {
-            "citation": "E0",
+            "citation": evidence_store.get("seed")["ref"],
             "field": "requestParameters.settings",
             "value": altered,
         }
     ]
-    result, _ = run_test_graph(evidence_store, [decision(), report])
-    assert result["status"] == "invalid"
-    assert any(error["code"] == "unsupported_observation" for error in result["failures"])
-    assert result["observations"][0]["value"] == altered
-    assert result["observations"][0]["citation"] == evidence_store.get("seed")["ref"]
+    errors = materialized_errors(evidence_store, report)
+    assert any(error["code"] == "unsupported_observation" for error in errors)
     assert evidence_store.get("seed")["record"]["requestParameters"]["settings"] == original
 
 
-def test_test_only_nested_observation_accepts_exact_json_types(evidence_store):
+def test_materialized_nested_observation_accepts_exact_json_types(evidence_store):
     report = analysis_for(evidence_store)
     exact = evidence_store.get("seed")["record"]["requestParameters"]["settings"]
     report["observations"] = [
-        {"citation": "E0", "field": "requestParameters.settings", "value": exact}
+        {
+            "citation": evidence_store.get("seed")["ref"],
+            "field": "requestParameters.settings",
+            "value": exact,
+        }
     ]
-    result, _ = run_test_graph(evidence_store, [decision(), report])
-    assert result["status"] == "completed"
-    assert result["observations"][0]["value"] == exact
-    assert result["failures"] == []
+    assert materialized_errors(evidence_store, report) == []
 
 
-def test_test_only_observations_distinguish_absent_error_code_from_json_null(evidence_store):
+def test_materialized_observations_distinguish_missing_and_null(evidence_store):
+    ref = evidence_store.get("seed")["ref"]
     report = analysis_for(evidence_store)
     report["observations"] = [
-        {"citation": "E0", "field": "errorCode", "value": None, "present": False},
-        {"citation": "E0", "field": "responseElements", "value": None, "present": True},
+        {"citation": ref, "field": "errorCode", "value": None, "present": False},
+        {"citation": ref, "field": "responseElements", "value": None, "present": True},
     ]
-    result, _ = run_test_graph(evidence_store, [decision(), report])
-    assert result["status"] == "completed"
-    assert result["failures"] == []
-    by_field = {observation["field"]: observation for observation in result["observations"]}
-    assert by_field["errorCode"]["present"] is False
-    assert by_field["responseElements"]["present"] is True
-    assert all(observation["value"] is None for observation in result["observations"])
-    raw = evidence_store.get("seed")["record"]
-    assert "errorCode" not in raw
-    assert "responseElements" in raw and raw["responseElements"] is None
+    assert materialized_errors(evidence_store, report) == []
+    assert "errorCode" not in evidence_store.get("seed")["record"]
+    assert evidence_store.get("seed")["record"]["responseElements"] is None
 
 
 @pytest.mark.parametrize(
@@ -355,37 +367,51 @@ def test_test_only_observations_distinguish_absent_error_code_from_json_null(evi
         ("errorCode", False, "AccessDenied"),
     ],
 )
-def test_test_only_observation_rejects_wrong_presence_or_non_null_absence(
-    evidence_store, field, present, value
-):
+def test_materialized_observation_rejects_wrong_presence(evidence_store, field, present, value):
     report = analysis_for(evidence_store)
     report["observations"] = [
-        {"citation": "E0", "field": field, "value": value, "present": present}
+        {
+            "citation": evidence_store.get("seed")["ref"],
+            "field": field,
+            "value": value,
+            "present": present,
+        }
     ]
-    result, _ = run_test_graph(evidence_store, [decision(), report])
-    assert result["status"] == "invalid"
-    assert any(error["code"] == "unsupported_observation" for error in result["failures"])
-    assert result["observations"][0]["present"] is present
-    assert result["observations"][0]["value"] == value
+    assert any(
+        error["code"] == "unsupported_observation"
+        for error in materialized_errors(evidence_store, report)
+    )
 
 
-def test_test_only_missing_field_requires_explicit_absence_flag(evidence_store):
-    report = analysis_for(evidence_store)
-    report["observations"] = [{"citation": "E0", "field": "errorCode", "value": None}]
-    result, _ = run_test_graph(evidence_store, [decision(), report])
-    assert result["status"] == "invalid"
-    assert result["observations"][0]["present"] is True
-    assert any(error["code"] == "unsupported_observation" for error in result["failures"])
-
-
-def test_test_only_absence_observation_cannot_use_an_unknown_citation(evidence_store):
+def test_materialized_missing_field_requires_absence_flag(evidence_store):
     report = analysis_for(evidence_store)
     report["observations"] = [
-        {"citation": "E99", "field": "errorCode", "value": None, "present": False}
+        {
+            "citation": evidence_store.get("seed")["ref"],
+            "field": "errorCode",
+            "value": None,
+        }
     ]
-    result, _ = run_test_graph(evidence_store, [decision(), report])
-    assert result["status"] == "invalid"
-    assert any(error["code"] == "unsupported_observation" for error in result["failures"])
+    assert any(
+        error["code"] == "unsupported_observation"
+        for error in materialized_errors(evidence_store, report)
+    )
+
+
+def test_materialized_absence_cannot_use_unknown_citation(evidence_store):
+    report = analysis_for(evidence_store)
+    report["observations"] = [
+        {
+            "citation": "E99",
+            "field": "errorCode",
+            "value": None,
+            "present": False,
+        }
+    ]
+    assert any(
+        error["code"] == "unsupported_observation"
+        for error in materialized_errors(evidence_store, report)
+    )
 
 
 @pytest.mark.parametrize("present", [0, 1, "false", "true", None, [], {}])
@@ -397,7 +423,7 @@ def test_observation_presence_rejects_non_boolean_values(present):
 
 
 def test_test_only_changed_hypothesis_is_preserved_as_invalid(evidence_store):
-    report = analysis_for(evidence_store)
+    report = selection_for(evidence_store)
     report["findings"][0]["statement"] = "The credentials were stolen."
     result, _ = run_test_graph(evidence_store, [decision(), report])
     assert result["status"] == "invalid"
@@ -410,24 +436,164 @@ def test_test_only_changed_hypothesis_is_preserved_as_invalid(evidence_store):
 
 @pytest.mark.parametrize("unknown", ["sha256:" + "0" * 64 + "/Records/999", "E99"])
 def test_test_only_unknown_citations_are_invalid_and_do_not_create_timeline(
-    evidence_store, unknown
+    evidence_store, unknown, monkeypatch
 ):
-    report = analysis_for(evidence_store)
+    projection_calls = []
+
+    def forbidden_projection(*args, **kwargs):
+        projection_calls.append(True)
+        raise AssertionError("Invalid selection must not reach fact projection")
+
+    monkeypatch.setattr(agent, "project_observations", forbidden_projection)
+    report = selection_for(evidence_store)
     report["selected_event_refs"] = [unknown]
     report["findings"][0]["citations"] = [unknown]
-    report["observations"][0]["citation"] = unknown
     result, _ = run_test_graph(evidence_store, [decision(), report])
     assert result["status"] == "invalid"
     codes = {failure["code"] for failure in result["failures"]}
-    assert {"unknown_citation", "unsupported_observation"} <= codes
+    assert "unknown_citation" in codes
+    assert result["observations"] == []
     assert result["timeline"] == []
     assert result["selected_event_refs"] == [unknown]
+    assert projection_calls == []
+
+
+def test_wire_schema_excludes_model_observations():
+    assert "observations" not in ReportSelection.model_json_schema()["properties"]
+    assert "observations" in Analysis.model_json_schema()["properties"]
+    assert Analysis.model_fields["observations"].metadata[0].max_length == 2000
+
+
+@pytest.mark.parametrize(
+    "observations", [[], [{"citation": "E0", "field": "eventName", "value": "FabricatedEvent"}]]
+)
+def test_model_supplied_observations_fail_schema_without_fallback(evidence_store, observations):
+    malicious = {**selection_for(evidence_store), "observations": observations}
+    with pytest.raises(ValidationError):
+        ReportSelection.model_validate(malicious)
+    result, model = run_test_graph(
+        evidence_store, [decision(), malicious, selection_for(evidence_store)]
+    )
+    assert result["status"] == "failed"
+    assert result["observations"] == []
+    assert result["findings"] == []
+    assert result["timeline"] == []
+    assert result["model_calls"] == 2
+    assert {"phase": "report", "error_type": "ValueError"} in result["failures"]
+    assert json.loads(result["model_history"][-1]["output"]) == malicious
+    assert len(model.responses) == 1
+
+
+@pytest.mark.parametrize("cap", ["max_projected_observations", "max_projected_bytes"])
+def test_projection_budget_failure_is_invalid_and_preserves_selection(
+    evidence_store, monkeypatch, cap
+):
+    monkeypatch.setitem(agent.PROTOCOL, cap, 1)
+    selection = selection_for(evidence_store)
+    result, model = run_test_graph(
+        evidence_store, [decision(), selection, selection_for(evidence_store)]
+    )
+    assert result["status"] == "invalid"
+    assert result["observations"] == []
+    assert result["findings"] == selection["findings"]
+    assert result["selected_event_refs"] == selection["selected_event_refs"]
+    assert {
+        "phase": "validation",
+        "code": "observation_projection_failed",
+        "error_type": "ValueError",
+    } in result["failures"]
+    assert result["model_calls"] == 2
+    assert json.loads(result["model_history"][-1]["output"]) == selection
+    assert len(model.responses) == 1
+
+
+def test_known_finding_citation_must_also_be_selected(evidence_store, monkeypatch):
+    projection_calls = []
+
+    def forbidden_projection(*args, **kwargs):
+        projection_calls.append(True)
+        raise AssertionError("An unselected finding citation must block projection")
+
+    monkeypatch.setattr(agent, "project_observations", forbidden_projection)
+    selection = selection_for(evidence_store)
+    selection["findings"][0]["citations"] = [evidence_store.get("earlier")["ref"]]
+    result, _ = run_test_graph(
+        evidence_store,
+        [
+            decision("query_events", query={"principal": PRINCIPAL}),
+            decision(),
+            selection,
+        ],
+    )
+    assert result["status"] == "invalid"
+    assert {
+        "phase": "validation",
+        "code": "unselected_finding_citation",
+        "claim_id": "intent",
+    } in result["failures"]
+    assert result["observations"] == []
+    assert projection_calls == []
+
+
+def test_projection_keeps_only_selected_record_facts(evidence_store):
+    result, _ = run_test_graph(
+        evidence_store,
+        [
+            decision("query_events", query={"principal": PRINCIPAL}),
+            decision(),
+            selection_for(evidence_store),
+        ],
+    )
+    ref = evidence_store.get("seed")["ref"]
+    assert result["status"] == "completed"
+    assert len(result["evidence"]) == 3
+    assert result["selected_event_refs"] == [ref]
+    assert {item["citation"] for item in result["observations"]} == {ref}
+    facts = {item["field"]: item for item in result["observations"]}
+    assert facts["eventName"]["value"] == "StopLogging"
+    assert facts["requestParameters.enabled"]["value"] is True
+    assert facts["errorCode"] == {
+        "citation": ref,
+        "field": "errorCode",
+        "present": False,
+        "value": None,
+    }
+    assert facts["responseElements"] == {
+        "citation": ref,
+        "field": "responseElements",
+        "present": True,
+        "value": None,
+    }
+    assert validate_analysis(result, result["evidence"], HYPOTHESES) == []
+
+
+def test_prompt_contains_returned_evidence_and_no_evaluation_gold(evidence_store):
+    result, model = run_test_graph(evidence_store, [decision(), selection_for(evidence_store)])
+    assert result["status"] == "completed"
+    for call in model.calls:
+        payload = json.loads(call["messages"][-1].content)
+        assert set(payload) == {
+            "seed",
+            "question",
+            "hypotheses",
+            "evidence",
+            "chronology",
+            "tool_history",
+            "coverage",
+            "remaining_queries",
+        }
+        assert payload["hypotheses"] == HYPOTHESES
+        assert [item["event_id"] for item in payload["evidence"]] == ["seed"]
+        assert "annotations" not in payload
+        assert "relevant_event_ids" not in payload
+        assert "expected_status" not in json.dumps(payload)
+    assert result["evidence"] == [evidence_store.get("seed")]
 
 
 def test_test_only_parse_failure_preserves_raw_output_without_canned_report(evidence_store):
     raw = "test-only invalid report: no schema object"
     result, model = run_test_graph(
-        evidence_store, [decision(), TestOnlyParseFailure(raw), analysis_for(evidence_store)]
+        evidence_store, [decision(), TestOnlyParseFailure(raw), selection_for(evidence_store)]
     )
     assert result["status"] == "failed"
     assert result["findings"] == []
@@ -445,7 +611,7 @@ def test_test_only_parse_failure_preserves_raw_output_without_canned_report(evid
 def test_test_only_model_exception_is_preserved_without_retry(evidence_store):
     result, model = run_test_graph(
         evidence_store,
-        [decision(), RuntimeError("Test-only report exception"), analysis_for(evidence_store)],
+        [decision(), RuntimeError("Test-only report exception"), selection_for(evidence_store)],
     )
     assert result["status"] == "failed"
     assert result["findings"] == []
@@ -455,13 +621,38 @@ def test_test_only_model_exception_is_preserved_without_retry(evidence_store):
     assert len(model.responses) == 1
 
 
+def test_unexpected_report_validator_exception_cannot_complete_partial_report(
+    evidence_store, monkeypatch
+):
+    def broken_validator(*args, **kwargs):
+        raise RuntimeError("Test-only unexpected validator failure")
+
+    monkeypatch.setattr(agent, "validate_analysis", broken_validator)
+    selection = selection_for(evidence_store)
+    result, model = run_test_graph(
+        evidence_store, [decision(), selection, selection_for(evidence_store)]
+    )
+    assert result["status"] == "failed"
+    assert result["findings"] == []
+    assert result["observations"] == []
+    assert result["selected_event_refs"] == []
+    assert result["timeline"] == []
+    assert result["limitations"] == []
+    assert result["evidence"] == [evidence_store.get("seed")]
+    assert {"phase": "report", "error_type": "RuntimeError"} in result["failures"]
+    assert json.loads(result["model_history"][-1]["output"]) == selection
+    assert result["model_history"][-1]["phase"] == "report"
+    assert result["model_calls"] == 2
+    assert len(model.responses) == 1
+
+
 def test_test_only_failed_tool_is_visible_to_next_plan_and_final_report(evidence_store):
     result, model = run_test_graph(
         evidence_store,
         [
             decision("get_event", identifier="missing-event"),
             decision(),
-            analysis_for(evidence_store),
+            selection_for(evidence_store),
         ],
     )
     assert result["status"] == "completed"
@@ -481,7 +672,7 @@ def test_test_only_failed_tool_is_visible_to_next_plan_and_final_report(evidence
 def test_test_only_missing_tool_arguments_are_recorded_then_reported(evidence_store):
     result, _ = run_test_graph(
         evidence_store,
-        [decision("query_events"), decision(), analysis_for(evidence_store)],
+        [decision("query_events"), decision(), selection_for(evidence_store)],
     )
     assert result["status"] == "completed"
     assert result["tool_history"][0]["result"]["error"]["code"] == "tool_exception"
@@ -490,7 +681,7 @@ def test_test_only_missing_tool_arguments_are_recorded_then_reported(evidence_st
 
 
 def test_test_only_timeline_orders_instants_with_timezone_offsets(evidence_store):
-    report = analysis_for(evidence_store, ("later", "seed", "earlier"))
+    report = selection_for(evidence_store, ("later", "seed", "earlier"))
     result, _ = run_test_graph(
         evidence_store,
         [decision("query_events", query={"principal": PRINCIPAL}), decision(), report],
@@ -505,11 +696,13 @@ def test_test_only_timeline_orders_instants_with_timezone_offsets(evidence_store
 
 
 def test_test_only_fixed_search_handles_seed_without_optional_source_ip(evidence_store):
-    result, model = run_test_graph(evidence_store, [analysis_for(evidence_store)], strategy="fixed")
+    result, model = run_test_graph(
+        evidence_store, [selection_for(evidence_store)], strategy="fixed"
+    )
     assert result["status"] == "completed"
     assert result["query_count"] == 3
     assert result["model_calls"] == 1
-    assert [call["schema"] for call in model.calls] == [Analysis]
+    assert [call["schema"] for call in model.calls] == [ReportSelection]
     assert result["timeline"][0]["source_ip"] is None
     assert result["failures"] == []
     for call in result["tool_history"]:

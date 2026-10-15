@@ -17,6 +17,7 @@ from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, ConfigDict, Field
 
 from tracetrail.coverage import evidence_coverage
+from tracetrail.facts import chronological_context, project_observations
 from tracetrail.local_model import verify_local_weights
 from tracetrail.store import CloudTrailStore, Query
 from tracetrail.telemetry import local_context, serialize_local_trace
@@ -25,7 +26,7 @@ REFERENCE_MODEL = "qwen3.8:27b-q4_K_M"
 MODELS = (REFERENCE_MODEL, "gemma4:31b-it-q4_K_M", "mistral-small3.2:24b")
 OLLAMA_URL = "http://127.0.0.1:11434"
 PROTOCOL = {
-    "version": "tracetrail-v4",
+    "version": "tracetrail-v5",
     "temperature": 0,
     "seed": 42,
     "num_ctx": 16384,
@@ -38,6 +39,10 @@ PROTOCOL = {
     "thinking": False,
     "max_prompt_payload_bytes": 48000,
     "citation_encoding": "local-alias-to-file-hash-index",
+    "observation_source": "selected-record-projection-v1",
+    "max_projected_observations": 2000,
+    "max_projected_bytes": 1000000,
+    "chronology": "utc-order-and-signed-seconds-from-seed",
 }
 
 SYSTEM = """You investigate local CloudTrail records with read-only evidence tools.
@@ -46,6 +51,8 @@ CloudTrail records show API activity, not a person's intent. Missing logs do not
 Test each supplied explanation, including legitimate operation and insufficient evidence.
 Use exact citations from returned evidence. Distinguish observed fields from interpretation.
 Use only returned records; never invent events, citations, identities, or external context.
+The chronology is derived from observed timestamps. Negative seconds_from_seed means before
+the seed; positive means after it. Timestamp order does not by itself establish causality.
 No AWS, shell, network, remediation, or attack tool is available.
 """
 PLAN = """Choose one next evidence query, or finish with a reason for leaving remaining scope open.
@@ -80,20 +87,18 @@ Cite only evidence actually returned. Cite the relevant context even for uncerta
 uncertainty about intent or approval does not make the observed activity irrelevant.
 Review each returned record for relevance, including earlier caller and session issuance context.
 Put uncertainty, remaining unsearched pivots, query scope, and alternatives in limitations.
-Record atomic observed facts as observations: exact citation, dotted JSON field path, exact value.
-A field that exists uses present=true and its exact value. A field that is absent uses
-present=false and value=null. Missing errorCode is different from errorCode with a null value.
-Include the fields that support EACH finding, such as eventName, errorCode, sourceIPAddress,
-userIdentity.arn, userIdentity.accessKeyId, userIdentity.sessionContext.sessionIssuer.arn,
-requestParameters.roleArn,
-requestParameters.roleSessionName, responseElements.credentials.accessKeyId, and resource fields.
-Check each cited event's necessary linking fields, error fields, and relevant API parameters.
+Do not copy field values into the report. After a valid selection, code extracts exact observed
+fields from selected_event_refs. That extraction does not decide relevance or verify conclusions.
+Every finding citation must also appear in selected_event_refs. Include all records needed to
+support each finding, including context for uncertain conclusions. Do not cite unrelated records.
+Use chronology to test temporal statements against the actual signed offsets and UTC order.
+Check the exact direction and threshold of each statement; an earlier event precedes a later one.
+One hour is 3600 seconds. Do not treat retrieval order or E-alias numbers as timestamp order.
 An absent errorCode establishes only that no top-level errorCode was recorded. Inspect
 responseElements for error details; it does not verify success, authorization, or intent.
 GetTrailStatus responseElements=null does not establish the trail's logging state. API calls to
 start or stop logging alone do not prove a persistent state. Missing response fields remain unknown.
 Use short E0, E1 citation aliases exactly as provided. They resolve to original file hashes.
-Limit observations to the fields needed to explain the supplied claims. Use at most 32.
 Timeline is built separately from selected_event_refs. Give limitations.
 """
 PROMPT_SHA256 = hashlib.sha256((SYSTEM + PLAN + FINAL).encode()).hexdigest()
@@ -125,11 +130,16 @@ class Finding(StrictModel):
     citations: list[str]
 
 
-class Analysis(StrictModel):
+class ReportSelection(StrictModel):
     findings: list[Finding] = Field(max_length=12)
-    observations: list[Observation] = Field(max_length=40)
     selected_event_refs: list[str] = Field(max_length=40)
     limitations: list[str] = Field(max_length=12)
+
+
+class Analysis(ReportSelection):
+    """A materialized report. Model output uses ReportSelection instead."""
+
+    observations: list[Observation] = Field(max_length=2000)
 
 
 class InvestigationState(TypedDict):
@@ -202,6 +212,11 @@ def validate_analysis(analysis: dict, evidence: list[dict], hypotheses: list[dic
             errors.append({"code": "uncited_conclusion", "claim_id": finding["claim_id"]})
         if finding["statement"] != statements.get(finding["claim_id"]):
             errors.append({"code": "changed_statement", "claim_id": finding["claim_id"]})
+        for citation in finding["citations"]:
+            if citation in refs and citation not in analysis["selected_event_refs"]:
+                errors.append(
+                    {"code": "unselected_finding_citation", "claim_id": finding["claim_id"]}
+                )
     cited = list(analysis["selected_event_refs"])
     cited += [ref for f in analysis["findings"] for ref in f["citations"]]
     for ref in cited:
@@ -279,6 +294,8 @@ def investigate(
         def compact(item: dict) -> dict:
             return {**item, "ref": aliases[item["ref"]]}
 
+        chronology = chronological_context(state["evidence"], seed["ref"])
+        by_ref = {item["ref"]: item for item in state["evidence"]}
         history_summary = []
         for entry in state["tool_history"]:
             output = entry["result"]
@@ -291,7 +308,8 @@ def investigate(
         payload = {
             **context,
             "seed": compact(seed),
-            "evidence": [compact(item) for item in state["evidence"]],
+            "evidence": [compact(by_ref[row["citation"]]) for row in chronology],
+            "chronology": [{**row, "citation": aliases[row["citation"]]} for row in chronology],
             "tool_history": history_summary,
             "coverage": evidence_coverage(
                 [compact(item) for item in state["evidence"]], history_summary
@@ -330,13 +348,13 @@ def investigate(
             parsed = response["parsed"]
             result = parsed.model_dump(mode="json") if isinstance(parsed, BaseModel) else parsed
             resolve = {alias: ref for ref, alias in aliases.items()}
-            if schema is Analysis:
+            if schema in (Analysis, ReportSelection):
                 result["selected_event_refs"] = [
                     resolve.get(r, r) for r in result["selected_event_refs"]
                 ]
                 for finding in result["findings"]:
                     finding["citations"] = [resolve.get(r, r) for r in finding["citations"]]
-                for observation in result["observations"]:
+                for observation in result.get("observations", []):
                     observation["citation"] = resolve.get(
                         observation["citation"], observation["citation"]
                     )
@@ -408,10 +426,31 @@ def investigate(
 
     def report(state: InvestigationState) -> InvestigationState:
         try:
-            state["analysis"] = call(state, Analysis, FINAL)
+            selection = call(state, ReportSelection, FINAL)
+            state["analysis"] = {**selection, "observations": []}
             errors = validate_analysis(state["analysis"], state["evidence"], hypotheses)
             state["failures"].extend({"phase": "validation", **error} for error in errors)
+            if not errors:
+                try:
+                    state["analysis"]["observations"] = project_observations(
+                        state["evidence"],
+                        selection["selected_event_refs"],
+                        max_observations=PROTOCOL["max_projected_observations"],
+                        max_bytes=PROTOCOL["max_projected_bytes"],
+                    )
+                except Exception as exc:
+                    state["failures"].append(
+                        {
+                            "phase": "validation",
+                            "code": "observation_projection_failed",
+                            "error_type": type(exc).__name__,
+                        }
+                    )
+                else:
+                    errors = validate_analysis(state["analysis"], state["evidence"], hypotheses)
+                    state["failures"].extend({"phase": "validation", **error} for error in errors)
         except Exception as exc:
+            state["analysis"] = None
             state["failures"].append({"phase": "report", "error_type": type(exc).__name__})
         return state
 
@@ -487,6 +526,7 @@ def investigate(
             "citations_and_observation_values": "exact-record-validation",
             "narrative_and_finding_meaning": "not-semantically-verified",
         },
+        "observation_source": PROTOCOL["observation_source"],
         "model_history": state["model_history"],
         "failures": state["failures"],
         "query_count": state["query_count"],

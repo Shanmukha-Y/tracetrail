@@ -1,0 +1,211 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "40000000-0000-4000-8000-000000001001",
+      "eventName": "GetBucketLocation",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-04-02T18:05:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "94000000-0000-4000-8000-000000001001",
+      "requestParameters": {
+        "bucketName": "synthetic-archive-v4"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.151",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v4-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV4H0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/archive-service",
+        "principalId": "AIDA39BCBE85CA03B03E2",
+        "type": "IAMUser",
+        "userName": "archive-service"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "40000000-0000-4000-8000-000000001002",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-04-02T20:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "94000000-0000-4000-8000-000000001002",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/ArchiveReview",
+        "roleSessionName": "retention-check-84"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/ArchiveReview/retention-check-84",
+          "assumedRoleId": "AROA0D8DC3F6031CF100A:retention-check-84"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICV4H0001",
+          "expiration": "2026-04-02T21:00:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.152",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v4-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV4H0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/archive-service",
+        "principalId": "AIDA39BCBE85CA03B03E2",
+        "type": "IAMUser",
+        "userName": "archive-service"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Data",
+      "eventID": "40000000-0000-4000-8000-000000001003",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-04-02T20:04:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": false,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "94000000-0000-4000-8000-000000001003",
+      "requestParameters": {
+        "bucketName": "synthetic-archive-v4",
+        "key": "retention/quarterly-example.parquet"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.153",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v4-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV4H0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/ArchiveReview/retention-check-84",
+        "principalId": "AROA0D8DC3F6031CF100A:retention-check-84",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-04-02T20:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/ArchiveReview",
+            "principalId": "AROA0D8DC3F6031CF100A",
+            "type": "Role",
+            "userName": "ArchiveReview"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "errorCode": "AccessDenied",
+      "errorMessage": "Synthetic request was denied.",
+      "eventCategory": "Data",
+      "eventID": "40000000-0000-4000-8000-000000001004",
+      "eventName": "DeleteObject",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-04-02T20:06:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": false,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "94000000-0000-4000-8000-000000001004",
+      "requestParameters": {
+        "bucketName": "synthetic-archive-v4",
+        "key": "retention/quarterly-example.parquet"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.153",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v4-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV4H0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/ArchiveReview/retention-check-84",
+        "principalId": "AROA0D8DC3F6031CF100A:retention-check-84",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-04-02T20:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/ArchiveReview",
+            "principalId": "AROA0D8DC3F6031CF100A",
+            "type": "Role",
+            "userName": "ArchiveReview"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Data",
+      "eventID": "40000000-0000-4000-8000-000000001005",
+      "eventName": "GetObject",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-04-02T20:03:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": false,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "94000000-0000-4000-8000-000000001005",
+      "requestParameters": {
+        "bucketName": "synthetic-archive-v4",
+        "key": "retention/noise-example.parquet"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.153",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v4-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV4N0003",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/snapshot-reader",
+        "principalId": "AIDA5C3468971451DE4A4",
+        "type": "IAMUser",
+        "userName": "snapshot-reader"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "40000000-0000-4000-8000-000000001006",
+      "eventName": "GetBucketLocation",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-04-02T18:04:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "94000000-0000-4000-8000-000000001006",
+      "requestParameters": {
+        "bucketName": "synthetic-archive-v4"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.151",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v4-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV4N0004",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/region-audit",
+        "principalId": "AIDA08B86A7A790F2CEF7",
+        "type": "IAMUser",
+        "userName": "region-audit"
+      }
+    }
+  ]
+}

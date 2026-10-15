@@ -4,6 +4,8 @@ TraceTrail uses LangChain model and tool interfaces, a LangGraph investigation,
 and the LangSmith Python SDK for local evaluation. Ollama inference, CloudTrail
 records, execution traces, and evaluation results stay on the local computer.
 TraceTrail does not upload to LangSmith or require a LangSmith account or key.
+Local trace files and offline SDK evaluation are the project's intended
+LangSmith integration. Hosted tracing and a server UI are outside its scope.
 
 ## Verified package versions
 
@@ -44,6 +46,57 @@ The graph is compiled before invocation. Query and model-call limits bound its
 loop. Errors and incomplete investigations remain in the output. The official
 [Graph API guide](https://docs.langchain.com/oss/python/langgraph/graph-api)
 describes this state and node interface.
+
+## Model selection and exact record facts
+
+Protocol v5 asks the model for a `ReportSelection`: findings with unchanged
+hypothesis statements and statuses, finding citations, selected event
+references, and narrative limitations. Its wire schema forbids `observations`.
+The raw model response remains in the history. Code validates citation
+resolution, selected finding citations, statement identity, and claim coverage
+before extracting field values. Invalid selections do not receive projected
+facts or a replacement model report.
+
+`project_observations()` reads only the selected records that were already
+returned by evidence tools, including the supplied seed. It applies generic
+JSON rules equally to all methods and models. It does not query more records,
+select relevant events, change statuses, or read evaluation labels. The saved
+`observation_source` is `selected-record-projection-v1`. `validation_scope`
+separates exact record validation from findings and narrative that are not
+semantically verified.
+
+Projection includes every supported root field in each selected JSON record.
+It applies no credential redaction or field allowlist. Sensitive values present
+in the input can appear in the `0600` report files and raw execution traces.
+Handle those local files according to their contents; local storage does not
+remove sensitive data.
+
+Nonempty objects produce dotted field paths. Arrays remain whole typed JSON
+values, and empty objects remain `{}`. Actual JSON null is preserved with
+`present=true`. Missing top-level `errorCode`, `errorMessage`,
+`requestParameters`, and `responseElements` receive `present=false` and
+`value=null`. These four generic absence rules do not infer API success or
+trail state.
+
+Projection permits at most 2,000 observations and 1,000,000 bytes for the compact
+ASCII-escaped JSON observation array. Nesting depth is at most 32, and field
+paths are at most 512 characters. Empty or dotted keys in traversed objects
+would create ambiguous paths and are rejected. Objects inside whole array
+values retain their original keys because they are not traversed as paths.
+Unknown or duplicate selections, invalid JSON values, and limit violations
+reject projection. The report becomes invalid with an explicit error; the
+application does not return silently truncated facts.
+
+Chronological context sorts returned evidence by observed UTC timestamps and
+records signed `seconds_from_seed`. Negative offsets precede the seed; positive
+offsets follow it. Aliases stay attached to their original citations when the
+presentation order changes. This derived time context supplies neither
+causality nor a conclusion about a fixed hypothesis.
+
+The unchanged model budget is three evidence queries, at most four model calls,
+and 3,200 output tokens per call. Projection makes no inference call and uses
+no case-specific fields or expected answers. A structurally valid report with
+exact field values can still have a wrong status or unsupported narrative.
 
 ## Local traces
 
@@ -101,19 +154,15 @@ key, and no automatic batching. Both standard and newer API transports are
 blocked. Tests also deny socket connections. Evaluation failures are retained
 and reported in the local artifact.
 
-## LangSmith platform limits
+## LangSmith SDK and platform UI
 
 The [LangSmith SDK license](https://github.com/langchain-ai/langsmith-sdk/blob/main/LICENSE)
-is MIT. The full LangSmith server and web UI are separate products. The
+is MIT. The LangSmith server and web UI are separate products. The
 [official self-hosting guide](https://docs.langchain.com/langsmith/self-hosted)
-states that self-hosting is an Enterprise add-on and requires a license.
-TraceTrail does not install a server, accept service terms, set up billing, or
-create credentials. A full local LangSmith UI is therefore unavailable in this
-increment. Offline SDK evaluation and disk traces work without that server.
+checked on 2026-10-13 describes self-hosting as an Enterprise add-on that
+requires a license. That server is outside TraceTrail's local scope.
 
-The environment was checked on 2026-10-14 using presence flags only. Neither
-`LANGSMITH_API_KEY` nor `LANGCHAIN_API_KEY` was present. No workspace ID, project
-setting, or repository `.env` file was present. This does not prove that the
-user has no account. Hosted tracing would require existing authorized access,
-an approved destination, and explicit permission to export synthetic traces.
-No hosted request was made. Private logs must stay local.
+TraceTrail's disk traces and offline SDK evaluation work without a server,
+account, API key, hosted project, or export destination. Credentials, billing,
+and server setup are not requirements or release blockers for this project.
+Logs, trace records, and evaluation feedback stay local.

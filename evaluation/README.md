@@ -7,14 +7,22 @@ V1 includes fixture errors described in [CloudTrail semantics](../docs/cloudtrai
 Both earlier suites contain two original development and two original held-out
 cases. All four have now been inspected and are exposed for future protocol
 changes. Their saved split labels describe the original comparisons. They do
-not provide an untouched held-out test of v4. All earlier outputs and failures
+not provide an untouched held-out test of changed protocols. All earlier outputs and failures
 remain intact.
 
-The new frozen suite is `tracetrail-synthetic-v3`, selected explicitly with
+The preserved `tracetrail-synthetic-v3` suite is selected explicitly with
 `--manifest evaluation/cases-v3.json`. Its manifest SHA-256 is
 `6a1a27484de6015f001c1c9d4dd05c7d5f25dda185dd0063935d5c3abb71053d`.
 It contains one development and one held-out case. The manifest and fixture
 hashes were checked before the v4 comparison.
+
+The new v5 comparison uses `tracetrail-synthetic-v4`, selected explicitly with
+`--manifest evaluation/cases-v4.json`. Its manifest SHA-256 is
+`25514d27f154f01662a8f0657f11806c6273189d3d37155c6e6eff6b9d91af16`.
+It contains `dev-midnight-role-change` as development data and
+`heldout-archive-role-chain` as held-out data. The earlier v2 and v3 cases are
+exposed for v5. Their bytes, annotations, split labels, and results remain
+available for historical comparisons.
 
 This suite tests investigation of a small supplied CloudTrail log window. All
 accounts, identities, IP addresses, resources, and API events are invented.
@@ -54,9 +62,73 @@ must have a new ID and keep old fixtures, annotations, and results available.
 `fixtures/build_synthetic_v2.py` reproduces the v2 bytes from the preserved
 invented v1 definitions and documented AWS field corrections. It has no model, AWS, or network calls.
 
-## October 14 protocol v4 status
+## Protocol v5 contract and measured results
 
-The source defines `tracetrail-v4`. It gives the planner an inventory of
+The model's report wire schema now contains only selected records, finding
+citations, unchanged hypothesis statements with statuses, and narrative
+limitations. It forbids model-supplied observations. Once the selection passes
+validation, generic code projects exact typed fields from the selected returned
+records. The same projection applies to every model and method. It receives no
+gold labels, support annotations, or additional runtime records. Projection
+does not select evidence or correct conclusions.
+
+The saved `observation_source` identifies projected values, and
+`validation_scope` records that narrative and finding meaning remain
+unverified. Whole arrays, empty objects, and actual nulls retain their JSON
+types. The generic four API envelope absence rules and projection limits are
+documented in [integration details](../docs/integrations.md). Projection errors
+make a report invalid instead of silently truncating its facts.
+
+Evidence is presented in UTC order with stable aliases and signed seconds from
+the seed. These values derive from observed timestamps and do not establish
+causality. The budgets remain three queries, at most four model calls, and
+3,200 output tokens per call. V5 changes the wire contract, fact projection, and
+chronological context together, so a comparison cannot isolate one change's
+effect. A valid report does not establish semantic truth.
+
+The [frozen v5 protocol](protocol-v5.json) has file SHA-256
+`91adcc1f7e70d6793cc4a9a83f68396177385896789fe5dcb74b907f788b005b`.
+Its frozen prompt SHA-256 is
+`2f26e74763277a642ad5df16652a97c42693ad1fca01532a90d369652768f7c6`.
+All eight fresh-suite v5 investigations completed under the frozen protocol.
+Each group below has two runs: one development case and one held-out case.
+Selected-record precision was 100.0% in every group.
+
+| Model | Method | Mean recall | Mean annotated support | Mean status accuracy |
+| --- | --- | --- | --- | --- |
+| `qwen3.8:27b-q4_K_M` | adaptive | 87.5% | 62.5% | 87.5% |
+| `qwen3.8:27b-q4_K_M` | fixed | 50.0% | 25.0% | 50.0% |
+| `gemma4:31b-it-q4_K_M` | adaptive | 100.0% | 75.0% | 100.0% |
+| `mistral-small3.2:24b` | adaptive | 62.5% | 37.5% | 62.5% |
+
+The audit recomputed every projected observation exactly. Raw model reports
+contained no observations. These support scores combine code-extracted facts
+with model-selected evidence, finding citations, and statuses; they do not
+measure model field extraction. Sixteen of 32 findings failed strict support
+checks. All 16 lacked required finding citations; eight had status mismatches,
+and 12 lacked required field support. These categories overlap and cannot be
+added as separate failed findings. No incorrect projected fact was found.
+
+Qwen correctly handled the development sequence across midnight, but still
+refuted a held-out caller claim because it had not retrieved the caller record.
+That missing evidence called for uncertainty, not a refutation. Correctness on
+one development sequence does not establish a general temporal-reasoning fix.
+The suite has one case per split and one run per cell. It establishes no model
+winner, broad adaptive advantage, or production reliability. All reviewed cases
+are now exposed for future changes that use their outputs.
+
+The fresh-suite offline SDK evaluation replayed eight saved outputs and
+produced 176 feedback items, with uploads and new inference disabled. Including
+four exposed regression runs and the real CLI demonstration, v5 validation
+recorded 13 actual investigations, 39 model spans, and 33 tool spans. The 12
+comparison outputs received 264 offline SDK feedback items; the demonstration
+is separate from those SDK replays. Detailed split scores, artifact hashes,
+and reviewed failures are in [progress](../docs/progress.md) and the versioned
+[results-v5.json](results-v5.json).
+
+## October 14 measured protocol v4
+
+The measured v4 source gave the planner an inventory of
 observed candidate filters and actual attempted query scopes. The model still
 chooses its queries. It does not receive relevance labels, expected statuses,
 or support annotations. The prompt distinguishes the caller key, returned
@@ -188,10 +260,10 @@ Run development investigations with installed local Ollama models:
 uv run tracetrail compare --split development --output local-results/development.json
 ```
 
-Select the new v3 development case explicitly:
+Select the new v4 development case explicitly:
 
 ```sh
-uv run tracetrail compare --manifest evaluation/cases-v3.json --split development --output local-results/development-suite-v3.json
+uv run tracetrail compare --manifest evaluation/cases-v4.json --split development --output local-results/development-suite-v4.json
 ```
 
 The runner records model responses, evidence, tool history, errors, versions,
