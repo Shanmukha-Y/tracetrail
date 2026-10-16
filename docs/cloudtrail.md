@@ -82,3 +82,41 @@ not a discovered issuance. Preserve the legacy suite and its results; compare
 models only within the same frozen suite, prompts, tools, and budgets. The
 [evaluation guide](../evaluation/README.md) describes the current manifest and
 the boundary between development and held-out cases.
+
+## V5 annotation semantics
+
+The [v5 suite](../evaluation/cases-v5.json) contains four entirely invented
+cases, not actual incidents or redistributed samples. These annotation choices
+describe expected evidence support, not runtime results. Model input includes
+the case question and unlabelled hypothesis statements; expected statuses,
+required citations, and required field observations remain scorer-only data.
+
+The IAM case distinguishes the signing temporary key from the target user's
+key. `UpdateAccessKey` requests `status: "Inactive"`, which contradicts a claim
+that the request asked to activate the key. Its temporary signer supplies the
+required `userName`. The later read-only `ListAccessKeys` record has null
+response elements, so it does not reveal the target key's status at that time.
+See [UpdateAccessKey](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateAccessKey.html)
+and the [CloudTrail response-field rules](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html).
+
+The EC2 case records `Client.UnauthorizedOperation` on `DeleteSecurityGroup`.
+That explicit authorization denial contradicts success of this recorded
+request. It does not establish later group absence or malicious intent. The
+later `DescribeSecurityGroups` log has no returned group state. See
+[EC2 authorization errors](https://docs.aws.amazon.com/ec2/latest/devguide/errors-overview.html)
+and [DeleteSecurityGroup](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteSecurityGroup.html).
+
+The S3 case's `PutObject` has `AccessDenied`, the documented 403 error. This
+refutes completion of that upload request; it does not rule out another upload
+or establish publication approval. See the
+[S3 error definitions](https://docs.aws.amazon.com/AmazonS3/latest/API/API_Error.html).
+
+The KMS case preserves a service-specific CloudTrail enrichment: modern
+`DisableKey` records include the affected ARN in `responseElements.keyId`,
+although the live API returns no response body. That ARN identifies the key;
+it is not a later key-state observation. The subsequent `DescribeKey` log has
+null response elements, and the KMS API uses eventual consistency. Later
+disabled state and maintenance approval therefore remain uncertain. See the
+[DisableKey log example](https://docs.aws.amazon.com/kms/latest/developerguide/ct-disablekey.html),
+[DescribeKey log example](https://docs.aws.amazon.com/kms/latest/developerguide/ct-describekey.html),
+and [DisableKey API](https://docs.aws.amazon.com/kms/latest/APIReference/API_DisableKey.html).

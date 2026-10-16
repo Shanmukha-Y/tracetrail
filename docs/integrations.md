@@ -49,13 +49,30 @@ describes this state and node interface.
 
 ## Model selection and exact record facts
 
-Protocol v5 asks the model for a `ReportSelection`: findings with unchanged
-hypothesis statements and statuses, finding citations, selected event
-references, and narrative limitations. Its wire schema forbids `observations`.
-The raw model response remains in the history. Code validates citation
-resolution, selected finding citations, statement identity, and claim coverage
-before extracting field values. Invalid selections do not receive projected
-facts or a replacement model report.
+Protocol v6 asks the model for a `ReportSelection` with selected event
+references, findings, and narrative limitations. Each `FindingSelection`
+contains the unchanged hypothesis statement, `evidence_links`, a brief
+`rationale`, `missing_evidence`, and a status. Each link names a citation,
+one to six exact field paths, and a `supports`, `contradicts`, or `context`
+role. A finding can contain at most six links. The wire schema forbids both
+separate finding `citations` and model-supplied `observations`.
+
+Code resolves aliases and derives each finding's public `citations` only from
+its explicit links, with duplicates removed in order. It does not add other
+selected records or supply missing links. Unknown or unselected citations,
+unresolved field paths, duplicate links, blank rationales, and invalid gaps
+produce validation errors. Supported findings require a `supports` link, and
+refuted findings require a `contradicts` link. Uncertain findings require at
+least one nonblank missing-evidence entry. Whole arrays can be linked by their
+field path; array element indexing and absent nested paths do not resolve.
+The only linkable absent fields are the four top-level API envelope fields
+listed below.
+
+These checks verify structure and source presence. They do not establish that
+a declared role entails the full hypothesis. The model authors the role,
+rationale, gap, and status; code does not repair those judgments. The raw wire
+response remains in the history. Invalid selections do not receive projected
+facts, an automatic retry, or a replacement model report.
 
 `project_observations()` reads only the selected records that were already
 returned by evidence tools, including the supplied seed. It applies generic
@@ -97,6 +114,13 @@ The unchanged model budget is three evidence queries, at most four model calls,
 and 3,200 output tokens per call. Projection makes no inference call and uses
 no case-specific fields or expected answers. A structurally valid report with
 exact field values can still have a wrong status or unsupported narrative.
+The [frozen v6 protocol](../evaluation/protocol-v6.json) records the source,
+schema, prompt, and v5 suite hashes. The [v6 evaluation](../evaluation/README.md)
+records 16 actual investigations and 16 offline SDK replays with 352 feedback
+items. Thirteen reports completed; three invalid Mistral reports remain in the
+scores. Link structure did not prevent premature stopping or incorrect
+approval conclusions. The preserved v5 results describe the earlier contract
+without model-authored field links.
 
 ## Local traces
 

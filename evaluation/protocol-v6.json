@@ -1,0 +1,99 @@
+{
+  "earlier_candidate": {
+    "new_fresh_case_inference_before_freeze": false,
+    "prompt_changed_after_development": true,
+    "protocol_path": "local-results/protocol-v6-development.json",
+    "protocol_sha256": "945d86196aca6d044ab70bab13390d9756f940088bb4c14c50643f4878fa4d88",
+    "results_path": "local-results/development-v6-suite-v4.json",
+    "results_sha256": "15d6f49b6ef10fdc65e0364a99510c2054164206fbe587a77fef99c81b3a3623"
+  },
+  "expected_final_development_runs": 2,
+  "expected_fresh_runs": 16,
+  "exposed_development_manifest": {
+    "path": "evaluation/cases-v4.json",
+    "sha256": "25514d27f154f01662a8f0657f11806c6273189d3d37155c6e6eff6b9d91af16",
+    "split": "development"
+  },
+  "field_links": {
+    "absence_paths": [
+      "errorCode",
+      "errorMessage",
+      "requestParameters",
+      "responseElements"
+    ],
+    "failure_policy": "preserve invalid raw output; no repair, extra query, status rewrite, or retry",
+    "maximum_field_path_chars": 512,
+    "maximum_fields_per_link": 6,
+    "maximum_links_per_finding": 6,
+    "maximum_missing_entries": 4,
+    "maximum_missing_entry_chars": 300,
+    "maximum_rationale_chars": 600,
+    "public_citations": "ordered unique explicit link citations",
+    "source": "explicit model-authored selected-record links only",
+    "status_rules": "supported needs supports; refuted needs contradicts; uncertain needs explicit gap",
+    "validation_scope": "record reference and structure only; roles, rationale, completeness, entailment unverified"
+  },
+  "fresh_manifest": {
+    "development_cases": 2,
+    "heldout_cases": 2,
+    "path": "evaluation/cases-v5.json",
+    "sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96"
+  },
+  "frozen_at": "2026-10-16T13:32:08.129978+00:00",
+  "hosted_uploads": false,
+  "limitations": [
+    "Four fresh synthetic cases only; no production or model winner claim.",
+    "Earlier suites and development candidate outputs are exposed.",
+    "Wire schema, instructions, and structural validation change together.",
+    "Field-path coverage is descriptive annotation coverage, not semantic proof."
+  ],
+  "models": [
+    "qwen3.8:27b-q4_K_M",
+    "gemma4:31b-it-q4_K_M",
+    "mistral-small3.2:24b"
+  ],
+  "prompt_sha256": "4335bc9f8c85cce8502b6c4858ab64863c7b982cbe93fed1783de7583ca23db9",
+  "protocol": {
+    "chronology": "utc-order-and-signed-seconds-from-seed",
+    "citation_encoding": "local-alias-to-file-hash-index",
+    "finding_support": "model-authored-field-links-v1",
+    "max_projected_bytes": 1000000,
+    "max_projected_observations": 2000,
+    "max_prompt_payload_bytes": 48000,
+    "max_queries": 3,
+    "model_timeout_seconds": 150,
+    "num_ctx": 16384,
+    "num_predict": 3200,
+    "observation_source": "selected-record-projection-v1",
+    "query_limit": 20,
+    "run_deadline_seconds": 600,
+    "seed": 42,
+    "structured_method": "json_schema",
+    "temperature": 0,
+    "thinking": false,
+    "version": "tracetrail-v6"
+  },
+  "reference_model": "qwen3.8:27b-q4_K_M",
+  "repeats_per_cell": 1,
+  "schema_sha256": {
+    "decision": "5f9a75dbf9c0da05f0b72e44149f79cb62bcf80e4e55414ec41ebd1b8a1bccca",
+    "evidence_link": "b4cdf4f393c532ebee652dd46e0400e4d13a4b4e4a1bd225a8aa169d1b3848a9",
+    "materialized_analysis": "496dfde561e3cd91cb9cabfdaeb5b8b8477ef96004833684bc8e242280d94914",
+    "model_finding": "16eee8a59d424e7afdfc2efabe6ea153ec40cf9369266ba0a833efe04dfc66aa",
+    "model_report_selection": "53b27ddfb3b20c52bd882e0ad4febd283075e692327b5d33696e1d8a4c3b54e3",
+    "query": "11cec0cf3fed8037b0ab09a36a43212a58b07f57f77f3521e50d5bdba35772ad"
+  },
+  "scorer_changed": false,
+  "source_sha256": {
+    "src/tracetrail/__init__.py": "3453b39ea3b1b7b85a24e0b95fd2a27a1b98222d2bad0765a31bfd17512e69fc",
+    "src/tracetrail/agent.py": "61848326e2cd4f9c35685d8582a7fa6e49bd1b0c15ff3d097449cef829a1a665",
+    "src/tracetrail/claims.py": "cb75c7c7c34c8cff70fd7c11ce49808d386d52deaf2fc9fca4c3701d5327bf26",
+    "src/tracetrail/cli.py": "3cea2482f1a7a082a114302a67b70a7a16bbf8ce4e61e98a2e5c0baf293a95ce",
+    "src/tracetrail/coverage.py": "059c7f92f10d3bc52d844adad5864a43912d672df048dd4ae2ee08ffdf76da6e",
+    "src/tracetrail/evaluation.py": "e755383bc49e87edfceede571cf886382aec7ec3a2465637711dd8e9ba4bcce1",
+    "src/tracetrail/facts.py": "739e665de4754be64bef8e9370de37f71b69b05fa9344f59cc0ee402a8e0c355",
+    "src/tracetrail/local_model.py": "a2a24421f791a99532e4d9df64cdc3144430aa65d058b9b1ac32942f14d28abd",
+    "src/tracetrail/store.py": "cd0a17f28dc80a2c301ad63d37f31dda02075140a542cd4b40ff110cfe514a02",
+    "src/tracetrail/telemetry.py": "3d640f543cd2d1b156772d87425b4ab0b2b453279d8a71fafc738010d94d2eef"
+  }
+}

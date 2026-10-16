@@ -13,6 +13,7 @@ import tracetrail.agent as agent
 from tracetrail.agent import (
     Analysis,
     Decision,
+    FindingSelection,
     Observation,
     ReportSelection,
     investigate,
@@ -128,11 +129,33 @@ def selection_for(store, event_ids=("seed",)):
     refs = [store.get(event_id)["ref"] for event_id in event_ids]
     return {
         "findings": [
-            {**hypothesis, "status": "uncertain", "citations": refs} for hypothesis in HYPOTHESES
+            {
+                **hypothesis,
+                "evidence_links": [
+                    {"citation": ref, "fields": ["eventName"], "role": "context"} for ref in refs
+                ],
+                "rationale": "The cited API activity does not establish intent or approval.",
+                "missing_evidence": ["Intent and maintenance approval records are missing."],
+                "status": "uncertain",
+            }
+            for hypothesis in HYPOTHESES
         ],
         "selected_event_refs": refs,
         "limitations": ["These records do not show intent or maintenance approval."],
     }
+
+
+def materialized_findings(selection):
+    """Expected public citations come only from the explicit test-only links."""
+    return [
+        {
+            **deepcopy(finding),
+            "citations": list(
+                dict.fromkeys(link["citation"] for link in finding["evidence_links"])
+            ),
+        }
+        for finding in selection["findings"]
+    ]
 
 
 def analysis_for(store, event_ids=("seed",)):
@@ -140,6 +163,7 @@ def analysis_for(store, event_ids=("seed",)):
     selection = selection_for(store, event_ids)
     return {
         **selection,
+        "findings": materialized_findings(selection),
         "observations": [
             {
                 "citation": ref,
@@ -238,7 +262,7 @@ def test_test_only_finish_uses_exact_seed_citations_and_observations(evidence_st
     assert result["status"] == "completed"
     assert result["query_count"] == 0
     assert result["model_calls"] == 2
-    assert result["findings"] == report["findings"]
+    assert result["findings"] == materialized_findings(report)
     observed = {item["field"]: item for item in result["observations"]}
     assert observed["eventName"]["value"] == "StopLogging"
     assert observed["userIdentity.accessKeyId"]["value"] == "SYNTHETIC_KEY"
@@ -262,7 +286,8 @@ def test_test_only_aliases_resolve_to_exact_records_and_keep_raw_response(eviden
         aliases[ref] for ref in compact_report["selected_event_refs"]
     ]
     for finding in compact_report["findings"]:
-        finding["citations"] = [aliases[ref] for ref in finding["citations"]]
+        for link in finding["evidence_links"]:
+            link["citation"] = aliases[link["citation"]]
     result, model = run_test_graph(
         evidence_store,
         [
@@ -274,7 +299,7 @@ def test_test_only_aliases_resolve_to_exact_records_and_keep_raw_response(eviden
     )
     assert result["status"] == "completed"
     assert result["selected_event_refs"] == exact_report["selected_event_refs"]
-    assert result["findings"] == exact_report["findings"]
+    assert result["findings"] == materialized_findings(exact_report)
     assert {item["citation"] for item in result["observations"]} == set(
         exact_report["selected_event_refs"]
     )
@@ -447,7 +472,7 @@ def test_test_only_unknown_citations_are_invalid_and_do_not_create_timeline(
     monkeypatch.setattr(agent, "project_observations", forbidden_projection)
     report = selection_for(evidence_store)
     report["selected_event_refs"] = [unknown]
-    report["findings"][0]["citations"] = [unknown]
+    report["findings"][0]["evidence_links"][0]["citation"] = unknown
     result, _ = run_test_graph(evidence_store, [decision(), report])
     assert result["status"] == "invalid"
     codes = {failure["code"] for failure in result["failures"]}
@@ -460,6 +485,8 @@ def test_test_only_unknown_citations_are_invalid_and_do_not_create_timeline(
 
 def test_wire_schema_excludes_model_observations():
     assert "observations" not in ReportSelection.model_json_schema()["properties"]
+    assert "citations" not in FindingSelection.model_json_schema()["properties"]
+    assert "evidence_links" in FindingSelection.model_json_schema()["properties"]
     assert "observations" in Analysis.model_json_schema()["properties"]
     assert Analysis.model_fields["observations"].metadata[0].max_length == 2000
 
@@ -495,7 +522,7 @@ def test_projection_budget_failure_is_invalid_and_preserves_selection(
     )
     assert result["status"] == "invalid"
     assert result["observations"] == []
-    assert result["findings"] == selection["findings"]
+    assert result["findings"] == materialized_findings(selection)
     assert result["selected_event_refs"] == selection["selected_event_refs"]
     assert {
         "phase": "validation",
@@ -516,7 +543,7 @@ def test_known_finding_citation_must_also_be_selected(evidence_store, monkeypatc
 
     monkeypatch.setattr(agent, "project_observations", forbidden_projection)
     selection = selection_for(evidence_store)
-    selection["findings"][0]["citations"] = [evidence_store.get("earlier")["ref"]]
+    selection["findings"][0]["evidence_links"][0]["citation"] = evidence_store.get("earlier")["ref"]
     result, _ = run_test_graph(
         evidence_store,
         [
@@ -718,3 +745,124 @@ def test_analysis_requires_each_supplied_hypothesis_once(evidence_store, fault):
         report["findings"].append(deepcopy(report["findings"][0]))
     errors = validate_analysis(report, evidence_store.records, HYPOTHESES)
     assert any(error["code"] == "claim_coverage" for error in errors)
+
+
+@pytest.mark.parametrize("forbidden_field", ["citations", "observations"])
+def test_model_finding_forbids_legacy_fields_and_preserves_raw(evidence_store, forbidden_field):
+    malicious = selection_for(evidence_store)
+    malicious["findings"][0][forbidden_field] = []
+    with pytest.raises(ValidationError):
+        ReportSelection.model_validate(malicious)
+    result, model = run_test_graph(
+        evidence_store, [decision(), malicious, selection_for(evidence_store)]
+    )
+    assert result["status"] == "failed"
+    assert result["findings"] == []
+    assert result["observations"] == []
+    assert json.loads(result["model_history"][-1]["output"]) == malicious
+    assert {"phase": "report", "error_type": "ValueError"} in result["failures"]
+    assert result["model_calls"] == 2
+    assert len(model.responses) == 1
+
+
+@pytest.mark.parametrize("unknown", ["E99", "sha256:" + "0" * 64 + "/Records/999"])
+def test_unknown_finding_link_is_invalid_without_replacing_it(evidence_store, unknown):
+    selection = selection_for(evidence_store)
+    selection["findings"][0]["evidence_links"][0]["citation"] = unknown
+    result, _ = run_test_graph(evidence_store, [decision(), selection])
+    assert result["status"] == "invalid"
+    assert any(error["code"] == "unknown_evidence_link_citation" for error in result["failures"])
+    assert result["findings"][0]["citations"] == [unknown]
+    assert result["observations"] == []
+    assert json.loads(result["model_history"][-1]["output"]) == selection
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "requestParameters.missing",
+        "responseElements.trailStatus",
+        "sourceIPAddress",
+        "requestParameters.settings.flags.0.checked",
+    ],
+)
+def test_unresolved_field_link_blocks_projection(evidence_store, monkeypatch, field):
+    projected = []
+
+    def forbidden_projection(*args, **kwargs):
+        projected.append(True)
+        raise AssertionError("Invalid field links must block fact projection")
+
+    monkeypatch.setattr(agent, "project_observations", forbidden_projection)
+    selection = selection_for(evidence_store)
+    selection["findings"][0]["evidence_links"][0]["fields"] = [field]
+    result, _ = run_test_graph(evidence_store, [decision(), selection])
+    assert result["status"] == "invalid"
+    assert any(error["code"] == "unresolved_evidence_link_field" for error in result["failures"])
+    assert result["findings"][0]["evidence_links"][0]["fields"] == [field]
+    assert result["observations"] == []
+    assert projected == []
+    assert json.loads(result["model_history"][-1]["output"]) == selection
+
+
+@pytest.mark.parametrize(
+    "status,code",
+    [
+        ("supported", "missing_supporting_evidence"),
+        ("refuted", "missing_contradicting_evidence"),
+    ],
+)
+def test_decisive_status_requires_explicit_support_role(evidence_store, status, code):
+    selection = selection_for(evidence_store)
+    selection["findings"][0]["status"] = status
+    result, _ = run_test_graph(evidence_store, [decision(), selection])
+    assert result["status"] == "invalid"
+    assert any(error["code"] == code for error in result["failures"])
+    assert result["findings"][0]["status"] == status
+    assert result["findings"][0]["evidence_links"][0]["role"] == "context"
+    assert result["observations"] == []
+
+
+def test_uncertain_finding_requires_an_explicit_missing_evidence_gap(evidence_store):
+    selection = selection_for(evidence_store)
+    selection["findings"][0]["missing_evidence"] = []
+    result, _ = run_test_graph(evidence_store, [decision(), selection])
+    assert result["status"] == "invalid"
+    assert any(error["code"] == "missing_uncertainty" for error in result["failures"])
+    assert result["findings"][0]["missing_evidence"] == []
+    assert result["observations"] == []
+
+
+def test_top_level_api_absence_and_whole_array_can_be_linked(evidence_store):
+    selection = selection_for(evidence_store)
+    selection["findings"][0]["evidence_links"][0]["fields"] = [
+        "errorCode",
+        "responseElements",
+        "requestParameters.settings.flags",
+    ]
+    result, _ = run_test_graph(evidence_store, [decision(), selection])
+    assert result["status"] == "completed"
+    assert result["findings"] == materialized_findings(selection)
+    facts = {item["field"]: item for item in result["observations"]}
+    assert facts["errorCode"]["present"] is False
+    assert facts["responseElements"]["present"] is True
+    assert facts["responseElements"]["value"] is None
+    assert facts["requestParameters.settings.flags"]["value"] == [{"checked": False, "count": 1}]
+
+
+def test_selected_but_unlinked_records_do_not_pad_finding_citations(evidence_store):
+    selection = selection_for(evidence_store, ("seed", "earlier", "later"))
+    selection["findings"][0]["evidence_links"] = selection["findings"][0]["evidence_links"][:1]
+    result, _ = run_test_graph(
+        evidence_store,
+        [
+            decision("query_events", query={"principal": PRINCIPAL}),
+            decision(),
+            selection,
+        ],
+    )
+    assert result["status"] == "completed"
+    assert len(result["selected_event_refs"]) == 3
+    assert result["findings"][0]["citations"] == [evidence_store.get("seed")["ref"]]
+    assert result["findings"][1]["citations"] == selection["selected_event_refs"]
+    assert json.loads(result["model_history"][-1]["output"]) == selection

@@ -1,0 +1,144 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001301",
+      "eventName": "GetBucketLocation",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-06-17T14:35:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001301",
+      "requestParameters": {
+        "bucketName": "synthetic-deliveries-v5"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.91",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV5H0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/artifact-job",
+        "principalId": "AIDAD84C7DA6400A2E30D",
+        "type": "IAMUser",
+        "userName": "artifact-job"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001302",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-06-17T16:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001302",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/ReportPublisher",
+        "roleSessionName": "publication-check-46"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/ReportPublisher/publication-check-46",
+          "assumedRoleId": "AROA2D22A6238F6FDF945:publication-check-46"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICV5H0001",
+          "expiration": "2026-06-17T17:00:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.92",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV5H0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/artifact-job",
+        "principalId": "AIDAD84C7DA6400A2E30D",
+        "type": "IAMUser",
+        "userName": "artifact-job"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "errorCode": "AccessDenied",
+      "errorMessage": "Synthetic request was denied.",
+      "eventCategory": "Data",
+      "eventID": "50000000-0000-4000-8000-000000001303",
+      "eventName": "PutObject",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-06-17T16:04:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": false,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001303",
+      "requestParameters": {
+        "bucketName": "synthetic-deliveries-v5",
+        "key": "deliveries/audit-sample.txt"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.93",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV5H0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/ReportPublisher/publication-check-46",
+        "principalId": "AROA2D22A6238F6FDF945:publication-check-46",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-06-17T16:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/ReportPublisher",
+            "principalId": "AROA2D22A6238F6FDF945",
+            "type": "Role",
+            "userName": "ReportPublisher"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "errorCode": "AccessDenied",
+      "errorMessage": "Synthetic request was denied.",
+      "eventCategory": "Data",
+      "eventID": "50000000-0000-4000-8000-000000001304",
+      "eventName": "PutObject",
+      "eventSource": "s3.amazonaws.com",
+      "eventTime": "2026-06-17T16:03:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": false,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001304",
+      "requestParameters": {
+        "bucketName": "synthetic-deliveries-v5",
+        "key": "deliveries/unrelated.txt"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.93",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV5N0003",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/other-delivery-job",
+        "principalId": "AIDA9242DFD5262E58AD4",
+        "type": "IAMUser",
+        "userName": "other-delivery-job"
+      }
+    }
+  ]
+}

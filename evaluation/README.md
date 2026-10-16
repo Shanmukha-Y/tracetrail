@@ -16,13 +16,22 @@ The preserved `tracetrail-synthetic-v3` suite is selected explicitly with
 It contains one development and one held-out case. The manifest and fixture
 hashes were checked before the v4 comparison.
 
-The new v5 comparison uses `tracetrail-synthetic-v4`, selected explicitly with
+The preserved protocol v5 comparison used `tracetrail-synthetic-v4`, selected with
 `--manifest evaluation/cases-v4.json`. Its manifest SHA-256 is
 `25514d27f154f01662a8f0657f11806c6273189d3d37155c6e6eff6b9d91af16`.
 It contains `dev-midnight-role-change` as development data and
 `heldout-archive-role-chain` as held-out data. The earlier v2 and v3 cases are
-exposed for v5. Their bytes, annotations, split labels, and results remain
-available for historical comparisons.
+exposed for v5. All v2, v3, and v4 cases are now exposed for protocol v6. Their
+bytes, annotations, split labels, and results remain available for historical
+comparisons.
+
+The current protocol v6 comparison uses `tracetrail-synthetic-v5`, selected with
+`--manifest evaluation/cases-v5.json`. Its manifest SHA-256 is
+`66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96`.
+The four cases contain 18 records, 14 relevant records, 16 hypotheses, and 96
+required field observations. Each split has two cases. The manifest and fixture
+hashes were checked before the frozen protocol comparison. The measured v6
+results below retain all completed and invalid reports.
 
 This suite tests investigation of a small supplied CloudTrail log window. All
 accounts, identities, IP addresses, resources, and API events are invented.
@@ -36,10 +45,17 @@ use documentation ranges. The fixtures use the repository's MIT license.
 | `heldout-denied-and-missing` | Held out | Distinguish denied requests from success. Do not infer later trail state from missing records. |
 | `heldout-data-access` | Held out | Link object requests to a session. Distinguish allowed and denied requests from deletion and transfer claims. |
 
-| New v3 case | Split | Evidence question |
+| Preserved v3 case | Original split, now exposed | Evidence question |
 | --- | --- | --- |
 | `dev-caller-and-child-pivot` | Development | Link the caller and returned temporary key across changed source addresses. Keep approval and trail state uncertain where records do not establish them. |
 | `heldout-issued-key-chain` | Held out | Find the issuer of an observed temporary key and the original caller. Distinguish denied requests from success and test an approved-audit explanation. |
+
+| Current v5 case | Split | Evidence question |
+| --- | --- | --- |
+| `dev-key-lifecycle` | Development | Link role assumption, caller history, and an access-key request. Separate requested status from later key state and distinguish callers at the same source address. |
+| `dev-network-denial` | Development | Investigate a denied security-group request and its credential issuer. Separate the API outcome from later resource state and intent. |
+| `heldout-publication-denial` | Held out | Link an object upload attempt to its temporary credential issuer and original caller. Separate request outcome from approved publication and distinguish same-address callers. |
+| `heldout-encryption-state` | Held out | Investigate a KMS request and its credential chain. Separate the request from later key state and approval; an unlogged read response is not state evidence. |
 
 One development record contains an instruction in a role description. It is
 untrusted log data. It must not control the investigator.
@@ -62,9 +78,97 @@ must have a new ID and keep old fixtures, annotations, and results available.
 `fixtures/build_synthetic_v2.py` reproduces the v2 bytes from the preserved
 invented v1 definitions and documented AWS field corrections. It has no model, AWS, or network calls.
 
-## Protocol v5 contract and measured results
+## October 16 protocol v6 contract and measured results
 
-The model's report wire schema now contains only selected records, finding
+The [frozen v6 protocol](protocol-v6.json) has file SHA-256
+`062030719ddd94ec17eb42518051c5f819475719eb5a92f500c72e42e6f8b456`.
+Its frozen prompt SHA-256 is
+`4335bc9f8c85cce8502b6c4858ab64863c7b982cbe93fed1783de7583ca23db9`.
+Two initial development candidate runs are preserved separately. They informed
+a general component instruction before the final protocol freeze and are not
+fresh results for the frozen comparison.
+
+V6 findings contain model-authored `evidence_links`, each with a selected
+citation, exact field paths, and a `supports`, `contradicts`, or `context` role.
+The model also supplies a brief rationale, missing-evidence gaps, and the
+status of the unchanged hypothesis. The wire schema forbids separate finding
+citations and observations. Public citations are derived only from explicit
+links; code does not add missing evidence from the selected-record pool.
+
+Structural validation rejects unknown or unselected link citations, unresolved
+field paths, missing required support or contradiction roles, and uncertain
+findings without an explicit gap. These checks establish source presence, not
+semantic entailment. A valid field link can still have an incorrect role,
+rationale, or status. Projection remains the same generic extraction from
+selected returned records for every model and method. It supplies no gold
+labels, extra evidence, status repair, or automatic retry.
+
+The budgets remain three queries, at most four model calls, and 3,200 output
+tokens per call. Local SDK evaluation and trace storage are unchanged and need
+no hosted setup. Sixteen actual investigations ran under the frozen protocol.
+Each group has four runs: two development cases and two held-out cases. Thirteen
+reports completed; three Mistral reports were invalid. Every run remains in the
+comparison denominator.
+
+| Model | Method | Valid reports | Mean selected-event precision | Mean selected-event recall | Mean annotated support | Mean raw status accuracy | Mean queries | Mean model calls | Mean seconds |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Qwen | adaptive | 4/4 | 100.00% | 64.58% | 56.25% | 75.00% | 1.00 | 3.00 | 100.44 |
+| Qwen | fixed | 4/4 | 70.83% | 43.75% | 12.50% | 56.25% | 3.00 | 1.00 | 64.71 |
+| Gemma | adaptive | 4/4 | 95.00% | 91.67% | 75.00% | 100.00% | 2.25 | 3.75 | 154.52 |
+| Mistral | adaptive | 1/4 | 50.00% | 43.75% | 18.75% | 81.25% | 3.00 | 4.00 | 96.24 |
+
+Precision and recall measure the validated selected set, not all records a tool
+returned. An invalid selected pointer earns no record credit even when the
+correct record was returned. Raw status accuracy counts the model's hypothesis
+labels, including labels in invalid reports. It is not report validity, strict
+support, or a semantic truth score. Strict support also uses global
+code-projected facts. A passing finding need not contain every required field
+path in its model-authored links. These are distinct evaluation boundaries.
+
+A separate field-path audit counts each unique required combination of a
+hypothesis, exact original record reference, and field path. Only a link in the
+corresponding completed, valid finding earns credit. Repeated paths cannot
+increase the score. Global projected facts and rationale text earn no credit.
+This audit ignores the declared role and does not test value correctness,
+relevance, or entailment.
+
+| Model | Method | Required field paths explicitly linked |
+| --- | --- | --- |
+| Qwen | adaptive | 43/96 |
+| Qwen | fixed | 20/96 |
+| Gemma | adaptive | 44/96 |
+| Mistral | adaptive | 15/96 |
+
+Combined coverage was 122/384. The three invalid reports accounted for 74
+required combinations and earned zero credit; their denominators remain.
+
+Thirty-eight of 64 findings failed strict support checks. Qwen adaptive finished
+after one query in all four cases and left relevant context unqueried. Qwen and
+the one valid Mistral report treated an `AccessDenied` outcome as a refutation of
+approval. Mistral's invalid reports included missing contradiction roles and
+invalid `/evidence/...` selected references. Fixed search could match a status
+without finding the credential-issuance record needed to support it. These
+failures remain visible; they are not all hallucinations or parser failures.
+
+The genuine offline LangSmith SDK evaluation replayed all 16 saved outputs and
+produced 352 feedback items with `upload_results=False` and no new inference.
+The raw comparison SHA-256 is
+`c7eee979197141a84287391810ac42df226a8ad06ef270f267772a7ca80c1be2`.
+The offline SDK artifact SHA-256 is
+`da013dc3040441efb472e94f8bd157afe2e06c440f6a185676fbb53ad6bdf6cb`.
+These counts exclude the separately preserved development candidates and CLI
+demonstration.
+
+There is one run per model-method-case cell and only two cases per split. The
+suite and protocol differ from earlier comparisons, so these numbers establish
+no cross-suite improvement, model winner, or general adaptive advantage. See
+[results-v6.json](results-v6.json) and [progress](../docs/progress.md) for the
+development and held-out scores, exact artifacts, and reviewed failures. The
+[integration details](../docs/integrations.md) explain the bounded link contract.
+
+## October 15 protocol v5 contract and measured results
+
+The v5 model report wire schema contained selected records, finding
 citations, unchanged hypothesis statements with statuses, and narrative
 limitations. It forbids model-supplied observations. Once the selection passes
 validation, generic code projects exact typed fields from the selected returned
@@ -257,13 +361,8 @@ uv run pytest tests/test_evaluation.py
 Run development investigations with installed local Ollama models:
 
 ```sh
-uv run tracetrail compare --split development --output local-results/development.json
-```
-
-Select the new v4 development case explicitly:
-
-```sh
-uv run tracetrail compare --manifest evaluation/cases-v4.json --split development --output local-results/development-suite-v4.json
+uv run tracetrail compare --manifest evaluation/cases-v5.json \
+  --split development --output local-results/development-suite-v5.json
 ```
 
 The runner records model responses, evidence, tool history, errors, versions,

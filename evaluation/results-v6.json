@@ -1,0 +1,1560 @@
+{
+  "all_benchmark_inference_local": true,
+  "demo": {
+    "case_id": "dev-key-lifecycle",
+    "declared_field_path_coverage": {
+      "coverage": 0.42857142857142855,
+      "covered": 12,
+      "required": 28
+    },
+    "effective_loaded_weight_digests": [
+      "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+    ],
+    "expected_findings": 4,
+    "failure_codes": {},
+    "metrics": {
+      "duration_seconds": 105.39418533397838,
+      "failure_count": 0,
+      "insufficient_evidence_handling": 0.0,
+      "model_calls": 3,
+      "query_count": 1,
+      "relevant_event_precision": 1.0,
+      "relevant_event_recall": 0.75,
+      "status_accuracy": 0.75,
+      "supported_annotation_rate": 0.5,
+      "tool_errors": 0
+    },
+    "model": "qwen3.8:27b-q4_K_M",
+    "path": "local-results/demo-v6.json",
+    "projected_observation_count": 90,
+    "reported_findings": 4,
+    "separate_from_comparison_cells": true,
+    "sha256": "b113b84ed1ee4f1a900b4ce7968976d9827947ed05d198b084f3315370226ae5",
+    "split": "development",
+    "status": "completed",
+    "strategy": "adaptive",
+    "strict_annotation_failures": 2,
+    "trace_span_counts": {
+      "chain": 32,
+      "llm": 3,
+      "parser": 3,
+      "tool": 1
+    }
+  },
+  "development_candidate": {
+    "audit": {
+      "path": "local-results/development-v6-suite-v4.audit-summary.json",
+      "sha256": "8e2351894054add82140cdd16a518771ed03deff7478fa86ca22806e2e2604b8"
+    },
+    "case_manifest_path": "evaluation/cases-v4.json",
+    "case_manifest_sha256": "25514d27f154f01662a8f0657f11806c6273189d3d37155c6e6eff6b9d91af16",
+    "cells": [
+      {
+        "case_id": "dev-midnight-role-change",
+        "declared_field_path_coverage": {
+          "coverage": 0.7,
+          "covered": 21,
+          "required": 30
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 144.94265570817515,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 4,
+          "query_count": 2,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 1.0,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.5,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 113,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "completed",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 2,
+        "trace_span_counts": {
+          "chain": 44,
+          "llm": 4,
+          "parser": 4,
+          "tool": 2
+        }
+      },
+      {
+        "case_id": "dev-midnight-role-change",
+        "declared_field_path_coverage": {
+          "coverage": 0.36666666666666664,
+          "covered": 11,
+          "required": 30
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 52.10412766691297,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.5,
+          "status_accuracy": 0.5,
+          "supported_annotation_rate": 0.25,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 52,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "completed",
+        "strategy": "fixed",
+        "strict_annotation_failures": 3,
+        "trace_span_counts": {
+          "chain": 11,
+          "llm": 1,
+          "parser": 1,
+          "tool": 3
+        }
+      }
+    ],
+    "final_frozen_protocol": false,
+    "groups": [
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.7,
+          "covered": 21,
+          "required": 30
+        },
+        "expected_findings": 4,
+        "mean_metrics": {
+          "duration_seconds": 144.94265570817515,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 4,
+          "query_count": 2,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 1.0,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.5,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 1,
+        "reported_findings": 4,
+        "split": "all",
+        "status_counts": {
+          "completed": 1
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 2
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.7,
+          "covered": 21,
+          "required": 30
+        },
+        "expected_findings": 4,
+        "mean_metrics": {
+          "duration_seconds": 144.94265570817515,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 4,
+          "query_count": 2,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 1.0,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.5,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 1,
+        "reported_findings": 4,
+        "split": "development",
+        "status_counts": {
+          "completed": 1
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 2
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.36666666666666664,
+          "covered": 11,
+          "required": 30
+        },
+        "expected_findings": 4,
+        "mean_metrics": {
+          "duration_seconds": 52.10412766691297,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.5,
+          "status_accuracy": 0.5,
+          "supported_annotation_rate": 0.25,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 1,
+        "reported_findings": 4,
+        "split": "all",
+        "status_counts": {
+          "completed": 1
+        },
+        "strategy": "fixed",
+        "strict_annotation_failures": 3
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.36666666666666664,
+          "covered": 11,
+          "required": 30
+        },
+        "expected_findings": 4,
+        "mean_metrics": {
+          "duration_seconds": 52.10412766691297,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.5,
+          "status_accuracy": 0.5,
+          "supported_annotation_rate": 0.25,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 1,
+        "reported_findings": 4,
+        "split": "development",
+        "status_counts": {
+          "completed": 1
+        },
+        "strategy": "fixed",
+        "strict_annotation_failures": 3
+      }
+    ],
+    "prompt_sha256": "c6e4258003749bb26c4c82f5ef6917a70d6efd88dab57809ea1d427b3e90eb17",
+    "raw": {
+      "path": "local-results/development-v6-suite-v4.json",
+      "sha256": "15d6f49b6ef10fdc65e0364a99510c2054164206fbe587a77fef99c81b3a3623"
+    },
+    "sdk": {
+      "feedback_items": 44,
+      "inference_rerun": false,
+      "path": "local-results/development-v6-suite-v4.langsmith-local.json",
+      "replays": 2,
+      "sha256": "42f75443b7a7959a852dd5354a6f540fd54562face572d4bee0794f17a4630eb",
+      "upload_results": false
+    },
+    "versions": {
+      "langchain": "1.4.5",
+      "langchain-ollama": "1.1.0",
+      "langgraph": "1.2.15",
+      "langsmith": "0.14.8"
+    }
+  },
+  "field_path_coverage_policy": {
+    "invalid_reports_keep_denominator_and_earn_zero": true,
+    "no_global_observation_credit": true,
+    "no_role_truth_or_entailment_judgment": true,
+    "unit": "unique claim/source/exact-path annotation atom"
+  },
+  "final_development": {
+    "audit": {
+      "path": "local-results/development-v6-final-suite-v4.audit-summary.json",
+      "sha256": "5b4fc63807c6a42bf525c71c5116a940fcecb6bbc9c37ed98b7a94daf88533dd"
+    },
+    "case_manifest_path": "evaluation/cases-v4.json",
+    "case_manifest_sha256": "25514d27f154f01662a8f0657f11806c6273189d3d37155c6e6eff6b9d91af16",
+    "cells": [
+      {
+        "case_id": "dev-midnight-role-change",
+        "declared_field_path_coverage": {
+          "coverage": 0.8333333333333334,
+          "covered": 25,
+          "required": 30
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 144.31153504084796,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 1.0,
+          "model_calls": 4,
+          "query_count": 2,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 1.0,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.75,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 113,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "completed",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 1,
+        "trace_span_counts": {
+          "chain": 44,
+          "llm": 4,
+          "parser": 4,
+          "tool": 2
+        }
+      },
+      {
+        "case_id": "dev-midnight-role-change",
+        "declared_field_path_coverage": {
+          "coverage": 0.4,
+          "covered": 12,
+          "required": 30
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 60.25489366566762,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.5,
+          "status_accuracy": 0.5,
+          "supported_annotation_rate": 0.25,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 52,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "completed",
+        "strategy": "fixed",
+        "strict_annotation_failures": 3,
+        "trace_span_counts": {
+          "chain": 11,
+          "llm": 1,
+          "parser": 1,
+          "tool": 3
+        }
+      }
+    ],
+    "final_frozen_protocol": true,
+    "groups": [
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.8333333333333334,
+          "covered": 25,
+          "required": 30
+        },
+        "expected_findings": 4,
+        "mean_metrics": {
+          "duration_seconds": 144.31153504084796,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 1.0,
+          "model_calls": 4,
+          "query_count": 2,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 1.0,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.75,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 1,
+        "reported_findings": 4,
+        "split": "all",
+        "status_counts": {
+          "completed": 1
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 1
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.8333333333333334,
+          "covered": 25,
+          "required": 30
+        },
+        "expected_findings": 4,
+        "mean_metrics": {
+          "duration_seconds": 144.31153504084796,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 1.0,
+          "model_calls": 4,
+          "query_count": 2,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 1.0,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.75,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 1,
+        "reported_findings": 4,
+        "split": "development",
+        "status_counts": {
+          "completed": 1
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 1
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.4,
+          "covered": 12,
+          "required": 30
+        },
+        "expected_findings": 4,
+        "mean_metrics": {
+          "duration_seconds": 60.25489366566762,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.5,
+          "status_accuracy": 0.5,
+          "supported_annotation_rate": 0.25,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 1,
+        "reported_findings": 4,
+        "split": "all",
+        "status_counts": {
+          "completed": 1
+        },
+        "strategy": "fixed",
+        "strict_annotation_failures": 3
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.4,
+          "covered": 12,
+          "required": 30
+        },
+        "expected_findings": 4,
+        "mean_metrics": {
+          "duration_seconds": 60.25489366566762,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.5,
+          "status_accuracy": 0.5,
+          "supported_annotation_rate": 0.25,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 1,
+        "reported_findings": 4,
+        "split": "development",
+        "status_counts": {
+          "completed": 1
+        },
+        "strategy": "fixed",
+        "strict_annotation_failures": 3
+      }
+    ],
+    "prompt_sha256": "4335bc9f8c85cce8502b6c4858ab64863c7b982cbe93fed1783de7583ca23db9",
+    "raw": {
+      "path": "local-results/development-v6-final-suite-v4.json",
+      "sha256": "a4d446e9a28de5263d383df09ef4c708663a0b78ca1956979404c8b3323674db"
+    },
+    "sdk": {
+      "feedback_items": 44,
+      "inference_rerun": false,
+      "path": "local-results/development-v6-final-suite-v4.langsmith-local.json",
+      "replays": 2,
+      "sha256": "7339546efb1ced9a2e670a6803da82ac85ab829424749bf345432a3c20465717",
+      "upload_results": false
+    },
+    "versions": {
+      "langchain": "1.4.5",
+      "langchain-ollama": "1.1.0",
+      "langgraph": "1.2.15",
+      "langsmith": "0.14.8"
+    }
+  },
+  "fresh_evaluation": {
+    "audit": {
+      "path": "local-results/comparison-v6-suite-v5.audit-summary.json",
+      "sha256": "150980a539b9ac4f2cdaec1e8004ae7f3b37c14ed7dce4b5cf74ae6299890b98"
+    },
+    "case_manifest_path": "evaluation/cases-v5.json",
+    "case_manifest_sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96",
+    "cells": [
+      {
+        "case_id": "dev-key-lifecycle",
+        "declared_field_path_coverage": {
+          "coverage": 0.42857142857142855,
+          "covered": 12,
+          "required": 28
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 99.13108408311382,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 3,
+          "query_count": 1,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.75,
+          "status_accuracy": 0.75,
+          "supported_annotation_rate": 0.5,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 90,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "completed",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 2,
+        "trace_span_counts": {
+          "chain": 32,
+          "llm": 3,
+          "parser": 3,
+          "tool": 1
+        }
+      },
+      {
+        "case_id": "dev-key-lifecycle",
+        "declared_field_path_coverage": {
+          "coverage": 0.17857142857142858,
+          "covered": 5,
+          "required": 28
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 56.090472291223705,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.25,
+          "status_accuracy": 0.25,
+          "supported_annotation_rate": 0.0,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 28,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "completed",
+        "strategy": "fixed",
+        "strict_annotation_failures": 4,
+        "trace_span_counts": {
+          "chain": 11,
+          "llm": 1,
+          "parser": 1,
+          "tool": 3
+        }
+      },
+      {
+        "case_id": "dev-network-denial",
+        "declared_field_path_coverage": {
+          "coverage": 0.45,
+          "covered": 9,
+          "required": 20
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 99.83948537521064,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.5,
+          "model_calls": 3,
+          "query_count": 1,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.6666666666666666,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.75,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 58,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "completed",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 1,
+        "trace_span_counts": {
+          "chain": 32,
+          "llm": 3,
+          "parser": 3,
+          "tool": 1
+        }
+      },
+      {
+        "case_id": "dev-network-denial",
+        "declared_field_path_coverage": {
+          "coverage": 0.2,
+          "covered": 4,
+          "required": 20
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 57.77507687499747,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 0.6666666666666666,
+          "relevant_event_recall": 0.6666666666666666,
+          "status_accuracy": 0.75,
+          "supported_annotation_rate": 0.25,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 84,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "completed",
+        "strategy": "fixed",
+        "strict_annotation_failures": 3,
+        "trace_span_counts": {
+          "chain": 11,
+          "llm": 1,
+          "parser": 1,
+          "tool": 3
+        }
+      },
+      {
+        "case_id": "heldout-publication-denial",
+        "declared_field_path_coverage": {
+          "coverage": 0.5,
+          "covered": 11,
+          "required": 22
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 93.16128670889884,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 3,
+          "query_count": 1,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.6666666666666666,
+          "status_accuracy": 0.5,
+          "supported_annotation_rate": 0.5,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 59,
+        "reported_findings": 4,
+        "split": "heldout",
+        "status": "completed",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 2,
+        "trace_span_counts": {
+          "chain": 32,
+          "llm": 3,
+          "parser": 3,
+          "tool": 1
+        }
+      },
+      {
+        "case_id": "heldout-publication-denial",
+        "declared_field_path_coverage": {
+          "coverage": 0.13636363636363635,
+          "covered": 3,
+          "required": 22
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 64.85212208284065,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 0.5,
+          "relevant_event_recall": 0.3333333333333333,
+          "status_accuracy": 0.5,
+          "supported_annotation_rate": 0.25,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 56,
+        "reported_findings": 4,
+        "split": "heldout",
+        "status": "completed",
+        "strategy": "fixed",
+        "strict_annotation_failures": 3,
+        "trace_span_counts": {
+          "chain": 11,
+          "llm": 1,
+          "parser": 1,
+          "tool": 3
+        }
+      },
+      {
+        "case_id": "heldout-encryption-state",
+        "declared_field_path_coverage": {
+          "coverage": 0.4230769230769231,
+          "covered": 11,
+          "required": 26
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 109.64794249972329,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.5,
+          "model_calls": 3,
+          "query_count": 1,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.5,
+          "status_accuracy": 0.75,
+          "supported_annotation_rate": 0.5,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 58,
+        "reported_findings": 4,
+        "split": "heldout",
+        "status": "completed",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 2,
+        "trace_span_counts": {
+          "chain": 32,
+          "llm": 3,
+          "parser": 3,
+          "tool": 1
+        }
+      },
+      {
+        "case_id": "heldout-encryption-state",
+        "declared_field_path_coverage": {
+          "coverage": 0.3076923076923077,
+          "covered": 8,
+          "required": 26
+        },
+        "effective_loaded_weight_digests": [
+          "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 80.1175961252302,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 0.6666666666666666,
+          "relevant_event_recall": 0.5,
+          "status_accuracy": 0.75,
+          "supported_annotation_rate": 0.0,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 84,
+        "reported_findings": 4,
+        "split": "heldout",
+        "status": "completed",
+        "strategy": "fixed",
+        "strict_annotation_failures": 4,
+        "trace_span_counts": {
+          "chain": 11,
+          "llm": 1,
+          "parser": 1,
+          "tool": 3
+        }
+      },
+      {
+        "case_id": "dev-key-lifecycle",
+        "declared_field_path_coverage": {
+          "coverage": 0.4642857142857143,
+          "covered": 13,
+          "required": 28
+        },
+        "effective_loaded_weight_digests": [
+          "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 175.01634708372876,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 1.0,
+          "model_calls": 4,
+          "query_count": 3,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 1.0,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 1.0,
+          "tool_errors": 0
+        },
+        "model": "gemma4:31b-it-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 114,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "completed",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 0,
+        "trace_span_counts": {
+          "chain": 46,
+          "llm": 4,
+          "parser": 4,
+          "tool": 3
+        }
+      },
+      {
+        "case_id": "dev-network-denial",
+        "declared_field_path_coverage": {
+          "coverage": 0.25,
+          "covered": 5,
+          "required": 20
+        },
+        "effective_loaded_weight_digests": [
+          "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 114.52175179170445,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 3,
+          "query_count": 1,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.6666666666666666,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.5,
+          "tool_errors": 0
+        },
+        "model": "gemma4:31b-it-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 58,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "completed",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 2,
+        "trace_span_counts": {
+          "chain": 32,
+          "llm": 3,
+          "parser": 3,
+          "tool": 1
+        }
+      },
+      {
+        "case_id": "heldout-publication-denial",
+        "declared_field_path_coverage": {
+          "coverage": 0.4090909090909091,
+          "covered": 9,
+          "required": 22
+        },
+        "effective_loaded_weight_digests": [
+          "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 151.33261583326384,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 4,
+          "query_count": 2,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 1.0,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.75,
+          "tool_errors": 0
+        },
+        "model": "gemma4:31b-it-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 83,
+        "reported_findings": 4,
+        "split": "heldout",
+        "status": "completed",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 1,
+        "trace_span_counts": {
+          "chain": 44,
+          "llm": 4,
+          "parser": 4,
+          "tool": 2
+        }
+      },
+      {
+        "case_id": "heldout-encryption-state",
+        "declared_field_path_coverage": {
+          "coverage": 0.6538461538461539,
+          "covered": 17,
+          "required": 26
+        },
+        "effective_loaded_weight_digests": [
+          "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 177.1918624592945,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.5,
+          "model_calls": 4,
+          "query_count": 3,
+          "relevant_event_precision": 0.8,
+          "relevant_event_recall": 1.0,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.75,
+          "tool_errors": 0
+        },
+        "model": "gemma4:31b-it-q4_K_M",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 136,
+        "reported_findings": 4,
+        "split": "heldout",
+        "status": "completed",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 1,
+        "trace_span_counts": {
+          "chain": 46,
+          "llm": 4,
+          "parser": 4,
+          "tool": 3
+        }
+      },
+      {
+        "case_id": "dev-key-lifecycle",
+        "declared_field_path_coverage": {
+          "coverage": 0.0,
+          "covered": 0,
+          "required": 28
+        },
+        "effective_loaded_weight_digests": [
+          "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {
+          "missing_contradicting_evidence": 1
+        },
+        "metrics": {
+          "duration_seconds": 106.09977166727185,
+          "failure_count": 1,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 4,
+          "query_count": 3,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.75,
+          "status_accuracy": 0.75,
+          "supported_annotation_rate": 0.0,
+          "tool_errors": 0
+        },
+        "model": "mistral-small3.2:24b",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 0,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "invalid",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 4,
+        "trace_span_counts": {
+          "chain": 46,
+          "llm": 4,
+          "parser": 4,
+          "tool": 3
+        }
+      },
+      {
+        "case_id": "dev-network-denial",
+        "declared_field_path_coverage": {
+          "coverage": 0.0,
+          "covered": 0,
+          "required": 20
+        },
+        "effective_loaded_weight_digests": [
+          "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {
+          "unknown_citation": 4,
+          "unselected_evidence_link_citation": 6,
+          "unselected_finding_citation": 6
+        },
+        "metrics": {
+          "duration_seconds": 83.59020662494004,
+          "failure_count": 16,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 4,
+          "query_count": 3,
+          "relevant_event_precision": 0.0,
+          "relevant_event_recall": 0.0,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.0,
+          "tool_errors": 0
+        },
+        "model": "mistral-small3.2:24b",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 0,
+        "reported_findings": 4,
+        "split": "development",
+        "status": "invalid",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 4,
+        "trace_span_counts": {
+          "chain": 46,
+          "llm": 4,
+          "parser": 4,
+          "tool": 3
+        }
+      },
+      {
+        "case_id": "heldout-publication-denial",
+        "declared_field_path_coverage": {
+          "coverage": 0.6818181818181818,
+          "covered": 15,
+          "required": 22
+        },
+        "effective_loaded_weight_digests": [
+          "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {},
+        "metrics": {
+          "duration_seconds": 100.72696520807222,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 4,
+          "query_count": 3,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 1.0,
+          "status_accuracy": 0.75,
+          "supported_annotation_rate": 0.75,
+          "tool_errors": 0
+        },
+        "model": "mistral-small3.2:24b",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 83,
+        "reported_findings": 4,
+        "split": "heldout",
+        "status": "completed",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 1,
+        "trace_span_counts": {
+          "chain": 46,
+          "llm": 4,
+          "parser": 4,
+          "tool": 3
+        }
+      },
+      {
+        "case_id": "heldout-encryption-state",
+        "declared_field_path_coverage": {
+          "coverage": 0.0,
+          "covered": 0,
+          "required": 26
+        },
+        "effective_loaded_weight_digests": [
+          "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06"
+        ],
+        "expected_findings": 4,
+        "failure_codes": {
+          "unknown_citation": 2,
+          "unselected_evidence_link_citation": 2,
+          "unselected_finding_citation": 2
+        },
+        "metrics": {
+          "duration_seconds": 94.55660249991342,
+          "failure_count": 6,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 4,
+          "query_count": 3,
+          "relevant_event_precision": 0.0,
+          "relevant_event_recall": 0.0,
+          "status_accuracy": 0.75,
+          "supported_annotation_rate": 0.0,
+          "tool_errors": 0
+        },
+        "model": "mistral-small3.2:24b",
+        "ollama_version": "0.40.0",
+        "projected_observation_count": 0,
+        "reported_findings": 4,
+        "split": "heldout",
+        "status": "invalid",
+        "strategy": "adaptive",
+        "strict_annotation_failures": 4,
+        "trace_span_counts": {
+          "chain": 46,
+          "llm": 4,
+          "parser": 4,
+          "tool": 3
+        }
+      }
+    ],
+    "final_frozen_protocol": true,
+    "groups": [
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.4583333333333333,
+          "covered": 44,
+          "required": 96
+        },
+        "expected_findings": 16,
+        "mean_metrics": {
+          "duration_seconds": 154.5156442919979,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.375,
+          "model_calls": 3.75,
+          "query_count": 2.25,
+          "relevant_event_precision": 0.95,
+          "relevant_event_recall": 0.9166666666666666,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.75,
+          "tool_errors": 0
+        },
+        "model": "gemma4:31b-it-q4_K_M",
+        "n": 4,
+        "reported_findings": 16,
+        "split": "all",
+        "status_counts": {
+          "completed": 4
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 4
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.375,
+          "covered": 18,
+          "required": 48
+        },
+        "expected_findings": 8,
+        "mean_metrics": {
+          "duration_seconds": 144.7690494377166,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.5,
+          "model_calls": 3.5,
+          "query_count": 2,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.8333333333333333,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.75,
+          "tool_errors": 0
+        },
+        "model": "gemma4:31b-it-q4_K_M",
+        "n": 2,
+        "reported_findings": 8,
+        "split": "development",
+        "status_counts": {
+          "completed": 2
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 2
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.5416666666666666,
+          "covered": 26,
+          "required": 48
+        },
+        "expected_findings": 8,
+        "mean_metrics": {
+          "duration_seconds": 164.26223914627917,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.25,
+          "model_calls": 4,
+          "query_count": 2.5,
+          "relevant_event_precision": 0.9,
+          "relevant_event_recall": 1.0,
+          "status_accuracy": 1.0,
+          "supported_annotation_rate": 0.75,
+          "tool_errors": 0
+        },
+        "model": "gemma4:31b-it-q4_K_M",
+        "n": 2,
+        "reported_findings": 8,
+        "split": "heldout",
+        "status_counts": {
+          "completed": 2
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 2
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.15625,
+          "covered": 15,
+          "required": 96
+        },
+        "expected_findings": 16,
+        "mean_metrics": {
+          "duration_seconds": 96.24338650004938,
+          "failure_count": 5.75,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 4,
+          "query_count": 3,
+          "relevant_event_precision": 0.5,
+          "relevant_event_recall": 0.4375,
+          "status_accuracy": 0.8125,
+          "supported_annotation_rate": 0.1875,
+          "tool_errors": 0
+        },
+        "model": "mistral-small3.2:24b",
+        "n": 4,
+        "reported_findings": 16,
+        "split": "all",
+        "status_counts": {
+          "completed": 1,
+          "invalid": 3
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 13
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.0,
+          "covered": 0,
+          "required": 48
+        },
+        "expected_findings": 8,
+        "mean_metrics": {
+          "duration_seconds": 94.84498914610595,
+          "failure_count": 8.5,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 4,
+          "query_count": 3,
+          "relevant_event_precision": 0.5,
+          "relevant_event_recall": 0.375,
+          "status_accuracy": 0.875,
+          "supported_annotation_rate": 0.0,
+          "tool_errors": 0
+        },
+        "model": "mistral-small3.2:24b",
+        "n": 2,
+        "reported_findings": 8,
+        "split": "development",
+        "status_counts": {
+          "invalid": 2
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 8
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.3125,
+          "covered": 15,
+          "required": 48
+        },
+        "expected_findings": 8,
+        "mean_metrics": {
+          "duration_seconds": 97.64178385399282,
+          "failure_count": 3,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 4,
+          "query_count": 3,
+          "relevant_event_precision": 0.5,
+          "relevant_event_recall": 0.5,
+          "status_accuracy": 0.75,
+          "supported_annotation_rate": 0.375,
+          "tool_errors": 0
+        },
+        "model": "mistral-small3.2:24b",
+        "n": 2,
+        "reported_findings": 8,
+        "split": "heldout",
+        "status_counts": {
+          "completed": 1,
+          "invalid": 1
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 5
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.4479166666666667,
+          "covered": 43,
+          "required": 96
+        },
+        "expected_findings": 16,
+        "mean_metrics": {
+          "duration_seconds": 100.44494966673665,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.25,
+          "model_calls": 3,
+          "query_count": 1,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.6458333333333333,
+          "status_accuracy": 0.75,
+          "supported_annotation_rate": 0.5625,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 4,
+        "reported_findings": 16,
+        "split": "all",
+        "status_counts": {
+          "completed": 4
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 7
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.4375,
+          "covered": 21,
+          "required": 48
+        },
+        "expected_findings": 8,
+        "mean_metrics": {
+          "duration_seconds": 99.48528472916223,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.25,
+          "model_calls": 3,
+          "query_count": 1,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.7083333333333333,
+          "status_accuracy": 0.875,
+          "supported_annotation_rate": 0.625,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 2,
+        "reported_findings": 8,
+        "split": "development",
+        "status_counts": {
+          "completed": 2
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 3
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.4583333333333333,
+          "covered": 22,
+          "required": 48
+        },
+        "expected_findings": 8,
+        "mean_metrics": {
+          "duration_seconds": 101.40461460431106,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.25,
+          "model_calls": 3,
+          "query_count": 1,
+          "relevant_event_precision": 1.0,
+          "relevant_event_recall": 0.5833333333333333,
+          "status_accuracy": 0.625,
+          "supported_annotation_rate": 0.5,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 2,
+        "reported_findings": 8,
+        "split": "heldout",
+        "status_counts": {
+          "completed": 2
+        },
+        "strategy": "adaptive",
+        "strict_annotation_failures": 4
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.20833333333333334,
+          "covered": 20,
+          "required": 96
+        },
+        "expected_findings": 16,
+        "mean_metrics": {
+          "duration_seconds": 64.708816843573,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 0.7083333333333333,
+          "relevant_event_recall": 0.4375,
+          "status_accuracy": 0.5625,
+          "supported_annotation_rate": 0.125,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 4,
+        "reported_findings": 16,
+        "split": "all",
+        "status_counts": {
+          "completed": 4
+        },
+        "strategy": "fixed",
+        "strict_annotation_failures": 14
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.1875,
+          "covered": 9,
+          "required": 48
+        },
+        "expected_findings": 8,
+        "mean_metrics": {
+          "duration_seconds": 56.932774583110586,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 0.8333333333333333,
+          "relevant_event_recall": 0.4583333333333333,
+          "status_accuracy": 0.5,
+          "supported_annotation_rate": 0.125,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 2,
+        "reported_findings": 8,
+        "split": "development",
+        "status_counts": {
+          "completed": 2
+        },
+        "strategy": "fixed",
+        "strict_annotation_failures": 7
+      },
+      {
+        "declared_field_path_coverage": {
+          "coverage": 0.22916666666666666,
+          "covered": 11,
+          "required": 48
+        },
+        "expected_findings": 8,
+        "mean_metrics": {
+          "duration_seconds": 72.48485910403542,
+          "failure_count": 0,
+          "insufficient_evidence_handling": 0.0,
+          "model_calls": 1,
+          "query_count": 3,
+          "relevant_event_precision": 0.5833333333333333,
+          "relevant_event_recall": 0.41666666666666663,
+          "status_accuracy": 0.625,
+          "supported_annotation_rate": 0.125,
+          "tool_errors": 0
+        },
+        "model": "qwen3.8:27b-q4_K_M",
+        "n": 2,
+        "reported_findings": 8,
+        "split": "heldout",
+        "status_counts": {
+          "completed": 2
+        },
+        "strategy": "fixed",
+        "strict_annotation_failures": 7
+      }
+    ],
+    "prompt_sha256": "4335bc9f8c85cce8502b6c4858ab64863c7b982cbe93fed1783de7583ca23db9",
+    "raw": {
+      "path": "local-results/comparison-v6-suite-v5.json",
+      "sha256": "c7eee979197141a84287391810ac42df226a8ad06ef270f267772a7ca80c1be2"
+    },
+    "sdk": {
+      "feedback_items": 352,
+      "inference_rerun": false,
+      "path": "local-results/comparison-v6-suite-v5.langsmith-local.json",
+      "replays": 16,
+      "sha256": "da013dc3040441efb472e94f8bd157afe2e06c440f6a185676fbb53ad6bdf6cb",
+      "upload_results": false
+    },
+    "versions": {
+      "langchain": "1.4.5",
+      "langchain-ollama": "1.1.0",
+      "langgraph": "1.2.15",
+      "langsmith": "0.14.8"
+    }
+  },
+  "langsmith_upload_results": false,
+  "limitations": [
+    "Four fresh synthetic cases, one run per cell. No model winner or production reliability claim.",
+    "The two earlier development candidate runs use a different prompt and are not final-protocol capability evidence.",
+    "Strict support includes global system-extracted observations; it does not measure model field extraction or prove narrative entailment.",
+    "Raw status-label accuracy includes invalid reports and can hide missing credential-provenance evidence.",
+    "Invalid reports and all failures remain in denominators; no runtime repairs or canned fallbacks.",
+    "Raw investigation outputs, trace trees, SDK feedback, and audit details stay in ignored local files. Invented fixtures, protocol definitions, numeric summaries, and hashes are versioned.",
+    "Fresh suite differs from v5 evaluation; cross-suite score differences do not establish an improvement."
+  ],
+  "prompt_sha256": "4335bc9f8c85cce8502b6c4858ab64863c7b982cbe93fed1783de7583ca23db9",
+  "protocol": {
+    "chronology": "utc-order-and-signed-seconds-from-seed",
+    "citation_encoding": "local-alias-to-file-hash-index",
+    "finding_support": "model-authored-field-links-v1",
+    "max_projected_bytes": 1000000,
+    "max_projected_observations": 2000,
+    "max_prompt_payload_bytes": 48000,
+    "max_queries": 3,
+    "model_timeout_seconds": 150,
+    "num_ctx": 16384,
+    "num_predict": 3200,
+    "observation_source": "selected-record-projection-v1",
+    "query_limit": 20,
+    "run_deadline_seconds": 600,
+    "seed": 42,
+    "structured_method": "json_schema",
+    "temperature": 0,
+    "thinking": false,
+    "version": "tracetrail-v6"
+  },
+  "protocol_file_sha256": "062030719ddd94ec17eb42518051c5f819475719eb5a92f500c72e42e6f8b456",
+  "schema_version": 1,
+  "scorer_changed": false,
+  "totals": {
+    "actual_investigations_including_candidate_and_demo": 21,
+    "actual_model_spans": 60,
+    "actual_tool_spans": 48,
+    "final_protocol_investigations_including_demo": 19,
+    "sdk_feedback_items": 440,
+    "sdk_replays": 20
+  }
+}

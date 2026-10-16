@@ -1,0 +1,178 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001401",
+      "eventName": "ListAliases",
+      "eventSource": "kms.amazonaws.com",
+      "eventTime": "2026-06-21T06:45:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001401",
+      "requestParameters": null,
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.101",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV5H0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/encryption-desk",
+        "principalId": "AIDA2B22E77C259F85EDE",
+        "type": "IAMUser",
+        "userName": "encryption-desk"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001402",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-06-21T08:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001402",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/EncryptionOperator",
+        "roleSessionName": "key-review-77"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/EncryptionOperator/key-review-77",
+          "assumedRoleId": "AROAC30125E589C0BD8DA:key-review-77"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICV5H0002",
+          "expiration": "2026-06-21T09:00:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.102",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV5H0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/encryption-desk",
+        "principalId": "AIDA2B22E77C259F85EDE",
+        "type": "IAMUser",
+        "userName": "encryption-desk"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001403",
+      "eventName": "DisableKey",
+      "eventSource": "kms.amazonaws.com",
+      "eventTime": "2026-06-21T08:02:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001403",
+      "requestParameters": {
+        "keyId": "arn:aws:kms:us-east-1:000000000000:key/50000000-0000-4000-8000-000000005002"
+      },
+      "responseElements": {
+        "keyId": "arn:aws:kms:us-east-1:000000000000:key/50000000-0000-4000-8000-000000005002"
+      },
+      "sourceIPAddress": "203.0.113.103",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV5H0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/EncryptionOperator/key-review-77",
+        "principalId": "AROAC30125E589C0BD8DA:key-review-77",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-06-21T08:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/EncryptionOperator",
+            "principalId": "AROAC30125E589C0BD8DA",
+            "type": "Role",
+            "userName": "EncryptionOperator"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001404",
+      "eventName": "DescribeKey",
+      "eventSource": "kms.amazonaws.com",
+      "eventTime": "2026-06-21T08:03:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001404",
+      "requestParameters": {
+        "keyId": "arn:aws:kms:us-east-1:000000000000:key/50000000-0000-4000-8000-000000005002"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.103",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV5H0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/EncryptionOperator/key-review-77",
+        "principalId": "AROAC30125E589C0BD8DA:key-review-77",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-06-21T08:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/EncryptionOperator",
+            "principalId": "AROAC30125E589C0BD8DA",
+            "type": "Role",
+            "userName": "EncryptionOperator"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001405",
+      "eventName": "DescribeKey",
+      "eventSource": "kms.amazonaws.com",
+      "eventTime": "2026-06-21T08:02:30Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001405",
+      "requestParameters": {
+        "keyId": "arn:aws:kms:us-east-1:000000000000:key/50000000-0000-4000-8000-000000005002"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.103",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV5N0004",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/other-key-auditor",
+        "principalId": "AIDAE58CFEEFA792C6216",
+        "type": "IAMUser",
+        "userName": "other-key-auditor"
+      }
+    }
+  ]
+}

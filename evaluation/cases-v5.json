@@ -1,0 +1,802 @@
+{
+  "cases": [
+    {
+      "annotations": [
+        {
+          "claim_id": "original_caller_link",
+          "expected_status": "supported",
+          "reason": "The same original key occurs in the earlier identity and later issuance requests.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001101",
+            "50000000-0000-4000-8000-000000001102"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001101",
+              "field": "eventName",
+              "value": "GetCallerIdentity"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001102",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001101",
+              "field": "userIdentity.userName",
+              "value": "key-janitor"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001102",
+              "field": "userIdentity.userName",
+              "value": "key-janitor"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001101",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV5D0001"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001102",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV5D0001"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001101",
+              "field": "eventTime",
+              "value": "2026-05-11T09:40:00Z"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001102",
+              "field": "eventTime",
+              "value": "2026-05-11T11:00:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "returned_key_change",
+          "expected_status": "supported",
+          "reason": "The returned signer key and the target access key have distinct roles.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001102",
+            "50000000-0000-4000-8000-000000001103"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001102",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001102",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV5D0001"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV5D0001"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "eventName",
+              "value": "UpdateAccessKey"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "requestParameters.userName",
+              "value": "batch-reader"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "requestParameters.accessKeyId",
+              "value": "AKIASYNTHETICV5T0001"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "requestParameters.status",
+              "value": "Inactive"
+            }
+          ]
+        },
+        {
+          "claim_id": "activation_requested",
+          "expected_status": "refuted",
+          "reason": "Inactive directly contradicts a request to activate this key.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001103"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "eventName",
+              "value": "UpdateAccessKey"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "requestParameters.accessKeyId",
+              "value": "AKIASYNTHETICV5T0001"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "requestParameters.status",
+              "value": "Inactive"
+            }
+          ]
+        },
+        {
+          "claim_id": "later_key_state",
+          "expected_status": "uncertain",
+          "reason": "The read-only log does not contain the access-key list or current statuses.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001103",
+            "50000000-0000-4000-8000-000000001104"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "eventName",
+              "value": "UpdateAccessKey"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "requestParameters.accessKeyId",
+              "value": "AKIASYNTHETICV5T0001"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "requestParameters.userName",
+              "value": "batch-reader"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "requestParameters.status",
+              "value": "Inactive"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001104",
+              "field": "eventName",
+              "value": "ListAccessKeys"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001104",
+              "field": "requestParameters.userName",
+              "value": "batch-reader"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001103",
+              "field": "eventTime",
+              "value": "2026-05-11T11:02:00Z"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001104",
+              "field": "eventTime",
+              "value": "2026-05-11T11:04:00Z"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001104",
+              "field": "readOnly",
+              "value": true
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001104",
+              "field": "responseElements",
+              "value": null
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v5/dev-key-lifecycle.json",
+      "fixture_sha256": "1dc4f312466b3ca2b8e32eaa9d5a303c7e2530ccd06072624738a1b660345f08",
+      "hypotheses": [
+        {
+          "claim_id": "original_caller_link",
+          "statement": "The key-janitor key called GetCallerIdentity before the AssumeRole request."
+        },
+        {
+          "claim_id": "returned_key_change",
+          "statement": "The temporary key returned by AssumeRole was used for UpdateAccessKey on the batch-reader key with requested status Inactive."
+        },
+        {
+          "claim_id": "activation_requested",
+          "statement": "The recorded UpdateAccessKey request asked AWS to activate the target key."
+        },
+        {
+          "claim_id": "later_key_state",
+          "statement": "The target key was inactive when the later ListAccessKeys request was made."
+        }
+      ],
+      "id": "dev-key-lifecycle",
+      "notes": "Fresh invented records. Shared source IP addresses do not establish identity.",
+      "question": "Investigate the role assumption, caller history, and target access-key request. Separate the requested status from later key state. Link each conclusion to its own records, rather than to another caller at the same IP address.",
+      "relevant_event_ids": [
+        "50000000-0000-4000-8000-000000001101",
+        "50000000-0000-4000-8000-000000001102",
+        "50000000-0000-4000-8000-000000001103",
+        "50000000-0000-4000-8000-000000001104"
+      ],
+      "seed_event_id": "50000000-0000-4000-8000-000000001102",
+      "split": "development"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "issued_key_link",
+          "expected_status": "supported",
+          "reason": "The returned credential links the issuer to the denied request.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001201",
+            "50000000-0000-4000-8000-000000001202"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001201",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001201",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV5D0002"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV5D0002"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "eventName",
+              "value": "DeleteSecurityGroup"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001201",
+              "field": "eventTime",
+              "value": "2026-05-13T14:00:00Z"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "eventTime",
+              "value": "2026-05-13T14:03:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "deletion_succeeded",
+          "expected_status": "refuted",
+          "reason": "The explicit authorization error contradicts success of this request.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001202"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "eventName",
+              "value": "DeleteSecurityGroup"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "requestParameters.groupId",
+              "value": "sg-00000000000000502"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "errorCode",
+              "value": "Client.UnauthorizedOperation"
+            }
+          ]
+        },
+        {
+          "claim_id": "later_group_absence",
+          "expected_status": "uncertain",
+          "reason": "The denied deletion and unlogged read response do not establish later group state.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001202",
+            "50000000-0000-4000-8000-000000001203"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "eventName",
+              "value": "DeleteSecurityGroup"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "requestParameters.groupId",
+              "value": "sg-00000000000000502"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "errorCode",
+              "value": "Client.UnauthorizedOperation"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001203",
+              "field": "eventName",
+              "value": "DescribeSecurityGroups"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "eventTime",
+              "value": "2026-05-13T14:03:00Z"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001203",
+              "field": "eventTime",
+              "value": "2026-05-13T14:05:00Z"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001203",
+              "field": "readOnly",
+              "value": true
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001203",
+              "field": "responseElements",
+              "value": null
+            }
+          ]
+        },
+        {
+          "claim_id": "malicious_intent",
+          "expected_status": "uncertain",
+          "reason": "An API name and a denial do not establish approval, ownership, or malicious intent.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001201",
+            "50000000-0000-4000-8000-000000001202"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001201",
+              "field": "requestParameters.roleSessionName",
+              "value": "net-review-29"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "eventName",
+              "value": "DeleteSecurityGroup"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001202",
+              "field": "errorCode",
+              "value": "Client.UnauthorizedOperation"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v5/dev-network-denial.json",
+      "fixture_sha256": "185fca4b027ee803e8b4eb2991bce43493e5d8be6cde06b805e161b3672ed07a",
+      "hypotheses": [
+        {
+          "claim_id": "issued_key_link",
+          "statement": "The DeleteSecurityGroup request used the temporary key returned by the earlier AssumeRole request."
+        },
+        {
+          "claim_id": "deletion_succeeded",
+          "statement": "The recorded DeleteSecurityGroup request succeeded."
+        },
+        {
+          "claim_id": "later_group_absence",
+          "statement": "The target security group was absent when the later DescribeSecurityGroups request was made."
+        },
+        {
+          "claim_id": "malicious_intent",
+          "statement": "The denied DeleteSecurityGroup request was a malicious action."
+        }
+      ],
+      "id": "dev-network-denial",
+      "notes": "Fresh invented records. Shared source IP addresses do not establish identity.",
+      "question": "Investigate the denied security-group request and its credential issuer. Distinguish the API outcome from later resource state and from the actor's intent. Cite the records that establish each point.",
+      "relevant_event_ids": [
+        "50000000-0000-4000-8000-000000001201",
+        "50000000-0000-4000-8000-000000001202",
+        "50000000-0000-4000-8000-000000001203"
+      ],
+      "seed_event_id": "50000000-0000-4000-8000-000000001202",
+      "split": "development"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "caller_context",
+          "expected_status": "supported",
+          "reason": "The original caller key links the earlier bucket request to the issuer.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001301",
+            "50000000-0000-4000-8000-000000001302"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001301",
+              "field": "eventName",
+              "value": "GetBucketLocation"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001302",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001301",
+              "field": "userIdentity.userName",
+              "value": "artifact-job"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001302",
+              "field": "userIdentity.userName",
+              "value": "artifact-job"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001301",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV5H0001"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001302",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV5H0001"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001301",
+              "field": "eventTime",
+              "value": "2026-06-17T14:35:00Z"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001302",
+              "field": "eventTime",
+              "value": "2026-06-17T16:00:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "upload_key_link",
+          "expected_status": "supported",
+          "reason": "The returned key joins the earlier issuer and the denied data write.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001302",
+            "50000000-0000-4000-8000-000000001303"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001302",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001302",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV5H0001"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001303",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV5H0001"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001303",
+              "field": "eventName",
+              "value": "PutObject"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001303",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001302",
+              "field": "eventTime",
+              "value": "2026-06-17T16:00:00Z"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001303",
+              "field": "eventTime",
+              "value": "2026-06-17T16:04:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "upload_succeeded",
+          "expected_status": "refuted",
+          "reason": "The explicit denial contradicts completion of this upload request.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001303"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001303",
+              "field": "eventName",
+              "value": "PutObject"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001303",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001303",
+              "field": "requestParameters.bucketName",
+              "value": "synthetic-deliveries-v5"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001303",
+              "field": "requestParameters.key",
+              "value": "deliveries/audit-sample.txt"
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_publication",
+          "expected_status": "uncertain",
+          "reason": "Job and session names do not establish publication approval.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001302",
+            "50000000-0000-4000-8000-000000001303"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001302",
+              "field": "requestParameters.roleSessionName",
+              "value": "publication-check-46"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001303",
+              "field": "eventName",
+              "value": "PutObject"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001303",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v5/heldout-publication-denial.json",
+      "fixture_sha256": "79cfb3205f75d7738a50121171ae4d9b16ae8bffec93f1abc777ba17c0ef2fb1",
+      "hypotheses": [
+        {
+          "claim_id": "caller_context",
+          "statement": "The original artifact-job key called GetBucketLocation before the AssumeRole request."
+        },
+        {
+          "claim_id": "upload_key_link",
+          "statement": "The denied PutObject request used the temporary key returned by the earlier AssumeRole request."
+        },
+        {
+          "claim_id": "upload_succeeded",
+          "statement": "The recorded PutObject request uploaded the target object."
+        },
+        {
+          "claim_id": "approved_publication",
+          "statement": "The upload attempt was approved report publication."
+        }
+      ],
+      "id": "heldout-publication-denial",
+      "notes": "Fresh invented records. Shared source IP addresses do not establish identity.",
+      "question": "Investigate the object upload attempt, including its temporary credential issuer and original caller context. Establish the request outcome and test whether these records establish approved report publication. Keep same-IP callers separate.",
+      "relevant_event_ids": [
+        "50000000-0000-4000-8000-000000001301",
+        "50000000-0000-4000-8000-000000001302",
+        "50000000-0000-4000-8000-000000001303"
+      ],
+      "seed_event_id": "50000000-0000-4000-8000-000000001303",
+      "split": "heldout"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "caller_context",
+          "expected_status": "supported",
+          "reason": "The original key links the earlier KMS read to the later issuer.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001401",
+            "50000000-0000-4000-8000-000000001402"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001401",
+              "field": "eventName",
+              "value": "ListAliases"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001402",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001401",
+              "field": "userIdentity.userName",
+              "value": "encryption-desk"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001402",
+              "field": "userIdentity.userName",
+              "value": "encryption-desk"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001401",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV5H0002"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001402",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV5H0002"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001401",
+              "field": "eventTime",
+              "value": "2026-06-21T06:45:00Z"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001402",
+              "field": "eventTime",
+              "value": "2026-06-21T08:00:00Z"
+            }
+          ]
+        },
+        {
+          "claim_id": "disable_request",
+          "expected_status": "supported",
+          "reason": "The returned signer key made this API request; no API error is recorded.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001402",
+            "50000000-0000-4000-8000-000000001403"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001402",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001402",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV5H0002"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001403",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV5H0002"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001403",
+              "field": "eventName",
+              "value": "DisableKey"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001403",
+              "field": "requestParameters.keyId",
+              "value": "arn:aws:kms:us-east-1:000000000000:key/50000000-0000-4000-8000-000000005002"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001403",
+              "field": "responseElements.keyId",
+              "value": "arn:aws:kms:us-east-1:000000000000:key/50000000-0000-4000-8000-000000005002"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001403",
+              "field": "errorCode",
+              "present": false,
+              "value": null
+            }
+          ]
+        },
+        {
+          "claim_id": "later_disabled_state",
+          "expected_status": "uncertain",
+          "reason": "KMS state is eventually consistent and the read response state is not logged here.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001403",
+            "50000000-0000-4000-8000-000000001404"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001403",
+              "field": "eventName",
+              "value": "DisableKey"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001403",
+              "field": "requestParameters.keyId",
+              "value": "arn:aws:kms:us-east-1:000000000000:key/50000000-0000-4000-8000-000000005002"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001404",
+              "field": "eventName",
+              "value": "DescribeKey"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001404",
+              "field": "requestParameters.keyId",
+              "value": "arn:aws:kms:us-east-1:000000000000:key/50000000-0000-4000-8000-000000005002"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001403",
+              "field": "eventTime",
+              "value": "2026-06-21T08:02:00Z"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001404",
+              "field": "eventTime",
+              "value": "2026-06-21T08:03:00Z"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001404",
+              "field": "readOnly",
+              "value": true
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001404",
+              "field": "responseElements",
+              "value": null
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_maintenance",
+          "expected_status": "uncertain",
+          "reason": "The supplied records do not include approval, actor intent, or change-policy evidence.",
+          "required_event_ids": [
+            "50000000-0000-4000-8000-000000001402",
+            "50000000-0000-4000-8000-000000001403"
+          ],
+          "required_observations": [
+            {
+              "event_id": "50000000-0000-4000-8000-000000001402",
+              "field": "requestParameters.roleSessionName",
+              "value": "key-review-77"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001403",
+              "field": "eventName",
+              "value": "DisableKey"
+            },
+            {
+              "event_id": "50000000-0000-4000-8000-000000001403",
+              "field": "requestParameters.keyId",
+              "value": "arn:aws:kms:us-east-1:000000000000:key/50000000-0000-4000-8000-000000005002"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v5/heldout-encryption-state.json",
+      "fixture_sha256": "01adfe3a151de3e76f9781416f2e8e5f8fe9036861774781469faf4800a62ffd",
+      "hypotheses": [
+        {
+          "claim_id": "caller_context",
+          "statement": "The original encryption-desk key called ListAliases before the AssumeRole request."
+        },
+        {
+          "claim_id": "disable_request",
+          "statement": "The temporary key returned by AssumeRole made the DisableKey request for the target KMS key without a recorded API error."
+        },
+        {
+          "claim_id": "later_disabled_state",
+          "statement": "The target KMS key was disabled when the later DescribeKey request was made."
+        },
+        {
+          "claim_id": "approved_maintenance",
+          "statement": "The DisableKey request was approved key maintenance."
+        }
+      ],
+      "id": "heldout-encryption-state",
+      "notes": "Fresh invented records. Shared source IP addresses do not establish identity.",
+      "question": "Investigate the KMS request and its credential chain. Distinguish the request from later key state and from maintenance approval. Link each explanation to its own API and identity evidence; an unlogged read response is not state evidence.",
+      "relevant_event_ids": [
+        "50000000-0000-4000-8000-000000001401",
+        "50000000-0000-4000-8000-000000001402",
+        "50000000-0000-4000-8000-000000001403",
+        "50000000-0000-4000-8000-000000001404"
+      ],
+      "seed_event_id": "50000000-0000-4000-8000-000000001403",
+      "split": "heldout"
+    }
+  ],
+  "data_origin": "Entirely invented fresh cases, with no real account, incident, person, private log, or redistributed public sample.",
+  "design_notes": "Four compact cases for claim-specific credential links, direct contradictions, absent state evidence, and uncertain approval or intent. All scalar annotations resolve to actual source fields or explicit absence.",
+  "fixture_license": "MIT (same as repository)",
+  "freeze_policy": "Freeze reviewed manifest and fixture hashes before first inference. Preserve all old suites and results. Never edit a recorded suite in place.",
+  "schema_version": "1",
+  "suite_id": "tracetrail-synthetic-v5"
+}

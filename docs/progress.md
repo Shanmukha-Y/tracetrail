@@ -13,6 +13,211 @@ The repository stays private until the release checks pass. Workflow Sentinel is
 - Preserved earlier synthetic suites and a frozen two-case v4 suite with field support annotations.
 - CI for lint, formatting, and tests without inference or hosted tracing.
 
+## October 16: claim-level evidence links
+
+The [failure diagnosis](oct16-diagnosis.md) distinguishes report omissions from
+retrieval limits. In the preserved v5 fresh comparison, four of 16 strict
+failures were citation-only omissions. Twelve required unretrieved records.
+Six omitted an available selected citation, including two with a retrieval gap.
+Seven status mismatches were cautious uncertainty after incomplete retrieval;
+one Qwen finding incorrectly refuted earlier caller activity because it had
+not retrieved the caller record. These counts describe the preserved evidence,
+not a new model result.
+
+Protocol v6 requires a model-authored evidence basis for each fixed claim. The
+model chooses links to returned records, exact field paths, and the role of each
+link: support, contradiction, or context. It supplies a brief rationale and
+specific missing evidence before its status. Public finding citations are
+only the ordered unique references in these links. Code does not add records,
+fill citation gaps, select a status, or repair a failed model report.
+
+The link validator checks selected-record references, field presence, bounded
+nonblank explanations, duplicate links, and structural status requirements.
+A supported finding needs a declared supporting link; a refuted finding needs
+a declared contradicting link. Uncertainty needs a specific evidence gap.
+Only the four standard top-level API envelope fields may be linked when absent.
+An arbitrary missing nested path is not accepted as observed evidence. The
+roles, rationale, and claim meaning remain model judgments. A resolving field
+path does not establish relevance, contradiction, or entailment.
+
+The model budget, exact fact projection, temporal context, local models, fixed
+search, and annotation scorer remain unchanged. Both search methods and every
+model use the same reporting contract. V6 changes its wire schema, instructions,
+and structural validation together. No gain can be attributed to one part
+without a separate experiment. The new contract does not guarantee retrieval
+of missing context, completeness of finding citations, or semantic correctness.
+
+### Frozen protocol and development checks
+
+The independently authored `tracetrail-synthetic-v5` suite has four invented
+cases, two per split: 18 records, 14 relevant records, 16 fixed hypotheses, and
+96 required field observations. Its manifest SHA-256 is
+`66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96`.
+Independent review checked source types, timestamps, identities, CloudTrail
+semantics, and tool reachability within three queries. Reachability is a tool
+check, not a model result. New API annotation choices are documented in
+[CloudTrail semantics](cloudtrail.md#v5-annotation-semantics).
+
+The final [v6 protocol](../evaluation/protocol-v6.json) records ten source
+hashes, six schemas, the prompt, budgets, and fresh manifest. Its SHA-256 is
+`062030719ddd94ec17eb42518051c5f819475719eb5a92f500c72e42e6f8b456`.
+The final prompt SHA-256 is
+`4335bc9f8c85cce8502b6c4858ab64863c7b982cbe93fed1783de7583ca23db9`.
+All source and prompt changes ended before fresh inference started.
+
+Two actual Qwen comparisons used only the exposed development case from v4.
+The first candidate omitted available linking citations. Its adaptive support
+was 50%, with 100% recall and status accuracy. A general component checklist
+was then added to the prompt: actor and credential provenance, action and
+target, event relationships, time, and resulting state. It supplies no case
+answers. The candidate and final prompts are distinct; both outputs remain
+preserved. No fresh-case outputs were used to make this change.
+
+| Exposed development check | Adaptive support | Fixed support | Adaptive field links | Fixed field links |
+| --- | --- | --- | --- | --- |
+| Earlier candidate | 50% | 25% | 21/30 | 11/30 |
+| Final frozen protocol | 75% | 25% | 25/30 | 12/30 |
+
+Each row has one actual run per method. Final adaptive recall and status
+accuracy were 100%; fixed recall and status accuracy were 50%. Final durations
+were 144.31 and 60.25 seconds. Adaptive used two queries and four calls; fixed
+used three queries and one call. These exposed development results do not
+establish an independent improvement or a general reasoning fix.
+
+The final adaptive report still omitted an issuer citation from an action
+claim, even though its rationale discussed the provenance. A later-state
+finding passed the unchanged strict scorer through global projected facts,
+while its model-authored read link omitted required response and read-only
+paths. Strict support and explicit field-path coverage measure different
+properties. Neither proves narrative entailment.
+
+Each two-run batch received a genuine offline SDK replay with 44 numeric
+feedback items. Across both batches, original inference traces contain ten
+model spans and ten tool spans. Uploads and new replay inference were disabled.
+All metrics, schema invocations, source references, and projected facts matched.
+
+Candidate raw results SHA-256:
+`15d6f49b6ef10fdc65e0364a99510c2054164206fbe587a77fef99c81b3a3623`.
+Candidate SDK artifact SHA-256:
+`42f75443b7a7959a852dd5354a6f540fd54562face572d4bee0794f17a4630eb`.
+Final development raw results SHA-256:
+`a4d446e9a28de5263d383df09ef4c708663a0b78ca1956979404c8b3323674db`.
+Final development SDK artifact SHA-256:
+`7339546efb1ced9a2e670a6803da82ac85ab829424749bf345432a3c20465717`.
+
+### Fresh comparison and final validation
+
+All 16 fresh investigations finished under the frozen final protocol. There
+was one run per model, method, and case cell, with four cases per group and two
+cases per split. Thirteen reports completed structural validation. Three
+Mistral reports are invalid and remain in the denominators. The CLI returned
+nonzero for those invalid reports. The [numeric summary](../evaluation/results-v6.json)
+preserves cell and split rows, counts, model weight digests, and artifact hashes.
+
+| Model and method | Valid reports | Mean selected-event precision | Mean selected-event recall | Mean strict support | Mean raw status accuracy | Mean queries | Mean model calls | Mean seconds |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Qwen adaptive | 4/4 | 100% | 64.58% | 56.25% | 75% | 1 | 3 | 100.44 |
+| Qwen fixed | 4/4 | 70.83% | 43.75% | 12.5% | 56.25% | 3 | 1 | 64.71 |
+| Gemma adaptive | 4/4 | 95% | 91.67% | 75% | 100% | 2.25 | 3.75 | 154.52 |
+| Mistral adaptive | 1/4 | 50% | 43.75% | 18.75% | 81.25% | 3 | 4 | 96.24 |
+
+These precision and recall values measure the validated selected report set,
+not just records returned by tools. Raw status accuracy can count a matching
+label in an invalid report. For example, Mistral's network labels all match,
+but its selected references are invented `/evidence/*` paths instead of supplied
+aliases. That report has no valid selection and receives no projected facts.
+The three invalid outputs were not repaired, retried, or omitted.
+
+Thirty-eight of 64 findings fail strict annotations. This is not a hallucination
+count. The unchanged strict scorer checks fixed statements, statuses, required
+citations, and global projected facts. It does not verify that a rationale or
+declared evidence role entails the statement. A full-source status can also be
+correct by chance when the report lacks a required credential-issuance record.
+
+The separate explicit field-link audit checks only exact required paths named
+for the corresponding finding and source. It gives no credit from rationale
+text or global projected facts. Invalid reports retain their required atoms
+and earn zero primary credit. Required atoms are unique claim/source/path
+requirements; they are not counts of correct model conclusions.
+
+| Model and method | Explicit required field links |
+| --- | --- |
+| Qwen adaptive | 43/96 |
+| Qwen fixed | 20/96 |
+| Gemma adaptive | 44/96 |
+| Mistral adaptive | 15/96 |
+
+The primary total is 122/384; the three invalid reports retain 74 required
+atoms with zero credit. Thirteen valid reports have exact projected facts.
+The invalid reports have no projected facts. These results neither measure
+model field extraction accuracy nor certify relevance or entailment.
+
+Manual review preserves important failures. Every fresh Qwen adaptive run
+stops after one query, leaving two queries and observed-key pivots unused.
+One Qwen report and Mistral's valid publication report refute approval using an
+upload denial. A denial contradicts successful upload, not business approval
+of the attempt. Mistral also refutes caller history from an incomplete time
+window; the missing contradiction-role guard rejects that report. Two other
+Mistral outputs have invalid selected references. No reference or status was
+silently corrected. Other failures include missing issuer links, confusing
+caller filters with target parameters, and query rationales narrower than the
+actual filters. No blanket citation padding was found. Gemma's extra same-key
+read is useful resource context despite its fixed relevance-annotation penalty.
+
+The genuine offline SDK replay evaluated all 16 outputs and produced 352 numeric
+feedback items, with uploads and new inference disabled. All saved metrics
+recomputed exactly. The original fresh trace trees contain 47 model spans and
+37 tool spans, matching the recorded counters. All ten source hashes, six
+schemas, actual invoked prompts and schemas, and the frozen manifest match.
+Effective weight digests were constant within each model and match the earlier
+installed baseline. Qwen's runtime backend is not recorded in these artifacts;
+this limits runtime comparisons. No model winner, broad adaptive advantage,
+cross-suite improvement, or production reliability claim follows from four
+synthetic cases and one run per cell.
+
+Fresh raw results SHA-256:
+`c7eee979197141a84287391810ac42df226a8ad06ef270f267772a7ca80c1be2`.
+Fresh SDK artifact SHA-256:
+`da013dc3040441efb472e94f8bd157afe2e06c440f6a185676fbb53ad6bdf6cb`.
+Full local audit SHA-256:
+`150980a539b9ac4f2cdaec1e8004ae7f3b37c14ed7dce4b5cf74ae6299890b98`.
+
+The separate documented CLI demo ran `dev-key-lifecycle` with actual Qwen
+inference. It completed in 105.39 seconds with three model calls, one query,
+and 90 exact projected observations. Precision was 100%, recall 75%, strict
+support 50%, and raw status accuracy 75%. Its limitations and two strict
+failures remain in the saved output. This repeat is not another benchmark
+cell. Raw demo SHA-256:
+`b113b84ed1ee4f1a900b4ce7968976d9827947ed05d198b084f3315370226ae5`.
+
+This increment made 21 actual local investigations: two initial candidate
+runs, two final development runs, 16 fresh runs, and one demo. Nineteen use
+the final frozen protocol. Across all 21 investigations, original traces
+contain 60 model spans and 48 tool spans. The 20 comparison outputs received 440 real offline SDK
+feedback items. Raw investigation outputs, trace trees, SDK feedback, and
+audit details remain in ignored local files with mode `0600`. Invented
+fixtures, protocols, numeric summaries, and hashes are versioned. Ollama had
+no loaded models after the demo. Local SDK evaluation requires no hosted
+account, credential, export, or server setup.
+
+Ruff lint, formatting, and all 398 local tests pass. Unit-test models remain
+explicitly separate from the actual capability evidence above. Exact-commit
+CI is available in the repository
+[Actions workflow](https://github.com/Shanmukha-Y/tracetrail/actions/workflows/ci.yml).
+
+### Remaining release checks
+
+- Improve model use of available local pivots and query scope without hidden
+  searches, benchmark-specific branches, or minimum-query score padding.
+- Reduce invalid reference generation and missing model-authored evidence
+  chains without repairing failed outputs after the fact.
+- Distinguish approval from API success, and missing context from contradiction.
+  Valid references and correct raw labels remain insufficient.
+- Test more independent cases and repeated runs, with manual semantic review.
+  Keep every exposed case and failure available for later regressions.
+- Keep the repository private. Local LangSmith SDK work is complete; hosted
+  credentials or a licensed UI are not release requirements.
+
 ## October 15: selected-record facts and temporal context
 
 Protocol v5 separates model decisions from exact field extraction. The model

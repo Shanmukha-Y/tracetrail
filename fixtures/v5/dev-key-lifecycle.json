@@ -1,0 +1,178 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001101",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-05-11T09:40:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001101",
+      "requestParameters": null,
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.71",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV5D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/key-janitor",
+        "principalId": "AIDA93244A1436FC9C247",
+        "type": "IAMUser",
+        "userName": "key-janitor"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001102",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-05-11T11:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001102",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/KeyLifecycle",
+        "roleSessionName": "rotation-review-63"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/KeyLifecycle/rotation-review-63",
+          "assumedRoleId": "AROAC7DCE1A71F2A923A6:rotation-review-63"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICV5D0001",
+          "expiration": "2026-05-11T12:00:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.72",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV5D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/key-janitor",
+        "principalId": "AIDA93244A1436FC9C247",
+        "type": "IAMUser",
+        "userName": "key-janitor"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001103",
+      "eventName": "UpdateAccessKey",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-05-11T11:02:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001103",
+      "requestParameters": {
+        "accessKeyId": "AKIASYNTHETICV5T0001",
+        "status": "Inactive",
+        "userName": "batch-reader"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.73",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV5D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/KeyLifecycle/rotation-review-63",
+        "principalId": "AROAC7DCE1A71F2A923A6:rotation-review-63",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-05-11T11:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/KeyLifecycle",
+            "principalId": "AROAC7DCE1A71F2A923A6",
+            "type": "Role",
+            "userName": "KeyLifecycle"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001104",
+      "eventName": "ListAccessKeys",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-05-11T11:04:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001104",
+      "requestParameters": {
+        "userName": "batch-reader"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.73",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV5D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/KeyLifecycle/rotation-review-63",
+        "principalId": "AROAC7DCE1A71F2A923A6:rotation-review-63",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-05-11T11:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/KeyLifecycle",
+            "principalId": "AROAC7DCE1A71F2A923A6",
+            "type": "Role",
+            "userName": "KeyLifecycle"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "50000000-0000-4000-8000-000000001105",
+      "eventName": "ListAccessKeys",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-05-11T11:03:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "95000000-0000-4000-8000-000000001105",
+      "requestParameters": {
+        "userName": "batch-reader"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.73",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v5-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV5N0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/other-key-reader",
+        "principalId": "AIDAF7272F48E4FAF133B",
+        "type": "IAMUser",
+        "userName": "other-key-reader"
+      }
+    }
+  ]
+}

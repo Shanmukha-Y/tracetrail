@@ -7,7 +7,7 @@ import json
 import time
 import uuid
 from datetime import UTC, datetime, timedelta
-from typing import Any, Literal, TypedDict
+from typing import Annotated, Any, Literal, TypedDict
 
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_core.tracers.run_collector import RunCollectorCallbackHandler
@@ -16,6 +16,7 @@ from langgraph.checkpoint.memory import InMemorySaver
 from langgraph.graph import END, START, StateGraph
 from pydantic import BaseModel, ConfigDict, Field
 
+from tracetrail.claims import finding_citations, validate_finding_links
 from tracetrail.coverage import evidence_coverage
 from tracetrail.facts import chronological_context, project_observations
 from tracetrail.local_model import verify_local_weights
@@ -26,7 +27,7 @@ REFERENCE_MODEL = "qwen3.8:27b-q4_K_M"
 MODELS = (REFERENCE_MODEL, "gemma4:31b-it-q4_K_M", "mistral-small3.2:24b")
 OLLAMA_URL = "http://127.0.0.1:11434"
 PROTOCOL = {
-    "version": "tracetrail-v5",
+    "version": "tracetrail-v6",
     "temperature": 0,
     "seed": 42,
     "num_ctx": 16384,
@@ -43,6 +44,7 @@ PROTOCOL = {
     "max_projected_observations": 2000,
     "max_projected_bytes": 1000000,
     "chronology": "utc-order-and-signed-seconds-from-seed",
+    "finding_support": "model-authored-field-links-v1",
 }
 
 SYSTEM = """You investigate local CloudTrail records with read-only evidence tools.
@@ -78,6 +80,29 @@ Return a reason and the claim_id whose explanation you test. A query failure is 
 query failure only. Do not retry the same failed query without changing it.
 """
 FINAL = """Select the relevant evidence refs and report on every supplied claim_id.
+For each claim, choose evidence_links before its status. Each link names one returned citation,
+the exact dotted JSON field paths relevant to this claim, and its role: supports, contradicts,
+or context. Include every linking record needed to test the complete statement, not just its
+last event. Uncertain claims still need the available relevant context and linking records.
+Check each component of a compound statement separately: actor or session identity, credential
+provenance, action and target, relationships between events, time direction, and resulting state.
+An action record alone does not establish who issued its session or how it relates to another
+event. Link the observed connecting records as context when the whole claim remains uncertain.
+Before finalizing, compare each statement's components with its links. Explain unsupported
+components as gaps instead of silently dropping them. Do not pad a finding with unrelated records.
+Do not copy field values. Whole arrays may be referenced by their field path. The only absent
+paths that may be linked are top-level errorCode, errorMessage, requestParameters, responseElements.
+Give a brief evidence-based rationale explaining what these records establish and what they do
+not establish. List decisive missing evidence in missing_evidence; uncertain requires at least
+one specific gap. Distinguish an unsearched candidate, a scoped search without matches, an
+absent or null field, and unavailable external evidence. Do not claim that an unsearched
+candidate or an unused query was exhausted.
+Then choose the status. Supported requires a supports link; refuted requires a contradicts link.
+These roles must describe the record's relationship to the whole supplied statement.
+Failure to find support is not a contradiction. An unsearched, absent, denied, or unknown link
+does not by itself refute a statement about earlier activity. Use uncertain when the needed
+caller, approval, response state, or other decisive context is missing. A contrary observed fact
+can refute a statement; explain that fact explicitly. Context alone does not decide a claim.
 Use supported only when evidence supports the statement. Use refuted only when evidence
 contradicts it. Otherwise use uncertain. In particular, activity alone cannot establish key theft,
 intent, approved maintenance, or completed data exfiltration. Do not introduce new claim_ids.
@@ -89,7 +114,9 @@ Review each returned record for relevance, including earlier caller and session 
 Put uncertainty, remaining unsearched pivots, query scope, and alternatives in limitations.
 Do not copy field values into the report. After a valid selection, code extracts exact observed
 fields from selected_event_refs. That extraction does not decide relevance or verify conclusions.
-Every finding citation must also appear in selected_event_refs. Include all records needed to
+Every evidence_links citation must also appear in selected_event_refs. Code derives each finding's
+public citations only from its explicit evidence_links; it will not add missing links for you.
+Include all records needed to
 support each finding, including context for uncertain conclusions. Do not cite unrelated records.
 Use chronology to test temporal statements against the actual signed offsets and UTC order.
 Check the exact direction and threshold of each statement; an earlier event precedes a later one.
@@ -123,15 +150,31 @@ class Observation(StrictModel):
     value: Any
 
 
-class Finding(StrictModel):
+class EvidenceLink(StrictModel):
+    citation: str = Field(min_length=1, max_length=512)
+    fields: list[Annotated[str, Field(min_length=1, max_length=512)]] = Field(
+        min_length=1, max_length=6
+    )
+    role: Literal["supports", "contradicts", "context"]
+
+
+class FindingSelection(StrictModel):
     claim_id: str
     statement: str
+    evidence_links: list[EvidenceLink] = Field(max_length=6)
+    rationale: str = Field(min_length=1, max_length=600)
+    missing_evidence: list[Annotated[str, Field(min_length=1, max_length=300)]] = Field(
+        max_length=4
+    )
     status: Literal["supported", "uncertain", "refuted"]
+
+
+class Finding(FindingSelection):
     citations: list[str]
 
 
 class ReportSelection(StrictModel):
-    findings: list[Finding] = Field(max_length=12)
+    findings: list[FindingSelection] = Field(max_length=12)
     selected_event_refs: list[str] = Field(max_length=40)
     limitations: list[str] = Field(max_length=12)
 
@@ -139,6 +182,7 @@ class ReportSelection(StrictModel):
 class Analysis(ReportSelection):
     """A materialized report. Model output uses ReportSelection instead."""
 
+    findings: list[Finding] = Field(max_length=12)
     observations: list[Observation] = Field(max_length=2000)
 
 
@@ -208,6 +252,9 @@ def validate_analysis(analysis: dict, evidence: list[dict], hypotheses: list[dic
             {"code": "claim_coverage", "message": "Claims must match supplied hypotheses"}
         )
     for finding in analysis["findings"]:
+        errors.extend(validate_finding_links(finding, evidence, analysis["selected_event_refs"]))
+        if finding["citations"] != finding_citations(finding):
+            errors.append({"code": "finding_citation_mismatch", "claim_id": finding["claim_id"]})
         if finding["status"] != "uncertain" and not finding["citations"]:
             errors.append({"code": "uncited_conclusion", "claim_id": finding["claim_id"]})
         if finding["statement"] != statements.get(finding["claim_id"]):
@@ -353,7 +400,9 @@ def investigate(
                     resolve.get(r, r) for r in result["selected_event_refs"]
                 ]
                 for finding in result["findings"]:
-                    finding["citations"] = [resolve.get(r, r) for r in finding["citations"]]
+                    for link in finding["evidence_links"]:
+                        link["citation"] = resolve.get(link["citation"], link["citation"])
+                    finding["citations"] = finding_citations(finding)
                 for observation in result.get("observations", []):
                     observation["citation"] = resolve.get(
                         observation["citation"], observation["citation"]
@@ -524,9 +573,11 @@ def investigate(
         "coverage": evidence_coverage(state["evidence"], state["tool_history"]),
         "validation_scope": {
             "citations_and_observation_values": "exact-record-validation",
+            "finding_field_links": "exact-record-reference-only",
             "narrative_and_finding_meaning": "not-semantically-verified",
         },
         "observation_source": PROTOCOL["observation_source"],
+        "finding_support": PROTOCOL["finding_support"],
         "model_history": state["model_history"],
         "failures": state["failures"],
         "query_count": state["query_count"],
