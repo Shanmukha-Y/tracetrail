@@ -120,3 +120,35 @@ disabled state and maintenance approval therefore remain uncertain. See the
 [DisableKey log example](https://docs.aws.amazon.com/kms/latest/developerguide/ct-disablekey.html),
 [DescribeKey log example](https://docs.aws.amazon.com/kms/latest/developerguide/ct-describekey.html),
 and [DisableKey API](https://docs.aws.amazon.com/kms/latest/APIReference/API_DisableKey.html).
+
+## V6 annotation semantics
+
+The [v6 suite](../evaluation/cases-v6.json) contains four entirely invented
+cases. Account numbers, credential identifiers, and resources are synthetic;
+IP addresses use documentation ranges. No private logs, real incidents, or public
+samples were used. Frozen file hashes identify these inputs; expected statuses and field
+annotations are scorer data, not model input or runtime facts.
+
+Each claim needs its own records and exact fields. Match returned credential IDs
+to signing credential IDs for session links, and match requested resource IDs
+for resource links. An IAM request's target `userName` describes the user being
+updated; the signer is identified by `userIdentity`. Source IP values provide
+context, while credentials identify these record links. See the
+[CloudTrail identity reference](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-user-identity.html)
+and [UpdateUser parameters](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateUser.html).
+
+`requestParameters` describes submitted settings. A requested retention period
+or user path does not establish a resource's later state. CloudWatch Logs also
+allows a delay between expiration and deletion of log events. See
+[PutRetentionPolicy](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_PutRetentionPolicy.html).
+For ordinary read-only APIs, null `responseElements` contains no returned
+resource state. Missing response fields also leave an evidence gap. Keep that
+gap explicit rather than inferring a later path, topic state, or logging state.
+See the [CloudTrail response-field rules](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html).
+
+An explicit API denial can contradict success of that recorded request.
+For example, SNS documents `AuthorizationError` as denied access with HTTP 403.
+This outcome supplies no business approval or actor-intent evidence. The v6
+rubric keeps approval and intent uncertain when the supplied records lack that
+evidence, including when an API request has no recorded error. See
+[DeleteTopic errors](https://docs.aws.amazon.com/sns/latest/api/API_DeleteTopic.html).

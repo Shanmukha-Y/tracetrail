@@ -6,6 +6,7 @@ import hashlib
 import json
 import time
 import uuid
+from copy import deepcopy
 from datetime import UTC, datetime, timedelta
 from typing import Annotated, Any, Literal, TypedDict
 
@@ -20,14 +21,15 @@ from tracetrail.claims import finding_citations, validate_finding_links
 from tracetrail.coverage import evidence_coverage
 from tracetrail.facts import chronological_context, project_observations
 from tracetrail.local_model import verify_local_weights
-from tracetrail.store import CloudTrailStore, Query
+from tracetrail.planning import Decision, materialize_query, validate_decision
+from tracetrail.store import CloudTrailStore
 from tracetrail.telemetry import local_context, serialize_local_trace
 
 REFERENCE_MODEL = "qwen3.8:27b-q4_K_M"
 MODELS = (REFERENCE_MODEL, "gemma4:31b-it-q4_K_M", "mistral-small3.2:24b")
 OLLAMA_URL = "http://127.0.0.1:11434"
 PROTOCOL = {
-    "version": "tracetrail-v6",
+    "version": "tracetrail-v7",
     "temperature": 0,
     "seed": 42,
     "num_ctx": 16384,
@@ -45,6 +47,7 @@ PROTOCOL = {
     "max_projected_bytes": 1000000,
     "chronology": "utc-order-and-signed-seconds-from-seed",
     "finding_support": "model-authored-field-links-v1",
+    "planning": "claim-ledger-and-explicit-pivot-choice-v1",
 }
 
 SYSTEM = """You investigate local CloudTrail records with read-only evidence tools.
@@ -57,13 +60,23 @@ The chronology is derived from observed timestamps. Negative seconds_from_seed m
 the seed; positive means after it. Timestamp order does not by itself establish causality.
 No AWS, shell, network, remediation, or attack tool is available.
 """
-PLAN = """Choose one next evidence query, or finish with a reason for leaving remaining scope open.
+PLAN = """First write a short ledger entry for every supplied claim_id, then choose one action.
+Each ledger entry names returned evidence_refs, an open_question (empty if none), relevant
+candidate_ids from coverage, and actual query attempt_ids such as Q0. Use empty lists when none.
+The ledger records your reasoning; code checks references, not whether your reasoning is true.
+Choose one next evidence query, or finish with a reason for leaving remaining scope open.
 Test missing links before treating missing context as insufficient evidence. Consider caller
 activity
 before a role assumption, subsequent use of returned temporary keys, and the issuer of an observed
 temporary key. An IP address can change between these events. A one-hour window can omit context.
-The coverage inventory contains observed-only candidate filters and actual attempted query scopes.
-It does not select queries for you. Choose the query that best tests a supplied explanation.
+The coverage inventory contains observed-only candidate filters, their source paths and filter
+meanings, and actual attempted query scopes. local_query_supported means this filter is available;
+it does not promise matching records. searched means an attempt succeeded under its recorded
+AND filters, time bounds and pagination, not that this candidate or a chain was fully investigated.
+Choose the query that best tests a supplied explanation. For query_events set exactly one of:
+candidate_id (executes its exact filter with limit=20), continuation_id (executes that pending
+page with the same scope), or query (a custom Query). Set other branch arguments to null.
+Do not copy a candidate filter into query when selecting its ID. Code does not pick queries.
 access_key matches userIdentity.accessKeyId (uses of a key); issued_access_key matches
 responseElements.credentials.accessKeyId (the event that issued it). session_issuer matches only
 userIdentity.sessionContext.sessionIssuer.arn, never eventSource or the STS service name.
@@ -78,6 +91,16 @@ Do not repeat a successful identical query or stop just because one narrow query
 Tool query_events accepts query fields; get_event accepts identifier (eventID or exact ref).
 Return a reason and the claim_id whose explanation you test. A query failure is evidence of a
 query failure only. Do not retry the same failed query without changing it.
+For finish, set query, candidate_id, continuation_id and identifier to null. Every ID in
+coverage.finish_accounting_ids must appear exactly once in dispositions.pivot_ids. This list
+includes already queried candidates. Do not omit them. Group IDs with the same disposition
+if useful. Keep rationale brief; put pivot IDs in dispositions rather than listing them twice.
+Use deferred for a deliberate unsearched or incomplete local gap; not_relevant for your relevance
+judgment; tested_under_recorded_scope only with successful matching attempt_ids for each pivot.
+Pending continuations cannot be called tested. Reasons must describe the actual remaining scope.
+For query_events or get_event use dispositions=[]. An intentional finish with unused queries is
+allowed. Do not call an available local pivot unavailable or claim that unused budget was exhausted.
+Business approval and intent may require external evidence even after local activity is tested.
 """
 FINAL = """Select the relevant evidence refs and report on every supplied claim_id.
 For each claim, choose evidence_links before its status. Each link names one returned citation,
@@ -135,14 +158,6 @@ class StrictModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
-class Decision(StrictModel):
-    action: Literal["query_events", "get_event", "finish"]
-    rationale: str = Field(max_length=1000)
-    claim_id: str = Field(max_length=100)
-    query: Query | None = None
-    identifier: str | None = None
-
-
 class Observation(StrictModel):
     citation: str
     field: str = Field(min_length=1, max_length=512)
@@ -192,6 +207,8 @@ class InvestigationState(TypedDict):
     model_history: list[dict]
     failures: list[dict]
     decision: dict | None
+    decision_history: list[dict]
+    stop_reason: str | None
     analysis: dict | None
     query_count: int
     model_calls: int
@@ -352,6 +369,14 @@ def investigate(
             elif "ref" in output:
                 summary["ref"] = aliases[output["ref"]]
             history_summary.append({**entry, "result": summary})
+        previous_plan = deepcopy(state["decision"]) if strategy == "adaptive" else None
+        if previous_plan:
+            for item in previous_plan.get("ledger", []):
+                item["evidence_refs"] = [aliases.get(ref, ref) for ref in item["evidence_refs"]]
+            if previous_plan.get("identifier"):
+                previous_plan["identifier"] = aliases.get(
+                    previous_plan["identifier"], previous_plan["identifier"]
+                )
         payload = {
             **context,
             "seed": compact(seed),
@@ -362,6 +387,8 @@ def investigate(
                 [compact(item) for item in state["evidence"]], history_summary
             ),
             "remaining_queries": PROTOCOL["max_queries"] - state["query_count"],
+            "previous_plan": previous_plan,
+            "stop_reason": state["stop_reason"],
         }
         encoded_payload = json.dumps(payload, sort_keys=True)
         if len(encoded_payload.encode()) > PROTOCOL["max_prompt_payload_bytes"]:
@@ -407,8 +434,11 @@ def investigate(
                     observation["citation"] = resolve.get(
                         observation["citation"], observation["citation"]
                     )
-            elif result.get("identifier"):
-                result["identifier"] = resolve.get(result["identifier"], result["identifier"])
+            else:
+                if result.get("identifier"):
+                    result["identifier"] = resolve.get(result["identifier"], result["identifier"])
+                for item in result.get("ledger", []):
+                    item["evidence_refs"] = [resolve.get(r, r) for r in item["evidence_refs"]]
             return result
         except Exception as exc:
             history["error_type"] = type(exc).__name__
@@ -420,10 +450,29 @@ def investigate(
     def plan(state: InvestigationState) -> InvestigationState:
         try:
             state["decision"] = call(state, Decision, PLAN)
-            state["done"] = state["decision"]["action"] == "finish"
+            state["decision_history"].append(state["decision"])
+            errors = validate_decision(
+                state["decision"],
+                state["evidence"],
+                state["tool_history"],
+                hypotheses,
+                PROTOCOL["max_queries"] - state["query_count"],
+                evidence_coverage(state["evidence"], state["tool_history"]),
+            )
+            if errors:
+                state["failures"].extend(
+                    {"phase": "planning_validation", "code": error} for error in errors
+                )
+                state["done"] = True
+                state["stop_reason"] = "invalid_decision"
+            else:
+                state["done"] = state["decision"]["action"] == "finish"
+                if state["done"]:
+                    state["stop_reason"] = "model_finish"
         except Exception as exc:
             state["failures"].append({"phase": "plan", "error_type": type(exc).__name__})
             state["done"] = True
+            state["stop_reason"] = "plan_error"
         return state
 
     def run_tool(state: InvestigationState) -> InvestigationState:
@@ -431,7 +480,13 @@ def investigate(
         assert decision is not None
         name = decision["action"]
         args = (
-            decision.get("query")
+            (
+                materialize_query(
+                    decision, evidence_coverage(state["evidence"], state["tool_history"])
+                ).model_dump(mode="json")
+                if strategy == "adaptive"
+                else decision.get("query")
+            )
             if name == "query_events"
             else {"identifier": decision.get("identifier")}
         )
@@ -459,6 +514,8 @@ def investigate(
             entry["result"] = {"error": {"code": "tool_exception", "type": type(exc).__name__}}
             state["failures"].append({"phase": "tool", "error_type": type(exc).__name__})
         state["tool_history"].append(entry)
+        if strategy == "adaptive" and state["query_count"] >= PROTOCOL["max_queries"]:
+            state["stop_reason"] = "query_budget_exhausted"
         return state
 
     def fixed(state: InvestigationState) -> InvestigationState:
@@ -471,6 +528,7 @@ def investigate(
             }
             run_tool(state)
         state["done"] = True
+        state["stop_reason"] = "fixed_search_complete"
         return state
 
     def report(state: InvestigationState) -> InvestigationState:
@@ -507,7 +565,9 @@ def investigate(
         return "report" if state["done"] else "tool"
 
     def after_tool(state: InvestigationState) -> str:
-        return "report" if state["query_count"] >= PROTOCOL["max_queries"] else "plan"
+        if state["query_count"] >= PROTOCOL["max_queries"]:
+            return "report"
+        return "plan"
 
     graph = StateGraph(InvestigationState)
     graph.add_node("plan", plan)
@@ -526,6 +586,8 @@ def investigate(
         "model_history": [],
         "failures": [],
         "decision": None,
+        "decision_history": [],
+        "stop_reason": None,
         "analysis": None,
         "query_count": 0,
         "model_calls": 0,
@@ -571,10 +633,13 @@ def investigate(
         "evidence": state["evidence"],
         "tool_history": state["tool_history"],
         "coverage": evidence_coverage(state["evidence"], state["tool_history"]),
+        "decision_history": state["decision_history"],
+        "stop_reason": state["stop_reason"],
         "validation_scope": {
             "citations_and_observation_values": "exact-record-validation",
             "finding_field_links": "exact-record-reference-only",
             "narrative_and_finding_meaning": "not-semantically-verified",
+            "planning": "branch-arguments-and-recorded-reference-validation-only",
         },
         "observation_source": PROTOCOL["observation_source"],
         "finding_support": PROTOCOL["finding_support"],
@@ -587,7 +652,12 @@ def investigate(
         "status": "failed"
         if state["analysis"] is None
         else (
-            "invalid" if any(f["phase"] == "validation" for f in state["failures"]) else "completed"
+            "invalid"
+            if any(
+                f["phase"] in ("validation", "planning_validation", "plan")
+                for f in state["failures"]
+            )
+            else "completed"
         ),
         "duration_seconds": time.monotonic() - began,
         "started_at": started,

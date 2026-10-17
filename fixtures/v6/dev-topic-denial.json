@@ -1,0 +1,182 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002101",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-07-03T10:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002101",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/TopicReview",
+        "roleSessionName": "notice-review-12"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/TopicReview/notice-review-12",
+          "assumedRoleId": "AROA4F1D1B68F0162CFA2:notice-review-12"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICV6D0002",
+          "expiration": "2026-07-03T11:00:00Z"
+        }
+      },
+      "sourceIPAddress": "192.0.2.121",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV6D0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/notification-clerk",
+        "principalId": "AIDAC02EF565F80896CD2",
+        "type": "IAMUser",
+        "userName": "notification-clerk"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "errorCode": "AuthorizationError",
+      "errorMessage": "Synthetic request was denied.",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002102",
+      "eventName": "DeleteTopic",
+      "eventSource": "sns.amazonaws.com",
+      "eventTime": "2026-07-03T10:02:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002102",
+      "requestParameters": {
+        "topicArn": "arn:aws:sns:us-east-1:000000000000:synthetic-notifications-v6"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "198.51.100.122",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV6D0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/TopicReview/notice-review-12",
+        "principalId": "AROA4F1D1B68F0162CFA2:notice-review-12",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-07-03T10:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/TopicReview",
+            "principalId": "AROA4F1D1B68F0162CFA2",
+            "type": "Role",
+            "userName": "TopicReview"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002103",
+      "eventName": "GetTopicAttributes",
+      "eventSource": "sns.amazonaws.com",
+      "eventTime": "2026-07-03T10:04:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002103",
+      "requestParameters": {
+        "topicArn": "arn:aws:sns:us-east-1:000000000000:synthetic-notifications-v6"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.123",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV6D0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/TopicReview/notice-review-12",
+        "principalId": "AROA4F1D1B68F0162CFA2:notice-review-12",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-07-03T10:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/TopicReview",
+            "principalId": "AROA4F1D1B68F0162CFA2",
+            "type": "Role",
+            "userName": "TopicReview"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002104",
+      "eventName": "GetTopicAttributes",
+      "eventSource": "sns.amazonaws.com",
+      "eventTime": "2026-07-03T10:03:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002104",
+      "requestParameters": {
+        "topicArn": "arn:aws:sns:us-east-1:000000000000:synthetic-notifications-v6"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.123",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV6N0003",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/topic-reader-other",
+        "principalId": "AIDA74DABEF8B8E6B9DF5",
+        "type": "IAMUser",
+        "userName": "topic-reader-other"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "errorCode": "AuthorizationError",
+      "errorMessage": "Synthetic request was denied.",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002105",
+      "eventName": "DeleteTopic",
+      "eventSource": "sns.amazonaws.com",
+      "eventTime": "2026-07-03T10:01:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002105",
+      "requestParameters": {
+        "topicArn": "arn:aws:sns:us-east-1:000000000000:synthetic-other-notifications-v6"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "198.51.100.122",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV6N0004",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/notice-cleaner-other",
+        "principalId": "AIDA4FA70A498804B8BCD",
+        "type": "IAMUser",
+        "userName": "notice-cleaner-other"
+      }
+    }
+  ]
+}

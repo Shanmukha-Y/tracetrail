@@ -13,6 +13,199 @@ The repository stays private until the release checks pass. Workflow Sentinel is
 - Preserved earlier synthetic suites and a frozen two-case v4 suite with field support annotations.
 - CI for lint, formatting, and tests without inference or hosted tracing.
 
+## October 17: explicit planning choices and query scope
+
+The [preserved failure diagnosis](oct17-diagnosis.md) identifies early finish
+as a model choice: all four v6 Qwen adaptive runs stopped after one query with
+two queries unused. Observed local pivots were available. Other runs described
+principal or resource constraints that their actual filters did not execute.
+The graph had honored those decisions, rather than exhausting its tools.
+
+Protocol v7 adds a model-authored ledger for every supplied claim before each
+action. The model names returned evidence, an open question, relevant observed
+pivots, and actual query attempts. It explicitly chooses one candidate filter,
+one pending continuation, a custom query, or an event lookup. Required nullable
+branch fields and mechanical validation reject omitted or conflicting choices.
+Code never infers a query from a rationale or ledger.
+
+The observed-only catalog now gives each filter its meaning and each actual
+query an attempt ID. It retains complete AND filters, time bounds, errors and
+page scopes. A successful scoped attempt does not establish complete coverage.
+Pending continuation IDs disappear only after that exact normalized scope was
+successfully executed. The catalog is capped at 16 candidates. Its candidate
+count and truncation flag disclose omissions. Its `finish_accounting_ids` list
+contains every visible candidate and pending page, including queried candidates.
+
+An early finish must account for these IDs, with model-authored reasons for
+deferral, irrelevance, or testing under an actual recorded scope. Zero-query
+finishes remain allowed. Exhausting the graph's query budget has a separate
+stop reason and needs no extra planner call. No minimum search count, hidden
+query, status repair, annotation lookup, or retry was added.
+
+These checks establish references and executable scope. They do not certify
+the ledger, relevance, gap completeness, disposition reasons, or conclusions.
+An invalid planner stops further searches and preserves its raw output. The
+bounded final report is still attempted. Its selection can validate and yield
+exact facts, while overall process status remains invalid. Ordinary historical
+scorer metrics can therefore be nonzero for an invalid process. Primary valid
+process field coverage gives those runs zero credit.
+
+### Exposed development and frozen inputs
+
+Three actual Qwen adaptive-versus-fixed batches used only the older v5
+`dev-key-lifecycle` case. They are development evidence, with one run per cell.
+All failures remain preserved.
+
+| Adaptive development candidate | Process | Queries / calls | Selected recall | Raw strict support | Raw status accuracy |
+| --- | --- | --- | --- | --- | --- |
+| Optional branch fields | Invalid | 0 / 2 | 25% | 0% | 25% |
+| Required nullable branches | Invalid | 2 / 4 | 100% | 75% | 100% |
+| Explicit finish accounting list | Invalid | 2 / 4 | 100% | 75% | 100% |
+
+The first model named the useful child-key pivot in its ledger and rationale
+but omitted the executable choice. Making nullable branch fields required
+removed that omission path. The next run retrieved the four-record chain but
+omitted three finish dispositions. The final candidate supplied an explicit
+accounting list. Qwen still omitted one ID and called principal and issuer
+filters tested by key queries that did not execute those predicates. Validation
+preserved both errors. Its ledger also marked the later-state question closed
+while its report correctly left that state uncertain. Structure does not prove
+reasoning or an honest scope judgment.
+
+The final adaptive duration was 207.30 seconds. All three fixed runs used three
+queries and one call, with 25% recall, 25% raw status accuracy and zero strict
+support. The final fixed duration was 52.79 seconds. Exact report facts and
+matching labels do not erase the adaptive process failures. These exposed
+results establish neither a successful planning fix nor general improvement.
+
+Each batch received a real offline SDK evaluation: six saved-output replays,
+132 numeric feedback items, no new replay inference and no uploads. Original
+execution traces contain 13 model spans and 13 tool spans. Byte-verified source
+snapshots preserve both earlier candidate implementations locally.
+
+The final [v7 protocol](../evaluation/protocol-v7.json) freezes 11 source files,
+eight schemas, the prompt, budgets, models and independent v6 suite. Its SHA-256
+is `b00bb95ecb13990607c9cc4713c9628bf812cbf738b17537bb9a8acf6cbd8c18`.
+The final prompt SHA-256 is
+`544041d360b9a675be55254c61d2582314d6bbb7f61a521e39c028b0797c302e`.
+The reporting instructions, report schemas, exact fact projection, fixed
+queries and historical scorer remain unchanged. Reporting context now includes
+the latest plan and the richer catalog. The change does not isolate the effect
+of each planning feature.
+
+The independently authored v6 suite has four invented cases, two per split:
+20 records, 14 relevant records, 16 hypotheses and 43 exact required observation
+atoms. Independent assistant review checked current AWS semantics, evidence support and
+tool reachability. Its final manifest SHA-256 is
+`e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87`.
+Its development split was not used to tune v7. All new cases and runtime inputs
+were frozen before fresh inference. Earlier fixture bytes remain unchanged.
+Different suites have different propositions and annotation requirements, so
+their support percentages cannot establish a version-to-version improvement.
+
+### Fresh comparison
+
+All 16 frozen fresh cells ran with actual local Ollama calls. Ten processes
+completed; six are invalid and remain in every denominator. The comparison
+CLI returned nonzero for these invalid results. Each group has four cases,
+two per split, with one run per cell.
+
+| Model and method | Valid processes | Mean selected precision | Mean selected recall | Mean raw strict support | Mean raw status accuracy | Mean queries | Mean calls | Mean seconds |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Qwen adaptive | 3/4 | 100% | 87.50% | 81.25% | 100% | 2 | 4 | 199.29 |
+| Qwen fixed | 4/4 | 91.67% | 50% | 18.75% | 50% | 3 | 1 | 49.55 |
+| Gemma adaptive | 3/4 | 100% | 70.83% | 56.25% | 87.50% | 1.5 | 3.5 | 200.82 |
+| Mistral adaptive | 0/4 | 66.67% | 54.17% | 31.25% | 100% | 2.25 | 4 | 148.34 |
+
+These are means across all four cells, including invalid processes. Recall
+measures the valid selected evidence set, rather than everything returned by
+tools. Raw strict support and status accuracy can be nonzero in an invalid
+process. All Mistral status labels match, but none of its processes validates.
+That is not a successful investigation or evidence of reliable reasoning.
+The fixed comparator is the frozen one-hour seed-filter baseline; this study
+does not compare every possible fixed-search approach. Adaptive used fewer
+queries here but more model calls and time.
+
+| Model and method | Development raw support | Held-out raw support | Primary valid-process declared fields |
+| --- | --- | --- | --- |
+| Qwen adaptive | 100% | 62.50% | 23/43 |
+| Qwen fixed | 12.50% | 25% | 17/43 |
+| Gemma adaptive | 50% | 62.50% | 17/43 |
+| Mistral adaptive | 0% | 62.50% | 0/43 |
+
+Thirty-four of 64 findings fail the unchanged strict annotations. Primary
+field-path coverage is 57/172 required claim/source/path atoms. Invalid
+processes retain their denominators and receive zero primary credit. The
+metric checks explicit field declarations in the corresponding finding; it
+does not use global projected facts or rationales, and ignores role meaning.
+It measures source-path coverage, not semantic entailment. Retained exact
+facts from a valid report inside an invalid process remain inspectable locally.
+
+The [Qwen assistant source review](v7-evidence-review.md) records concrete
+counterexamples. The directory investigation marks credential uses tested
+through an issuance query. The topic investigation claims no budget remains
+while one query is unused. The trail investigation recovers the caller and
+issuer but skips an available child-key query for a later status request.
+Correct status labels do not repair these omissions or scope assertions.
+Gemma also leaves useful queries unused, and one malformed ledger ID stops
+its topic investigation before any search. Null read responses and normal
+empty write responses require API-specific interpretation.
+
+Assistant review classifies Mistral's failures separately. Retention retrieves
+the chain but invents `/evidence/*` report selections instead of using supplied
+aliases. Topic falsely marks pivots tested, misses issuance, and leaves two
+uncertainty gaps empty. The held-out runs mark unexecuted caller searches
+tested and substitute child activity for original-caller evidence. Matching
+whole-corpus status labels do not establish these explanations. All reviews
+are assistant-generated source checks; no independent human review was done.
+
+The offline SDK evaluated all 16 saved runs with 352 matching numeric feedback
+items, no upload and no replay inference. Original execution traces contain
+50 model spans and 35 tool spans. Source, schema, prompt, manifest and actual
+invocation fingerprints match the freeze. The [scalar artifact](../evaluation/results-v7.json)
+records all cells and split rows, source artifact hashes, costs, invalid
+processes and effective loaded weight digests. Full raw reports, SDK traces,
+assistant review sidecars and earlier candidate source snapshots remain in
+ignored local files with `0600` permissions. They are not pushed.
+
+Fresh raw results SHA-256:
+`830b9f4cfa63d86a9803585724b1692328329042b5863156babd5125aa3a660e`.
+Fresh SDK artifact SHA-256:
+`72fe231b57d92d1e67d5b8e6d41bc4ffa188b13e9a7dc6bea6ac44c6c0a85c9c`.
+No fresh-output changes were made to runtime code, prompts, schemas or cases.
+All cases are now exposed for later work informed by this study. Independent
+human review, repeat stability and broader release checks remain open.
+
+### CLI demonstration and final local checks
+
+Reproduce the separate actual Qwen demonstration with:
+
+```sh
+uv run tracetrail demo --manifest evaluation/cases-v6.json \
+  --case dev-retention-chain --output local-results/demo-v7.json
+```
+
+It completed with two queries, four model calls, three selected relevant
+records and 83 exact projected observations in 204.69 seconds. Its selected
+precision, recall, status accuracy and strict support were all 100% on this
+single exposed demonstration case. This repeat is separate from the frozen
+benchmark and does not measure general reliability. Its raw artifact SHA-256
+is `b2286395b302d83c68373515ee49ff7ca43816e3d0b77af61dceb72ffa10e1fe`.
+
+Across the three exposed batches, fresh matrix and separate demonstration,
+23 actual investigations contain 67 model-call spans and 50 tool-call spans.
+Twenty-two saved outputs received offline SDK evaluation with 484 numeric
+feedback items. The demonstration has original execution traces but was not
+replayed into the SDK evaluator. No replay invoked a model or uploaded data.
+The listener was observed at `127.0.0.1:11434`; no models remained loaded after
+the demonstration. No weights were downloaded and no credentials were created.
+
+Final local verification passed all 518 tests, Ruff lint, formatting and
+whitespace checks. These checks cover software behavior and failure handling;
+they do not clear the observed model reasoning failures or release gates.
+The scalar artifact SHA-256 is
+`e4167007203fbad6ea178324af67fd00ca608f1a70421eb4685ad58fabadd40e`.
+
 ## October 16: claim-level evidence links
 
 The [failure diagnosis](oct16-diagnosis.md) distinguishes report omissions from
@@ -621,7 +814,7 @@ The v2 manifest hash is `c30eb66718886e6a3d80efe1f034bf913634c9e839873e6fcb30d8f
 - Inspect free-text limitations for unsupported language. Automated support scoring applies to fixed propositions and exact field observations.
 - Add licensed public simulation data only after license and privacy checks. Label it as simulation.
 - Improve large-file performance and evidence selection for records that exceed the model prompt budget.
-- Broader release review remains separate from CI. Lint, formatting, and all 147 tests passed for the October 13 source increment. Final local v4 source verification passed Ruff checks, formatting, and all 220 tests. CI status tied to each commit is available in the repository [Actions workflow](https://github.com/Shanmukha-Y/tracetrail/actions/workflows/ci.yml).
+- Broader release review remains separate from CI. Final local v7 verification passed lint, formatting, and all 518 tests. Earlier source checks remain recorded in their dated sections. CI status tied to each commit is available in the repository [Actions workflow](https://github.com/Shanmukha-Y/tracetrail/actions/workflows/ci.yml).
 
 Local disk traces and offline LangSmith SDK evaluation are the intended integration. Hosted and self-hosted platform UI deployments are outside this local-only project. No credential, server, or upload setup is needed.
 

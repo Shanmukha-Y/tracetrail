@@ -1,0 +1,3514 @@
+{
+  "all_inference_local": true,
+  "assistant_source_reviews": [
+    {
+      "path": "local-results/v7-gemma-development-review.json",
+      "sha256": "4c680e28929227c381bca672b309f3ab282724ea65acceafe5da590fa9ecce09"
+    },
+    {
+      "path": "local-results/v7-gemma-heldout-review.json",
+      "sha256": "2e8a400747a568fb96a6fb6fd00dc3ea8923982f6adbace184fd971a90f78a72"
+    },
+    {
+      "path": "local-results/v7-mistral-review.json",
+      "sha256": "38b20164e60472a380c2f812ad98cded748ff1e736c56c71fea6de7d91578680"
+    },
+    {
+      "path": "local-results/v7-qwen-directory-review.json",
+      "sha256": "7de8d3c61d335deb5c8af37037dedc0941b53e9ca51720535882454ca08d14e0"
+    },
+    {
+      "path": "local-results/v7-qwen-retention-review.json",
+      "sha256": "87f9f9abebc656281c76277382a741de70525300a3e344e22b4b6a2f492b97ad"
+    },
+    {
+      "path": "local-results/v7-qwen-topic-review.json",
+      "sha256": "06e3f75047ab98cf266f0791888044711fef2f63e87f85d9f84880b7ecb58d63"
+    },
+    {
+      "path": "local-results/v7-qwen-trail-review.json",
+      "sha256": "860755235fa4ff07dd28b6d3b01da333d6a1f5ebd3d35fe113685af199bb3d4a"
+    }
+  ],
+  "batches": [
+    {
+      "artifacts": {
+        "audit": {
+          "path": "local-results/development-v7-suite-v5.audit-summary.json",
+          "sha256": "f2be2d00e724f3266ddae3c5445c156d6fe3ce7c3286136e3683e1f91cc377d5"
+        },
+        "protocol": {
+          "path": "local-results/protocol-v7-development.json",
+          "sha256": "a95521adf848ae163d6df310260f7181ba316caeec664b32362cb63b00124ac8"
+        },
+        "raw_results": {
+          "path": "local-results/development-v7-suite-v5.json",
+          "sha256": "57031546688f19dd37a56822b5cad3bc3da3f03f8ef4a94f425ad49996a68db7"
+        },
+        "sdk_evaluation": {
+          "path": "local-results/development-v7-suite-v5.langsmith-local.json",
+          "sha256": "31603ffa547220e5cd0e07be85a282cea5dda0b11c23f36bc867c7c43eaa1a51"
+        }
+      },
+      "manifest_path": "evaluation/cases-v5.json",
+      "manifest_sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96",
+      "phase": "initial_exposed_development",
+      "run_count": 2,
+      "suite_id": "tracetrail-synthetic-v5",
+      "versions": {
+        "langchain": "1.4.5",
+        "langchain-ollama": "1.1.0",
+        "langgraph": "1.2.15",
+        "langsmith": "0.14.8"
+      }
+    },
+    {
+      "artifacts": {
+        "audit": {
+          "path": "local-results/development-v7-corrected-suite-v5.audit-summary.json",
+          "sha256": "310db85cc53dc9df0a87821b65024858a5a00120d56d3a009fc2266462a5ca65"
+        },
+        "protocol": {
+          "path": "local-results/protocol-v7-corrected-development.json",
+          "sha256": "7ff4c0f7a58543990cd81ce8709a78f87eb618629091aea8bafc4d9ed33def55"
+        },
+        "raw_results": {
+          "path": "local-results/development-v7-corrected-suite-v5.json",
+          "sha256": "158d9cc63d2ede65dbe8c38b7f55ad16ae8752ea45ac44914435d88e67172aeb"
+        },
+        "sdk_evaluation": {
+          "path": "local-results/development-v7-corrected-suite-v5.langsmith-local.json",
+          "sha256": "ca6e36196b8c5180374a644f06f7ef73c5378d98761a1bdc299629340b3b7f51"
+        }
+      },
+      "manifest_path": "evaluation/cases-v5.json",
+      "manifest_sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96",
+      "phase": "corrected_exposed_development",
+      "run_count": 2,
+      "suite_id": "tracetrail-synthetic-v5",
+      "versions": {
+        "langchain": "1.4.5",
+        "langchain-ollama": "1.1.0",
+        "langgraph": "1.2.15",
+        "langsmith": "0.14.8"
+      }
+    },
+    {
+      "artifacts": {
+        "audit": {
+          "path": "local-results/development-v7-final-suite-v5.audit-summary.json",
+          "sha256": "2cbbbba4c15120a6de9e974fae1423111a455f14ecbe6bcb30382dc2a4189312"
+        },
+        "independent_verification": {
+          "path": "local-results/development-v7-final-suite-v5.verification.json",
+          "sha256": "210b4e60ff28077a25eae0fcf2f25045f00874552d4ec19320c691662ab128cf"
+        },
+        "protocol": {
+          "path": "local-results/protocol-v7-final-development.json",
+          "sha256": "8b55688206bbeefd7e19464de55d0a7d484282c5d83ce70a918531212fe3f374"
+        },
+        "raw_results": {
+          "path": "local-results/development-v7-final-suite-v5.json",
+          "sha256": "c6e5375ab8a8ac90c2339ef0d539d9209b40d0a211fba68adb2efb32f9f6174b"
+        },
+        "sdk_evaluation": {
+          "path": "local-results/development-v7-final-suite-v5.langsmith-local.json",
+          "sha256": "86caa2153b92f5017b6f58b5937f62e174e0a58270602763e7adf4086f3b4438"
+        }
+      },
+      "manifest_path": "evaluation/cases-v5.json",
+      "manifest_sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96",
+      "phase": "final_exposed_development",
+      "run_count": 2,
+      "suite_id": "tracetrail-synthetic-v5",
+      "versions": {
+        "langchain": "1.4.5",
+        "langchain-ollama": "1.1.0",
+        "langgraph": "1.2.15",
+        "langsmith": "0.14.8"
+      }
+    },
+    {
+      "artifacts": {
+        "audit": {
+          "path": "local-results/comparison-v7-suite-v6.audit-summary.json",
+          "sha256": "089fea2b95ab8cd7ac48e776bf1362d807965cc4e48a4dd06c1555efb916a8fd"
+        },
+        "independent_verification": {
+          "path": "local-results/comparison-v7-suite-v6.verification.json",
+          "sha256": "dd99f8d55fd1073cbf21ee55c5d48605d93e9dcb228d4ee562acd85f6ae02e64"
+        },
+        "protocol": {
+          "path": "evaluation/protocol-v7.json",
+          "sha256": "b00bb95ecb13990607c9cc4713c9628bf812cbf738b17537bb9a8acf6cbd8c18"
+        },
+        "raw_results": {
+          "path": "local-results/comparison-v7-suite-v6.json",
+          "sha256": "830b9f4cfa63d86a9803585724b1692328329042b5863156babd5125aa3a660e"
+        },
+        "sdk_evaluation": {
+          "path": "local-results/comparison-v7-suite-v6.langsmith-local.json",
+          "sha256": "72fe231b57d92d1e67d5b8e6d41bc4ffa188b13e9a7dc6bea6ac44c6c0a85c9c"
+        }
+      },
+      "manifest_path": "evaluation/cases-v6.json",
+      "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+      "phase": "fresh",
+      "run_count": 16,
+      "suite_id": "tracetrail-synthetic-v6",
+      "versions": {
+        "langchain": "1.4.5",
+        "langchain-ollama": "1.1.0",
+        "langgraph": "1.2.15",
+        "langsmith": "0.14.8"
+      }
+    }
+  ],
+  "cells": [
+    {
+      "case_id": "dev-key-lifecycle",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [
+        "exclusive_query_source_required"
+      ],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-key-lifecycle",
+        "duration_seconds": 69.09025774989277,
+        "failure_count": 1,
+        "finding_count": 4,
+        "fixture_sha256": "1dc4f312466b3ca2b8e32eaa9d5a303c7e2530ccd06072624738a1b660345f08",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96",
+        "missing_claim_ids": [],
+        "model_calls": 2,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "original_caller_link",
+            "index": 0,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "returned_key_change",
+            "index": 1,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "activation_requested",
+            "index": 2,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_key_state",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 0,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.25,
+        "relevant_true_positives": 1,
+        "retrieved_event_count": 1,
+        "run_failed": true,
+        "selected_event_count": 1,
+        "split": "development",
+        "status_accuracy": 0.25,
+        "suite_id": "tracetrail-synthetic-v5",
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "tool_returned_event_count": 1,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 20,
+        "llm": 2,
+        "parser": 2
+      },
+      "phase": "initial_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.0,
+        "covered": 0,
+        "required": 28
+      },
+      "remote_routing": false,
+      "result_index": 0,
+      "split": "development",
+      "status": "invalid",
+      "stop_reason": "invalid_decision",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "dev-key-lifecycle",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-key-lifecycle",
+        "duration_seconds": 44.21180708380416,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "1dc4f312466b3ca2b8e32eaa9d5a303c7e2530ccd06072624738a1b660345f08",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96",
+        "missing_claim_ids": [],
+        "model_calls": 1,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "original_caller_link",
+            "index": 0,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "returned_key_change",
+            "index": 1,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "activation_requested",
+            "index": 2,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_key_state",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 3,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.25,
+        "relevant_true_positives": 1,
+        "retrieved_event_count": 1,
+        "run_failed": false,
+        "selected_event_count": 1,
+        "split": "development",
+        "status_accuracy": 0.25,
+        "suite_id": "tracetrail-synthetic-v5",
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "tool_returned_event_count": 1,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 11,
+        "llm": 1,
+        "parser": 1,
+        "tool": 3
+      },
+      "phase": "initial_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.17857142857142858,
+        "covered": 5,
+        "required": 28
+      },
+      "remote_routing": false,
+      "result_index": 1,
+      "split": "development",
+      "status": "completed",
+      "stop_reason": "fixed_search_complete",
+      "strategy": "fixed"
+    },
+    {
+      "case_id": "dev-key-lifecycle",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [
+        "finish_disposition_coverage"
+      ],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-key-lifecycle",
+        "duration_seconds": 194.84136029193178,
+        "failure_count": 1,
+        "finding_count": 4,
+        "fixture_sha256": "1dc4f312466b3ca2b8e32eaa9d5a303c7e2530ccd06072624738a1b660345f08",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": true,
+            "claim_id": "original_caller_link",
+            "index": 0,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "returned_key_change",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "activation_requested",
+            "index": 2,
+            "reasons": []
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_key_state",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation"
+            ]
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 1.0,
+        "relevant_true_positives": 4,
+        "retrieved_event_count": 4,
+        "run_failed": true,
+        "selected_event_count": 4,
+        "split": "development",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v5",
+        "supported_annotation_rate": 0.75,
+        "tool_errors": 0,
+        "tool_returned_event_count": 4,
+        "unsupported_claim_rate": 0.25,
+        "unsupported_claims": 1
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "corrected_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.0,
+        "covered": 0,
+        "required": 28
+      },
+      "remote_routing": false,
+      "result_index": 0,
+      "split": "development",
+      "status": "invalid",
+      "stop_reason": "invalid_decision",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "dev-key-lifecycle",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-key-lifecycle",
+        "duration_seconds": 44.159102083183825,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "1dc4f312466b3ca2b8e32eaa9d5a303c7e2530ccd06072624738a1b660345f08",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96",
+        "missing_claim_ids": [],
+        "model_calls": 1,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "original_caller_link",
+            "index": 0,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "returned_key_change",
+            "index": 1,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "activation_requested",
+            "index": 2,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_key_state",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 3,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.25,
+        "relevant_true_positives": 1,
+        "retrieved_event_count": 1,
+        "run_failed": false,
+        "selected_event_count": 1,
+        "split": "development",
+        "status_accuracy": 0.25,
+        "suite_id": "tracetrail-synthetic-v5",
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "tool_returned_event_count": 1,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 11,
+        "llm": 1,
+        "parser": 1,
+        "tool": 3
+      },
+      "phase": "corrected_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.17857142857142858,
+        "covered": 5,
+        "required": 28
+      },
+      "remote_routing": false,
+      "result_index": 1,
+      "split": "development",
+      "status": "completed",
+      "stop_reason": "fixed_search_complete",
+      "strategy": "fixed"
+    },
+    {
+      "case_id": "dev-key-lifecycle",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [
+        "tested_pivot_requires_matching_successful_attempt",
+        "finish_disposition_coverage"
+      ],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-key-lifecycle",
+        "duration_seconds": 207.30369737464935,
+        "failure_count": 2,
+        "finding_count": 4,
+        "fixture_sha256": "1dc4f312466b3ca2b8e32eaa9d5a303c7e2530ccd06072624738a1b660345f08",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": true,
+            "claim_id": "original_caller_link",
+            "index": 0,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "returned_key_change",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "activation_requested",
+            "index": 2,
+            "reasons": []
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_key_state",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation"
+            ]
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 1.0,
+        "relevant_true_positives": 4,
+        "retrieved_event_count": 4,
+        "run_failed": true,
+        "selected_event_count": 4,
+        "split": "development",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v5",
+        "supported_annotation_rate": 0.75,
+        "tool_errors": 0,
+        "tool_returned_event_count": 4,
+        "unsupported_claim_rate": 0.25,
+        "unsupported_claims": 1
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "final_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.0,
+        "covered": 0,
+        "required": 28
+      },
+      "remote_routing": false,
+      "result_index": 0,
+      "split": "development",
+      "status": "invalid",
+      "stop_reason": "invalid_decision",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "dev-key-lifecycle",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-key-lifecycle",
+        "duration_seconds": 52.78846950037405,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "1dc4f312466b3ca2b8e32eaa9d5a303c7e2530ccd06072624738a1b660345f08",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96",
+        "missing_claim_ids": [],
+        "model_calls": 1,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "original_caller_link",
+            "index": 0,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "returned_key_change",
+            "index": 1,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "activation_requested",
+            "index": 2,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_key_state",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 3,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.25,
+        "relevant_true_positives": 1,
+        "retrieved_event_count": 1,
+        "run_failed": false,
+        "selected_event_count": 1,
+        "split": "development",
+        "status_accuracy": 0.25,
+        "suite_id": "tracetrail-synthetic-v5",
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "tool_returned_event_count": 1,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 11,
+        "llm": 1,
+        "parser": 1,
+        "tool": 3
+      },
+      "phase": "final_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.17857142857142858,
+        "covered": 5,
+        "required": 28
+      },
+      "remote_routing": false,
+      "result_index": 1,
+      "split": "development",
+      "status": "completed",
+      "stop_reason": "fixed_search_complete",
+      "strategy": "fixed"
+    },
+    {
+      "case_id": "dev-retention-chain",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-retention-chain",
+        "duration_seconds": 197.68332058284432,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "a0332b26475cea74b7041cbe343ae654bc616dbb8e19457b0405c366326504ab",
+        "insufficient_evidence_handling": 1.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": true,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "child_key_match",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "retention_requested",
+            "index": 2,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "approved_retention",
+            "index": 3,
+            "reasons": []
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 3,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 1.0,
+        "relevant_true_positives": 3,
+        "retrieved_event_count": 3,
+        "run_failed": false,
+        "selected_event_count": 3,
+        "split": "development",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 1.0,
+        "tool_errors": 0,
+        "tool_returned_event_count": 3,
+        "unsupported_claim_rate": 0.0,
+        "unsupported_claims": 0
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 1.0,
+        "covered": 10,
+        "required": 10
+      },
+      "remote_routing": false,
+      "result_index": 0,
+      "split": "development",
+      "status": "completed",
+      "stop_reason": "model_finish",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "dev-retention-chain",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-retention-chain",
+        "duration_seconds": 41.98020183341578,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "a0332b26475cea74b7041cbe343ae654bc616dbb8e19457b0405c366326504ab",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 1,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "child_key_match",
+            "index": 1,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "retention_requested",
+            "index": 2,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "approved_retention",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 3,
+        "relevant_event_count": 3,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.3333333333333333,
+        "relevant_true_positives": 1,
+        "retrieved_event_count": 1,
+        "run_failed": false,
+        "selected_event_count": 1,
+        "split": "development",
+        "status_accuracy": 0.25,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "tool_returned_event_count": 1,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 11,
+        "llm": 1,
+        "parser": 1,
+        "tool": 3
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.2,
+        "covered": 2,
+        "required": 10
+      },
+      "remote_routing": false,
+      "result_index": 1,
+      "split": "development",
+      "status": "completed",
+      "stop_reason": "fixed_search_complete",
+      "strategy": "fixed"
+    },
+    {
+      "case_id": "dev-topic-denial",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-topic-denial",
+        "duration_seconds": 214.3416080828756,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "66d6f9010265009a30b9cf1c21cdb9f7e8a3b394909e8148f70a50fb1b20de08",
+        "insufficient_evidence_handling": 1.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": true,
+            "claim_id": "issuer_key_match",
+            "index": 0,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "topic_deletion_succeeded",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "later_topic_absence",
+            "index": 2,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "malicious_intent",
+            "index": 3,
+            "reasons": []
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 3,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 1.0,
+        "relevant_true_positives": 3,
+        "retrieved_event_count": 3,
+        "run_failed": false,
+        "selected_event_count": 3,
+        "split": "development",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 1.0,
+        "tool_errors": 0,
+        "tool_returned_event_count": 3,
+        "unsupported_claim_rate": 0.0,
+        "unsupported_claims": 0
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.7272727272727273,
+        "covered": 8,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 2,
+      "split": "development",
+      "status": "completed",
+      "stop_reason": "model_finish",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "dev-topic-denial",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-topic-denial",
+        "duration_seconds": 58.28755391575396,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "66d6f9010265009a30b9cf1c21cdb9f7e8a3b394909e8148f70a50fb1b20de08",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 1,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "issuer_key_match",
+            "index": 0,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "topic_deletion_succeeded",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_topic_absence",
+            "index": 2,
+            "reasons": [
+              "missing_required_citation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "malicious_intent",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 3,
+        "relevant_event_count": 3,
+        "relevant_event_precision": 0.6666666666666666,
+        "relevant_event_recall": 0.6666666666666666,
+        "relevant_true_positives": 2,
+        "retrieved_event_count": 3,
+        "run_failed": false,
+        "selected_event_count": 3,
+        "split": "development",
+        "status_accuracy": 0.75,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.25,
+        "tool_errors": 0,
+        "tool_returned_event_count": 3,
+        "unsupported_claim_rate": 0.75,
+        "unsupported_claims": 3
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 11,
+        "llm": 1,
+        "parser": 1,
+        "tool": 3
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.5454545454545454,
+        "covered": 6,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 3,
+      "split": "development",
+      "status": "completed",
+      "stop_reason": "fixed_search_complete",
+      "strategy": "fixed"
+    },
+    {
+      "case_id": "heldout-directory-path",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [
+        "tested_pivot_requires_matching_successful_attempt"
+      ],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "heldout-directory-path",
+        "duration_seconds": 186.05128420889378,
+        "failure_count": 1,
+        "finding_count": 4,
+        "fixture_sha256": "b417cf717271d3302dfdc0dd10a335a267aaae74d0474fc9296a14472ebcfaa3",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": true,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "issuer_key_match",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "legacy_path_requested",
+            "index": 2,
+            "reasons": []
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_user_path",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.75,
+        "relevant_true_positives": 3,
+        "retrieved_event_count": 3,
+        "run_failed": true,
+        "selected_event_count": 3,
+        "split": "heldout",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.75,
+        "tool_errors": 0,
+        "tool_returned_event_count": 3,
+        "unsupported_claim_rate": 0.25,
+        "unsupported_claims": 1
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.0,
+        "covered": 0,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 4,
+      "split": "heldout",
+      "status": "invalid",
+      "stop_reason": "invalid_decision",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "heldout-directory-path",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "heldout-directory-path",
+        "duration_seconds": 47.91214158339426,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "b417cf717271d3302dfdc0dd10a335a267aaae74d0474fc9296a14472ebcfaa3",
+        "insufficient_evidence_handling": 1.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 1,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "issuer_key_match",
+            "index": 1,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "legacy_path_requested",
+            "index": 2,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "later_user_path",
+            "index": 3,
+            "reasons": []
+          }
+        ],
+        "query_count": 3,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.5,
+        "relevant_true_positives": 2,
+        "retrieved_event_count": 2,
+        "run_failed": false,
+        "selected_event_count": 2,
+        "split": "heldout",
+        "status_accuracy": 0.5,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.5,
+        "tool_errors": 0,
+        "tool_returned_event_count": 2,
+        "unsupported_claim_rate": 0.5,
+        "unsupported_claims": 2
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 11,
+        "llm": 1,
+        "parser": 1,
+        "tool": 3
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.5454545454545454,
+        "covered": 6,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 5,
+      "split": "heldout",
+      "status": "completed",
+      "stop_reason": "fixed_search_complete",
+      "strategy": "fixed"
+    },
+    {
+      "case_id": "heldout-trail-operations",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "heldout-trail-operations",
+        "duration_seconds": 199.07473937468603,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "5242a2c47e604d612f04b4e4bcd9d232c6ed0655dd061695e56b218bbe5174fa",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": true,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "issuer_key_match",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_logging_state",
+            "index": 2,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "approved_operations",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation"
+            ]
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.75,
+        "relevant_true_positives": 3,
+        "retrieved_event_count": 3,
+        "run_failed": false,
+        "selected_event_count": 3,
+        "split": "heldout",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.5,
+        "tool_errors": 0,
+        "tool_returned_event_count": 3,
+        "unsupported_claim_rate": 0.5,
+        "unsupported_claims": 2
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.45454545454545453,
+        "covered": 5,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 6,
+      "split": "heldout",
+      "status": "completed",
+      "stop_reason": "model_finish",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "heldout-trail-operations",
+      "effective_loaded_weight_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "heldout-trail-operations",
+        "duration_seconds": 50.00830275006592,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "5242a2c47e604d612f04b4e4bcd9d232c6ed0655dd061695e56b218bbe5174fa",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 1,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "issuer_key_match",
+            "index": 1,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_logging_state",
+            "index": 2,
+            "reasons": [
+              "missing_required_citation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "approved_operations",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 3,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.5,
+        "relevant_true_positives": 2,
+        "retrieved_event_count": 2,
+        "run_failed": false,
+        "selected_event_count": 2,
+        "split": "heldout",
+        "status_accuracy": 0.5,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "tool_returned_event_count": 2,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 11,
+        "llm": 1,
+        "parser": 1,
+        "tool": 3
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.2727272727272727,
+        "covered": 3,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 7,
+      "split": "heldout",
+      "status": "completed",
+      "stop_reason": "fixed_search_complete",
+      "strategy": "fixed"
+    },
+    {
+      "case_id": "dev-retention-chain",
+      "effective_loaded_weight_digests": [
+        "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-retention-chain",
+        "duration_seconds": 230.62143737496808,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "a0332b26475cea74b7041cbe343ae654bc616dbb8e19457b0405c366326504ab",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": true,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "child_key_match",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "retention_requested",
+            "index": 2,
+            "reasons": []
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "approved_retention",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation"
+            ]
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 3,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 1.0,
+        "relevant_true_positives": 3,
+        "retrieved_event_count": 3,
+        "run_failed": false,
+        "selected_event_count": 3,
+        "split": "development",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.75,
+        "tool_errors": 0,
+        "tool_returned_event_count": 3,
+        "unsupported_claim_rate": 0.25,
+        "unsupported_claims": 1
+      },
+      "model": "gemma4:31b-it-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.7,
+        "covered": 7,
+        "required": 10
+      },
+      "remote_routing": false,
+      "result_index": 8,
+      "split": "development",
+      "status": "completed",
+      "stop_reason": "model_finish",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "dev-topic-denial",
+      "effective_loaded_weight_digests": [
+        "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97"
+      ],
+      "failure_codes": [
+        "unknown_ledger_candidate_id"
+      ],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-topic-denial",
+        "duration_seconds": 89.3611104581505,
+        "failure_count": 1,
+        "finding_count": 4,
+        "fixture_sha256": "66d6f9010265009a30b9cf1c21cdb9f7e8a3b394909e8148f70a50fb1b20de08",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 2,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "issuer_key_match",
+            "index": 0,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "topic_deletion_succeeded",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_topic_absence",
+            "index": 2,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "malicious_intent",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 0,
+        "relevant_event_count": 3,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.3333333333333333,
+        "relevant_true_positives": 1,
+        "retrieved_event_count": 1,
+        "run_failed": true,
+        "selected_event_count": 1,
+        "split": "development",
+        "status_accuracy": 0.75,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.25,
+        "tool_errors": 0,
+        "tool_returned_event_count": 1,
+        "unsupported_claim_rate": 0.75,
+        "unsupported_claims": 3
+      },
+      "model": "gemma4:31b-it-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 20,
+        "llm": 2,
+        "parser": 2
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.0,
+        "covered": 0,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 9,
+      "split": "development",
+      "status": "invalid",
+      "stop_reason": "invalid_decision",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "heldout-directory-path",
+      "effective_loaded_weight_digests": [
+        "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "heldout-directory-path",
+        "duration_seconds": 230.0059162499383,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "b417cf717271d3302dfdc0dd10a335a267aaae74d0474fc9296a14472ebcfaa3",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": true,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "issuer_key_match",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "legacy_path_requested",
+            "index": 2,
+            "reasons": []
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_user_path",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.75,
+        "relevant_true_positives": 3,
+        "retrieved_event_count": 3,
+        "run_failed": false,
+        "selected_event_count": 3,
+        "split": "heldout",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.75,
+        "tool_errors": 0,
+        "tool_returned_event_count": 3,
+        "unsupported_claim_rate": 0.25,
+        "unsupported_claims": 1
+      },
+      "model": "gemma4:31b-it-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.45454545454545453,
+        "covered": 5,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 10,
+      "split": "heldout",
+      "status": "completed",
+      "stop_reason": "model_finish",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "heldout-trail-operations",
+      "effective_loaded_weight_digests": [
+        "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97"
+      ],
+      "failure_codes": [],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "heldout-trail-operations",
+        "duration_seconds": 253.28137845778838,
+        "failure_count": 0,
+        "finding_count": 4,
+        "fixture_sha256": "5242a2c47e604d612f04b4e4bcd9d232c6ed0655dd061695e56b218bbe5174fa",
+        "insufficient_evidence_handling": 0.5,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": [
+              "status_mismatch",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "issuer_key_match",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "later_logging_state",
+            "index": 2,
+            "reasons": []
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "approved_operations",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation"
+            ]
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.75,
+        "relevant_true_positives": 3,
+        "retrieved_event_count": 3,
+        "run_failed": false,
+        "selected_event_count": 3,
+        "split": "heldout",
+        "status_accuracy": 0.75,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.5,
+        "tool_errors": 0,
+        "tool_returned_event_count": 3,
+        "unsupported_claim_rate": 0.5,
+        "unsupported_claims": 2
+      },
+      "model": "gemma4:31b-it-q4_K_M",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.45454545454545453,
+        "covered": 5,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 11,
+      "split": "heldout",
+      "status": "completed",
+      "stop_reason": "model_finish",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "dev-retention-chain",
+      "effective_loaded_weight_digests": [
+        "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06"
+      ],
+      "failure_codes": [
+        "unselected_evidence_link_citation",
+        "unselected_finding_citation",
+        "unselected_evidence_link_citation",
+        "unselected_finding_citation",
+        "unselected_evidence_link_citation",
+        "unselected_finding_citation",
+        "unknown_citation",
+        "unknown_citation",
+        "unknown_citation",
+        "unknown_citation"
+      ],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-retention-chain",
+        "duration_seconds": 139.28259062487632,
+        "failure_count": 10,
+        "finding_count": 4,
+        "fixture_sha256": "a0332b26475cea74b7041cbe343ae654bc616dbb8e19457b0405c366326504ab",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": [
+              "invalid_or_unselected_citation",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "child_key_match",
+            "index": 1,
+            "reasons": [
+              "invalid_or_unselected_citation",
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "retention_requested",
+            "index": 2,
+            "reasons": [
+              "invalid_or_unselected_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "approved_retention",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 3,
+        "relevant_event_count": 3,
+        "relevant_event_precision": 0.0,
+        "relevant_event_recall": 0.0,
+        "relevant_true_positives": 0,
+        "retrieved_event_count": 4,
+        "run_failed": true,
+        "selected_event_count": 4,
+        "split": "development",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "tool_returned_event_count": 4,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "model": "mistral-small3.2:24b",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 46,
+        "llm": 4,
+        "parser": 4,
+        "tool": 3
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.0,
+        "covered": 0,
+        "required": 10
+      },
+      "remote_routing": false,
+      "result_index": 12,
+      "split": "development",
+      "status": "invalid",
+      "stop_reason": "query_budget_exhausted",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "dev-topic-denial",
+      "effective_loaded_weight_digests": [
+        "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06"
+      ],
+      "failure_codes": [
+        "tested_pivot_requires_matching_successful_attempt",
+        "missing_uncertainty",
+        "missing_uncertainty"
+      ],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "dev-topic-denial",
+        "duration_seconds": 147.64157474972308,
+        "failure_count": 3,
+        "finding_count": 4,
+        "fixture_sha256": "66d6f9010265009a30b9cf1c21cdb9f7e8a3b394909e8148f70a50fb1b20de08",
+        "insufficient_evidence_handling": 0.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "issuer_key_match",
+            "index": 0,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "topic_deletion_succeeded",
+            "index": 1,
+            "reasons": [
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "later_topic_absence",
+            "index": 2,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "malicious_intent",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 3,
+        "relevant_event_precision": 0.6666666666666666,
+        "relevant_event_recall": 0.6666666666666666,
+        "relevant_true_positives": 2,
+        "retrieved_event_count": 3,
+        "run_failed": true,
+        "selected_event_count": 3,
+        "split": "development",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "tool_returned_event_count": 3,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "model": "mistral-small3.2:24b",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.0,
+        "covered": 0,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 13,
+      "split": "development",
+      "status": "invalid",
+      "stop_reason": "invalid_decision",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "heldout-directory-path",
+      "effective_loaded_weight_digests": [
+        "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06"
+      ],
+      "failure_codes": [
+        "tested_pivot_requires_matching_successful_attempt"
+      ],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "heldout-directory-path",
+        "duration_seconds": 146.44322120817378,
+        "failure_count": 1,
+        "finding_count": 4,
+        "fixture_sha256": "b417cf717271d3302dfdc0dd10a335a267aaae74d0474fc9296a14472ebcfaa3",
+        "insufficient_evidence_handling": 1.0,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "issuer_key_match",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "legacy_path_requested",
+            "index": 2,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "later_user_path",
+            "index": 3,
+            "reasons": []
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.75,
+        "relevant_true_positives": 3,
+        "retrieved_event_count": 3,
+        "run_failed": true,
+        "selected_event_count": 3,
+        "split": "heldout",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.75,
+        "tool_errors": 0,
+        "tool_returned_event_count": 3,
+        "unsupported_claim_rate": 0.25,
+        "unsupported_claims": 1
+      },
+      "model": "mistral-small3.2:24b",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.0,
+        "covered": 0,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 14,
+      "split": "heldout",
+      "status": "invalid",
+      "stop_reason": "invalid_decision",
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "heldout-trail-operations",
+      "effective_loaded_weight_digests": [
+        "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06"
+      ],
+      "failure_codes": [
+        "tested_pivot_requires_matching_successful_attempt"
+      ],
+      "metrics": {
+        "annotation_coverage": 1.0,
+        "case_id": "heldout-trail-operations",
+        "duration_seconds": 159.97834441717714,
+        "failure_count": 1,
+        "finding_count": 4,
+        "fixture_sha256": "5242a2c47e604d612f04b4e4bcd9d232c6ed0655dd061695e56b218bbe5174fa",
+        "insufficient_evidence_handling": 0.5,
+        "invalid_evidence_count": 0,
+        "invalid_evidence_refs": [],
+        "invalid_observation_count": 0,
+        "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+        "missing_claim_ids": [],
+        "model_calls": 4,
+        "per_finding": [
+          {
+            "annotation_supported": false,
+            "claim_id": "caller_key_match",
+            "index": 0,
+            "reasons": [
+              "missing_required_citation",
+              "missing_or_wrong_required_observation"
+            ]
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "issuer_key_match",
+            "index": 1,
+            "reasons": []
+          },
+          {
+            "annotation_supported": true,
+            "claim_id": "later_logging_state",
+            "index": 2,
+            "reasons": []
+          },
+          {
+            "annotation_supported": false,
+            "claim_id": "approved_operations",
+            "index": 3,
+            "reasons": [
+              "missing_required_citation"
+            ]
+          }
+        ],
+        "query_count": 2,
+        "relevant_event_count": 4,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.75,
+        "relevant_true_positives": 3,
+        "retrieved_event_count": 3,
+        "run_failed": true,
+        "selected_event_count": 3,
+        "split": "heldout",
+        "status_accuracy": 1.0,
+        "suite_id": "tracetrail-synthetic-v6",
+        "supported_annotation_rate": 0.5,
+        "tool_errors": 0,
+        "tool_returned_event_count": 3,
+        "unsupported_claim_rate": 0.5,
+        "unsupported_claims": 2
+      },
+      "model": "mistral-small3.2:24b",
+      "ollama_version": "0.40.0",
+      "original_trace_span_counts": {
+        "chain": 44,
+        "llm": 4,
+        "parser": 4,
+        "tool": 2
+      },
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "coverage": 0.0,
+        "covered": 0,
+        "required": 11
+      },
+      "remote_routing": false,
+      "result_index": 15,
+      "split": "heldout",
+      "status": "invalid",
+      "stop_reason": "invalid_decision",
+      "strategy": "adaptive"
+    }
+  ],
+  "created_at": "2026-10-17T14:59:14.170235+00:00",
+  "exposed_development_cells": 6,
+  "field_path_coverage_method": {
+    "denominator_retains_invalid_and_failed_runs": true,
+    "global_projected_facts_and_rationale_not_used": true,
+    "roles_ignored": true,
+    "semantic_entailment_or_relevance_verified": false,
+    "unit": "unique (claim_id, original record reference, exact field path) required atom",
+    "valid_process_required": true
+  },
+  "fresh_cells": 16,
+  "frozen_protocol": {
+    "path": "evaluation/protocol-v7.json",
+    "sha256": "b00bb95ecb13990607c9cc4713c9628bf812cbf738b17537bb9a8acf6cbd8c18"
+  },
+  "frozen_suite": {
+    "development_cases": 2,
+    "heldout_cases": 2,
+    "hypotheses": 16,
+    "path": "evaluation/cases-v6.json",
+    "records": 20,
+    "relevant_records": 14,
+    "required_observation_atoms": 43,
+    "sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87"
+  },
+  "groups": [
+    {
+      "finding_count": 4,
+      "mean_metrics": {
+        "duration_seconds": 194.84136029193178,
+        "failure_count": 1,
+        "insufficient_evidence_handling": 0.0,
+        "model_calls": 4,
+        "query_count": 2,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 1.0,
+        "status_accuracy": 1.0,
+        "supported_annotation_rate": 0.75,
+        "tool_errors": 0,
+        "unsupported_claim_rate": 0.25,
+        "unsupported_claims": 1
+      },
+      "metric_sample_counts": {
+        "duration_seconds": 1,
+        "failure_count": 1,
+        "insufficient_evidence_handling": 1,
+        "model_calls": 1,
+        "query_count": 1,
+        "relevant_event_precision": 1,
+        "relevant_event_recall": 1,
+        "status_accuracy": 1,
+        "supported_annotation_rate": 1,
+        "tool_errors": 1,
+        "unsupported_claim_rate": 1,
+        "unsupported_claims": 1
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "phase": "corrected_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "covered": 0,
+        "micro_coverage": 0.0,
+        "required": 28
+      },
+      "run_count": 1,
+      "split_rows": [
+        {
+          "finding_count": 4,
+          "mean_metrics": {
+            "duration_seconds": 194.84136029193178,
+            "failure_count": 1,
+            "insufficient_evidence_handling": 0.0,
+            "model_calls": 4,
+            "query_count": 2,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 1.0,
+            "status_accuracy": 1.0,
+            "supported_annotation_rate": 0.75,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 0.25,
+            "unsupported_claims": 1
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 1,
+            "failure_count": 1,
+            "insufficient_evidence_handling": 1,
+            "model_calls": 1,
+            "query_count": 1,
+            "relevant_event_precision": 1,
+            "relevant_event_recall": 1,
+            "status_accuracy": 1,
+            "supported_annotation_rate": 1,
+            "tool_errors": 1,
+            "unsupported_claim_rate": 1,
+            "unsupported_claims": 1
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 0,
+            "micro_coverage": 0.0,
+            "required": 28
+          },
+          "run_count": 1,
+          "split": "development",
+          "status_counts": {
+            "invalid": 1
+          },
+          "stop_reason_counts": {
+            "invalid_decision": 1
+          },
+          "strict_failed_findings": 1
+        }
+      ],
+      "status_counts": {
+        "invalid": 1
+      },
+      "stop_reason_counts": {
+        "invalid_decision": 1
+      },
+      "strategy": "adaptive",
+      "strict_failed_findings": 1
+    },
+    {
+      "finding_count": 4,
+      "mean_metrics": {
+        "duration_seconds": 44.159102083183825,
+        "failure_count": 0,
+        "insufficient_evidence_handling": 0.0,
+        "model_calls": 1,
+        "query_count": 3,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.25,
+        "status_accuracy": 0.25,
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "metric_sample_counts": {
+        "duration_seconds": 1,
+        "failure_count": 1,
+        "insufficient_evidence_handling": 1,
+        "model_calls": 1,
+        "query_count": 1,
+        "relevant_event_precision": 1,
+        "relevant_event_recall": 1,
+        "status_accuracy": 1,
+        "supported_annotation_rate": 1,
+        "tool_errors": 1,
+        "unsupported_claim_rate": 1,
+        "unsupported_claims": 1
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "phase": "corrected_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "covered": 5,
+        "micro_coverage": 0.17857142857142858,
+        "required": 28
+      },
+      "run_count": 1,
+      "split_rows": [
+        {
+          "finding_count": 4,
+          "mean_metrics": {
+            "duration_seconds": 44.159102083183825,
+            "failure_count": 0,
+            "insufficient_evidence_handling": 0.0,
+            "model_calls": 1,
+            "query_count": 3,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 0.25,
+            "status_accuracy": 0.25,
+            "supported_annotation_rate": 0.0,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 1.0,
+            "unsupported_claims": 4
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 1,
+            "failure_count": 1,
+            "insufficient_evidence_handling": 1,
+            "model_calls": 1,
+            "query_count": 1,
+            "relevant_event_precision": 1,
+            "relevant_event_recall": 1,
+            "status_accuracy": 1,
+            "supported_annotation_rate": 1,
+            "tool_errors": 1,
+            "unsupported_claim_rate": 1,
+            "unsupported_claims": 1
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 5,
+            "micro_coverage": 0.17857142857142858,
+            "required": 28
+          },
+          "run_count": 1,
+          "split": "development",
+          "status_counts": {
+            "completed": 1
+          },
+          "stop_reason_counts": {
+            "fixed_search_complete": 1
+          },
+          "strict_failed_findings": 4
+        }
+      ],
+      "status_counts": {
+        "completed": 1
+      },
+      "stop_reason_counts": {
+        "fixed_search_complete": 1
+      },
+      "strategy": "fixed",
+      "strict_failed_findings": 4
+    },
+    {
+      "finding_count": 4,
+      "mean_metrics": {
+        "duration_seconds": 207.30369737464935,
+        "failure_count": 2,
+        "insufficient_evidence_handling": 0.0,
+        "model_calls": 4,
+        "query_count": 2,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 1.0,
+        "status_accuracy": 1.0,
+        "supported_annotation_rate": 0.75,
+        "tool_errors": 0,
+        "unsupported_claim_rate": 0.25,
+        "unsupported_claims": 1
+      },
+      "metric_sample_counts": {
+        "duration_seconds": 1,
+        "failure_count": 1,
+        "insufficient_evidence_handling": 1,
+        "model_calls": 1,
+        "query_count": 1,
+        "relevant_event_precision": 1,
+        "relevant_event_recall": 1,
+        "status_accuracy": 1,
+        "supported_annotation_rate": 1,
+        "tool_errors": 1,
+        "unsupported_claim_rate": 1,
+        "unsupported_claims": 1
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "phase": "final_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "covered": 0,
+        "micro_coverage": 0.0,
+        "required": 28
+      },
+      "run_count": 1,
+      "split_rows": [
+        {
+          "finding_count": 4,
+          "mean_metrics": {
+            "duration_seconds": 207.30369737464935,
+            "failure_count": 2,
+            "insufficient_evidence_handling": 0.0,
+            "model_calls": 4,
+            "query_count": 2,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 1.0,
+            "status_accuracy": 1.0,
+            "supported_annotation_rate": 0.75,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 0.25,
+            "unsupported_claims": 1
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 1,
+            "failure_count": 1,
+            "insufficient_evidence_handling": 1,
+            "model_calls": 1,
+            "query_count": 1,
+            "relevant_event_precision": 1,
+            "relevant_event_recall": 1,
+            "status_accuracy": 1,
+            "supported_annotation_rate": 1,
+            "tool_errors": 1,
+            "unsupported_claim_rate": 1,
+            "unsupported_claims": 1
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 0,
+            "micro_coverage": 0.0,
+            "required": 28
+          },
+          "run_count": 1,
+          "split": "development",
+          "status_counts": {
+            "invalid": 1
+          },
+          "stop_reason_counts": {
+            "invalid_decision": 1
+          },
+          "strict_failed_findings": 1
+        }
+      ],
+      "status_counts": {
+        "invalid": 1
+      },
+      "stop_reason_counts": {
+        "invalid_decision": 1
+      },
+      "strategy": "adaptive",
+      "strict_failed_findings": 1
+    },
+    {
+      "finding_count": 4,
+      "mean_metrics": {
+        "duration_seconds": 52.78846950037405,
+        "failure_count": 0,
+        "insufficient_evidence_handling": 0.0,
+        "model_calls": 1,
+        "query_count": 3,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.25,
+        "status_accuracy": 0.25,
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "metric_sample_counts": {
+        "duration_seconds": 1,
+        "failure_count": 1,
+        "insufficient_evidence_handling": 1,
+        "model_calls": 1,
+        "query_count": 1,
+        "relevant_event_precision": 1,
+        "relevant_event_recall": 1,
+        "status_accuracy": 1,
+        "supported_annotation_rate": 1,
+        "tool_errors": 1,
+        "unsupported_claim_rate": 1,
+        "unsupported_claims": 1
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "phase": "final_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "covered": 5,
+        "micro_coverage": 0.17857142857142858,
+        "required": 28
+      },
+      "run_count": 1,
+      "split_rows": [
+        {
+          "finding_count": 4,
+          "mean_metrics": {
+            "duration_seconds": 52.78846950037405,
+            "failure_count": 0,
+            "insufficient_evidence_handling": 0.0,
+            "model_calls": 1,
+            "query_count": 3,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 0.25,
+            "status_accuracy": 0.25,
+            "supported_annotation_rate": 0.0,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 1.0,
+            "unsupported_claims": 4
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 1,
+            "failure_count": 1,
+            "insufficient_evidence_handling": 1,
+            "model_calls": 1,
+            "query_count": 1,
+            "relevant_event_precision": 1,
+            "relevant_event_recall": 1,
+            "status_accuracy": 1,
+            "supported_annotation_rate": 1,
+            "tool_errors": 1,
+            "unsupported_claim_rate": 1,
+            "unsupported_claims": 1
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 5,
+            "micro_coverage": 0.17857142857142858,
+            "required": 28
+          },
+          "run_count": 1,
+          "split": "development",
+          "status_counts": {
+            "completed": 1
+          },
+          "stop_reason_counts": {
+            "fixed_search_complete": 1
+          },
+          "strict_failed_findings": 4
+        }
+      ],
+      "status_counts": {
+        "completed": 1
+      },
+      "stop_reason_counts": {
+        "fixed_search_complete": 1
+      },
+      "strategy": "fixed",
+      "strict_failed_findings": 4
+    },
+    {
+      "finding_count": 16,
+      "mean_metrics": {
+        "duration_seconds": 200.81746063521132,
+        "failure_count": 0.25,
+        "insufficient_evidence_handling": 0.125,
+        "model_calls": 3.5,
+        "query_count": 1.5,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.7083333333333334,
+        "status_accuracy": 0.875,
+        "supported_annotation_rate": 0.5625,
+        "tool_errors": 0,
+        "unsupported_claim_rate": 0.4375,
+        "unsupported_claims": 1.75
+      },
+      "metric_sample_counts": {
+        "duration_seconds": 4,
+        "failure_count": 4,
+        "insufficient_evidence_handling": 4,
+        "model_calls": 4,
+        "query_count": 4,
+        "relevant_event_precision": 4,
+        "relevant_event_recall": 4,
+        "status_accuracy": 4,
+        "supported_annotation_rate": 4,
+        "tool_errors": 4,
+        "unsupported_claim_rate": 4,
+        "unsupported_claims": 4
+      },
+      "model": "gemma4:31b-it-q4_K_M",
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "covered": 17,
+        "micro_coverage": 0.3953488372093023,
+        "required": 43
+      },
+      "run_count": 4,
+      "split_rows": [
+        {
+          "finding_count": 8,
+          "mean_metrics": {
+            "duration_seconds": 159.9912739165593,
+            "failure_count": 0.5,
+            "insufficient_evidence_handling": 0.0,
+            "model_calls": 3,
+            "query_count": 1,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 0.6666666666666666,
+            "status_accuracy": 0.875,
+            "supported_annotation_rate": 0.5,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 0.5,
+            "unsupported_claims": 2
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 2,
+            "failure_count": 2,
+            "insufficient_evidence_handling": 2,
+            "model_calls": 2,
+            "query_count": 2,
+            "relevant_event_precision": 2,
+            "relevant_event_recall": 2,
+            "status_accuracy": 2,
+            "supported_annotation_rate": 2,
+            "tool_errors": 2,
+            "unsupported_claim_rate": 2,
+            "unsupported_claims": 2
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 7,
+            "micro_coverage": 0.3333333333333333,
+            "required": 21
+          },
+          "run_count": 2,
+          "split": "development",
+          "status_counts": {
+            "completed": 1,
+            "invalid": 1
+          },
+          "stop_reason_counts": {
+            "invalid_decision": 1,
+            "model_finish": 1
+          },
+          "strict_failed_findings": 4
+        },
+        {
+          "finding_count": 8,
+          "mean_metrics": {
+            "duration_seconds": 241.64364735386334,
+            "failure_count": 0,
+            "insufficient_evidence_handling": 0.25,
+            "model_calls": 4,
+            "query_count": 2,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 0.75,
+            "status_accuracy": 0.875,
+            "supported_annotation_rate": 0.625,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 0.375,
+            "unsupported_claims": 1.5
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 2,
+            "failure_count": 2,
+            "insufficient_evidence_handling": 2,
+            "model_calls": 2,
+            "query_count": 2,
+            "relevant_event_precision": 2,
+            "relevant_event_recall": 2,
+            "status_accuracy": 2,
+            "supported_annotation_rate": 2,
+            "tool_errors": 2,
+            "unsupported_claim_rate": 2,
+            "unsupported_claims": 2
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 10,
+            "micro_coverage": 0.45454545454545453,
+            "required": 22
+          },
+          "run_count": 2,
+          "split": "heldout",
+          "status_counts": {
+            "completed": 2
+          },
+          "stop_reason_counts": {
+            "model_finish": 2
+          },
+          "strict_failed_findings": 3
+        }
+      ],
+      "status_counts": {
+        "completed": 3,
+        "invalid": 1
+      },
+      "stop_reason_counts": {
+        "invalid_decision": 1,
+        "model_finish": 3
+      },
+      "strategy": "adaptive",
+      "strict_failed_findings": 7
+    },
+    {
+      "finding_count": 16,
+      "mean_metrics": {
+        "duration_seconds": 148.33643274998758,
+        "failure_count": 3.75,
+        "insufficient_evidence_handling": 0.375,
+        "model_calls": 4,
+        "query_count": 2.25,
+        "relevant_event_precision": 0.6666666666666666,
+        "relevant_event_recall": 0.5416666666666666,
+        "status_accuracy": 1.0,
+        "supported_annotation_rate": 0.3125,
+        "tool_errors": 0,
+        "unsupported_claim_rate": 0.6875,
+        "unsupported_claims": 2.75
+      },
+      "metric_sample_counts": {
+        "duration_seconds": 4,
+        "failure_count": 4,
+        "insufficient_evidence_handling": 4,
+        "model_calls": 4,
+        "query_count": 4,
+        "relevant_event_precision": 4,
+        "relevant_event_recall": 4,
+        "status_accuracy": 4,
+        "supported_annotation_rate": 4,
+        "tool_errors": 4,
+        "unsupported_claim_rate": 4,
+        "unsupported_claims": 4
+      },
+      "model": "mistral-small3.2:24b",
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "covered": 0,
+        "micro_coverage": 0.0,
+        "required": 43
+      },
+      "run_count": 4,
+      "split_rows": [
+        {
+          "finding_count": 8,
+          "mean_metrics": {
+            "duration_seconds": 143.4620826872997,
+            "failure_count": 6.5,
+            "insufficient_evidence_handling": 0.0,
+            "model_calls": 4,
+            "query_count": 2.5,
+            "relevant_event_precision": 0.3333333333333333,
+            "relevant_event_recall": 0.3333333333333333,
+            "status_accuracy": 1.0,
+            "supported_annotation_rate": 0.0,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 1.0,
+            "unsupported_claims": 4
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 2,
+            "failure_count": 2,
+            "insufficient_evidence_handling": 2,
+            "model_calls": 2,
+            "query_count": 2,
+            "relevant_event_precision": 2,
+            "relevant_event_recall": 2,
+            "status_accuracy": 2,
+            "supported_annotation_rate": 2,
+            "tool_errors": 2,
+            "unsupported_claim_rate": 2,
+            "unsupported_claims": 2
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 0,
+            "micro_coverage": 0.0,
+            "required": 21
+          },
+          "run_count": 2,
+          "split": "development",
+          "status_counts": {
+            "invalid": 2
+          },
+          "stop_reason_counts": {
+            "invalid_decision": 1,
+            "query_budget_exhausted": 1
+          },
+          "strict_failed_findings": 8
+        },
+        {
+          "finding_count": 8,
+          "mean_metrics": {
+            "duration_seconds": 153.21078281267546,
+            "failure_count": 1,
+            "insufficient_evidence_handling": 0.75,
+            "model_calls": 4,
+            "query_count": 2,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 0.75,
+            "status_accuracy": 1.0,
+            "supported_annotation_rate": 0.625,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 0.375,
+            "unsupported_claims": 1.5
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 2,
+            "failure_count": 2,
+            "insufficient_evidence_handling": 2,
+            "model_calls": 2,
+            "query_count": 2,
+            "relevant_event_precision": 2,
+            "relevant_event_recall": 2,
+            "status_accuracy": 2,
+            "supported_annotation_rate": 2,
+            "tool_errors": 2,
+            "unsupported_claim_rate": 2,
+            "unsupported_claims": 2
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 0,
+            "micro_coverage": 0.0,
+            "required": 22
+          },
+          "run_count": 2,
+          "split": "heldout",
+          "status_counts": {
+            "invalid": 2
+          },
+          "stop_reason_counts": {
+            "invalid_decision": 2
+          },
+          "strict_failed_findings": 3
+        }
+      ],
+      "status_counts": {
+        "invalid": 4
+      },
+      "stop_reason_counts": {
+        "invalid_decision": 3,
+        "query_budget_exhausted": 1
+      },
+      "strategy": "adaptive",
+      "strict_failed_findings": 11
+    },
+    {
+      "finding_count": 16,
+      "mean_metrics": {
+        "duration_seconds": 199.28773806232493,
+        "failure_count": 0.25,
+        "insufficient_evidence_handling": 0.5,
+        "model_calls": 4,
+        "query_count": 2,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.875,
+        "status_accuracy": 1.0,
+        "supported_annotation_rate": 0.8125,
+        "tool_errors": 0,
+        "unsupported_claim_rate": 0.1875,
+        "unsupported_claims": 0.75
+      },
+      "metric_sample_counts": {
+        "duration_seconds": 4,
+        "failure_count": 4,
+        "insufficient_evidence_handling": 4,
+        "model_calls": 4,
+        "query_count": 4,
+        "relevant_event_precision": 4,
+        "relevant_event_recall": 4,
+        "status_accuracy": 4,
+        "supported_annotation_rate": 4,
+        "tool_errors": 4,
+        "unsupported_claim_rate": 4,
+        "unsupported_claims": 4
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "covered": 23,
+        "micro_coverage": 0.5348837209302325,
+        "required": 43
+      },
+      "run_count": 4,
+      "split_rows": [
+        {
+          "finding_count": 8,
+          "mean_metrics": {
+            "duration_seconds": 206.01246433285996,
+            "failure_count": 0,
+            "insufficient_evidence_handling": 1.0,
+            "model_calls": 4,
+            "query_count": 2,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 1.0,
+            "status_accuracy": 1.0,
+            "supported_annotation_rate": 1.0,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 0.0,
+            "unsupported_claims": 0
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 2,
+            "failure_count": 2,
+            "insufficient_evidence_handling": 2,
+            "model_calls": 2,
+            "query_count": 2,
+            "relevant_event_precision": 2,
+            "relevant_event_recall": 2,
+            "status_accuracy": 2,
+            "supported_annotation_rate": 2,
+            "tool_errors": 2,
+            "unsupported_claim_rate": 2,
+            "unsupported_claims": 2
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 18,
+            "micro_coverage": 0.8571428571428571,
+            "required": 21
+          },
+          "run_count": 2,
+          "split": "development",
+          "status_counts": {
+            "completed": 2
+          },
+          "stop_reason_counts": {
+            "model_finish": 2
+          },
+          "strict_failed_findings": 0
+        },
+        {
+          "finding_count": 8,
+          "mean_metrics": {
+            "duration_seconds": 192.5630117917899,
+            "failure_count": 0.5,
+            "insufficient_evidence_handling": 0.0,
+            "model_calls": 4,
+            "query_count": 2,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 0.75,
+            "status_accuracy": 1.0,
+            "supported_annotation_rate": 0.625,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 0.375,
+            "unsupported_claims": 1.5
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 2,
+            "failure_count": 2,
+            "insufficient_evidence_handling": 2,
+            "model_calls": 2,
+            "query_count": 2,
+            "relevant_event_precision": 2,
+            "relevant_event_recall": 2,
+            "status_accuracy": 2,
+            "supported_annotation_rate": 2,
+            "tool_errors": 2,
+            "unsupported_claim_rate": 2,
+            "unsupported_claims": 2
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 5,
+            "micro_coverage": 0.22727272727272727,
+            "required": 22
+          },
+          "run_count": 2,
+          "split": "heldout",
+          "status_counts": {
+            "completed": 1,
+            "invalid": 1
+          },
+          "stop_reason_counts": {
+            "invalid_decision": 1,
+            "model_finish": 1
+          },
+          "strict_failed_findings": 3
+        }
+      ],
+      "status_counts": {
+        "completed": 3,
+        "invalid": 1
+      },
+      "stop_reason_counts": {
+        "invalid_decision": 1,
+        "model_finish": 3
+      },
+      "strategy": "adaptive",
+      "strict_failed_findings": 3
+    },
+    {
+      "finding_count": 16,
+      "mean_metrics": {
+        "duration_seconds": 49.54705002065748,
+        "failure_count": 0,
+        "insufficient_evidence_handling": 0.25,
+        "model_calls": 1,
+        "query_count": 3,
+        "relevant_event_precision": 0.9166666666666666,
+        "relevant_event_recall": 0.5,
+        "status_accuracy": 0.5,
+        "supported_annotation_rate": 0.1875,
+        "tool_errors": 0,
+        "unsupported_claim_rate": 0.8125,
+        "unsupported_claims": 3.25
+      },
+      "metric_sample_counts": {
+        "duration_seconds": 4,
+        "failure_count": 4,
+        "insufficient_evidence_handling": 4,
+        "model_calls": 4,
+        "query_count": 4,
+        "relevant_event_precision": 4,
+        "relevant_event_recall": 4,
+        "status_accuracy": 4,
+        "supported_annotation_rate": 4,
+        "tool_errors": 4,
+        "unsupported_claim_rate": 4,
+        "unsupported_claims": 4
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "phase": "fresh",
+      "primary_valid_process_field_path_coverage": {
+        "covered": 17,
+        "micro_coverage": 0.3953488372093023,
+        "required": 43
+      },
+      "run_count": 4,
+      "split_rows": [
+        {
+          "finding_count": 8,
+          "mean_metrics": {
+            "duration_seconds": 50.13387787458487,
+            "failure_count": 0,
+            "insufficient_evidence_handling": 0.0,
+            "model_calls": 1,
+            "query_count": 3,
+            "relevant_event_precision": 0.8333333333333333,
+            "relevant_event_recall": 0.5,
+            "status_accuracy": 0.5,
+            "supported_annotation_rate": 0.125,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 0.875,
+            "unsupported_claims": 3.5
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 2,
+            "failure_count": 2,
+            "insufficient_evidence_handling": 2,
+            "model_calls": 2,
+            "query_count": 2,
+            "relevant_event_precision": 2,
+            "relevant_event_recall": 2,
+            "status_accuracy": 2,
+            "supported_annotation_rate": 2,
+            "tool_errors": 2,
+            "unsupported_claim_rate": 2,
+            "unsupported_claims": 2
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 8,
+            "micro_coverage": 0.38095238095238093,
+            "required": 21
+          },
+          "run_count": 2,
+          "split": "development",
+          "status_counts": {
+            "completed": 2
+          },
+          "stop_reason_counts": {
+            "fixed_search_complete": 2
+          },
+          "strict_failed_findings": 7
+        },
+        {
+          "finding_count": 8,
+          "mean_metrics": {
+            "duration_seconds": 48.96022216673009,
+            "failure_count": 0,
+            "insufficient_evidence_handling": 0.5,
+            "model_calls": 1,
+            "query_count": 3,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 0.5,
+            "status_accuracy": 0.5,
+            "supported_annotation_rate": 0.25,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 0.75,
+            "unsupported_claims": 3
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 2,
+            "failure_count": 2,
+            "insufficient_evidence_handling": 2,
+            "model_calls": 2,
+            "query_count": 2,
+            "relevant_event_precision": 2,
+            "relevant_event_recall": 2,
+            "status_accuracy": 2,
+            "supported_annotation_rate": 2,
+            "tool_errors": 2,
+            "unsupported_claim_rate": 2,
+            "unsupported_claims": 2
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 9,
+            "micro_coverage": 0.4090909090909091,
+            "required": 22
+          },
+          "run_count": 2,
+          "split": "heldout",
+          "status_counts": {
+            "completed": 2
+          },
+          "stop_reason_counts": {
+            "fixed_search_complete": 2
+          },
+          "strict_failed_findings": 6
+        }
+      ],
+      "status_counts": {
+        "completed": 4
+      },
+      "stop_reason_counts": {
+        "fixed_search_complete": 4
+      },
+      "strategy": "fixed",
+      "strict_failed_findings": 13
+    },
+    {
+      "finding_count": 4,
+      "mean_metrics": {
+        "duration_seconds": 69.09025774989277,
+        "failure_count": 1,
+        "insufficient_evidence_handling": 0.0,
+        "model_calls": 2,
+        "query_count": 0,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.25,
+        "status_accuracy": 0.25,
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "metric_sample_counts": {
+        "duration_seconds": 1,
+        "failure_count": 1,
+        "insufficient_evidence_handling": 1,
+        "model_calls": 1,
+        "query_count": 1,
+        "relevant_event_precision": 1,
+        "relevant_event_recall": 1,
+        "status_accuracy": 1,
+        "supported_annotation_rate": 1,
+        "tool_errors": 1,
+        "unsupported_claim_rate": 1,
+        "unsupported_claims": 1
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "phase": "initial_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "covered": 0,
+        "micro_coverage": 0.0,
+        "required": 28
+      },
+      "run_count": 1,
+      "split_rows": [
+        {
+          "finding_count": 4,
+          "mean_metrics": {
+            "duration_seconds": 69.09025774989277,
+            "failure_count": 1,
+            "insufficient_evidence_handling": 0.0,
+            "model_calls": 2,
+            "query_count": 0,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 0.25,
+            "status_accuracy": 0.25,
+            "supported_annotation_rate": 0.0,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 1.0,
+            "unsupported_claims": 4
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 1,
+            "failure_count": 1,
+            "insufficient_evidence_handling": 1,
+            "model_calls": 1,
+            "query_count": 1,
+            "relevant_event_precision": 1,
+            "relevant_event_recall": 1,
+            "status_accuracy": 1,
+            "supported_annotation_rate": 1,
+            "tool_errors": 1,
+            "unsupported_claim_rate": 1,
+            "unsupported_claims": 1
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 0,
+            "micro_coverage": 0.0,
+            "required": 28
+          },
+          "run_count": 1,
+          "split": "development",
+          "status_counts": {
+            "invalid": 1
+          },
+          "stop_reason_counts": {
+            "invalid_decision": 1
+          },
+          "strict_failed_findings": 4
+        }
+      ],
+      "status_counts": {
+        "invalid": 1
+      },
+      "stop_reason_counts": {
+        "invalid_decision": 1
+      },
+      "strategy": "adaptive",
+      "strict_failed_findings": 4
+    },
+    {
+      "finding_count": 4,
+      "mean_metrics": {
+        "duration_seconds": 44.21180708380416,
+        "failure_count": 0,
+        "insufficient_evidence_handling": 0.0,
+        "model_calls": 1,
+        "query_count": 3,
+        "relevant_event_precision": 1.0,
+        "relevant_event_recall": 0.25,
+        "status_accuracy": 0.25,
+        "supported_annotation_rate": 0.0,
+        "tool_errors": 0,
+        "unsupported_claim_rate": 1.0,
+        "unsupported_claims": 4
+      },
+      "metric_sample_counts": {
+        "duration_seconds": 1,
+        "failure_count": 1,
+        "insufficient_evidence_handling": 1,
+        "model_calls": 1,
+        "query_count": 1,
+        "relevant_event_precision": 1,
+        "relevant_event_recall": 1,
+        "status_accuracy": 1,
+        "supported_annotation_rate": 1,
+        "tool_errors": 1,
+        "unsupported_claim_rate": 1,
+        "unsupported_claims": 1
+      },
+      "model": "qwen3.8:27b-q4_K_M",
+      "phase": "initial_exposed_development",
+      "primary_valid_process_field_path_coverage": {
+        "covered": 5,
+        "micro_coverage": 0.17857142857142858,
+        "required": 28
+      },
+      "run_count": 1,
+      "split_rows": [
+        {
+          "finding_count": 4,
+          "mean_metrics": {
+            "duration_seconds": 44.21180708380416,
+            "failure_count": 0,
+            "insufficient_evidence_handling": 0.0,
+            "model_calls": 1,
+            "query_count": 3,
+            "relevant_event_precision": 1.0,
+            "relevant_event_recall": 0.25,
+            "status_accuracy": 0.25,
+            "supported_annotation_rate": 0.0,
+            "tool_errors": 0,
+            "unsupported_claim_rate": 1.0,
+            "unsupported_claims": 4
+          },
+          "metric_sample_counts": {
+            "duration_seconds": 1,
+            "failure_count": 1,
+            "insufficient_evidence_handling": 1,
+            "model_calls": 1,
+            "query_count": 1,
+            "relevant_event_precision": 1,
+            "relevant_event_recall": 1,
+            "status_accuracy": 1,
+            "supported_annotation_rate": 1,
+            "tool_errors": 1,
+            "unsupported_claim_rate": 1,
+            "unsupported_claims": 1
+          },
+          "primary_valid_process_field_path_coverage": {
+            "covered": 5,
+            "micro_coverage": 0.17857142857142858,
+            "required": 28
+          },
+          "run_count": 1,
+          "split": "development",
+          "status_counts": {
+            "completed": 1
+          },
+          "stop_reason_counts": {
+            "fixed_search_complete": 1
+          },
+          "strict_failed_findings": 4
+        }
+      ],
+      "status_counts": {
+        "completed": 1
+      },
+      "stop_reason_counts": {
+        "fixed_search_complete": 1
+      },
+      "strategy": "fixed",
+      "strict_failed_findings": 4
+    }
+  ],
+  "hosted_uploads": false,
+  "human_review_performed": false,
+  "limitations": [
+    "One actual run per frozen model/method/case cell; four synthetic cases, two per split.",
+    "All three exposed development adaptive processes remain invalid; matching raw labels or exact report facts do not repair them.",
+    "Historical strict support and status scores can be nonzero in an invalid process.",
+    "Fresh source, schemas, prompts, budgets and cases were frozen before inference; no fresh-output tuning.",
+    "Reporting contract, exact projection, fixed search and annotation scorer unchanged; richer planning context changes with the planning contract.",
+    "New suite uses different propositions and evidence atoms; no cross-suite improvement or model-winner claim.",
+    "Citation resolution, field support, and process structure do not prove semantic truth or complete investigation.",
+    "Inference uses installed local tags and captured effective weight digests; hosted LangSmith tracing and UI were not used.",
+    "The fixed comparator is the frozen one-hour seed-filter baseline; this does not compare every fixed-search approach."
+  ],
+  "mode": "measured-offline-synthetic-inference-summary",
+  "new_model_calls_in_summary": 0,
+  "offline_langsmith": {
+    "evaluated_runs": 22,
+    "inference_rerun": false,
+    "numeric_feedback_items": 484,
+    "uploads": false,
+    "version": "0.14.8"
+  },
+  "original_actual_inference": {
+    "all_test_only_false": true,
+    "investigations_including_separate_demo": 23,
+    "model_calls": 67,
+    "tool_calls": 50,
+    "trace_span_counts": {
+      "chain": 735,
+      "llm": 67,
+      "parser": 67,
+      "tool": 50
+    }
+  },
+  "prompt_sha256": "544041d360b9a675be55254c61d2582314d6bbb7f61a521e39c028b0797c302e",
+  "protocol": {
+    "chronology": "utc-order-and-signed-seconds-from-seed",
+    "citation_encoding": "local-alias-to-file-hash-index",
+    "finding_support": "model-authored-field-links-v1",
+    "max_projected_bytes": 1000000,
+    "max_projected_observations": 2000,
+    "max_prompt_payload_bytes": 48000,
+    "max_queries": 3,
+    "model_timeout_seconds": 150,
+    "num_ctx": 16384,
+    "num_predict": 3200,
+    "observation_source": "selected-record-projection-v1",
+    "planning": "claim-ledger-and-explicit-pivot-choice-v1",
+    "query_limit": 20,
+    "run_deadline_seconds": 600,
+    "seed": 42,
+    "structured_method": "json_schema",
+    "temperature": 0,
+    "thinking": false,
+    "version": "tracetrail-v7"
+  },
+  "schema_version": "2",
+  "separate_demo": {
+    "case_id": "dev-retention-chain",
+    "duration_seconds": 204.68602179177105,
+    "metrics": {
+      "annotation_coverage": 1.0,
+      "case_id": "dev-retention-chain",
+      "duration_seconds": 204.68602179177105,
+      "failure_count": 0,
+      "finding_count": 4,
+      "fixture_sha256": "a0332b26475cea74b7041cbe343ae654bc616dbb8e19457b0405c366326504ab",
+      "insufficient_evidence_handling": 1.0,
+      "invalid_evidence_count": 0,
+      "invalid_evidence_refs": [],
+      "invalid_observation_count": 0,
+      "manifest_sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87",
+      "missing_claim_ids": [],
+      "model_calls": 4,
+      "per_finding": [
+        {
+          "annotation_supported": true,
+          "claim_id": "caller_key_match",
+          "index": 0,
+          "reasons": []
+        },
+        {
+          "annotation_supported": true,
+          "claim_id": "child_key_match",
+          "index": 1,
+          "reasons": []
+        },
+        {
+          "annotation_supported": true,
+          "claim_id": "retention_requested",
+          "index": 2,
+          "reasons": []
+        },
+        {
+          "annotation_supported": true,
+          "claim_id": "approved_retention",
+          "index": 3,
+          "reasons": []
+        }
+      ],
+      "query_count": 2,
+      "relevant_event_count": 3,
+      "relevant_event_precision": 1.0,
+      "relevant_event_recall": 1.0,
+      "relevant_true_positives": 3,
+      "retrieved_event_count": 3,
+      "run_failed": false,
+      "selected_event_count": 3,
+      "split": "development",
+      "status_accuracy": 1.0,
+      "suite_id": "tracetrail-synthetic-v6",
+      "supported_annotation_rate": 1.0,
+      "tool_errors": 0,
+      "tool_returned_event_count": 3,
+      "unsupported_claim_rate": 0.0,
+      "unsupported_claims": 0
+    },
+    "model": "qwen3.8:27b-q4_K_M",
+    "model_calls": 4,
+    "observation_count": 83,
+    "original_trace_span_counts": {
+      "chain": 44,
+      "llm": 4,
+      "parser": 4,
+      "tool": 2
+    },
+    "part_of_benchmark": false,
+    "path": "local-results/demo-v7.json",
+    "query_count": 2,
+    "sdk_evaluation_replay": false,
+    "sha256": "b2286395b302d83c68373515ee49ff7ca43816e3d0b77af61dceb72ffa10e1fe",
+    "status": "completed",
+    "stop_reason": "model_finish",
+    "strategy": "adaptive"
+  },
+  "transport_verification": {
+    "cloud_inference_used": false,
+    "credentials_created_or_configured": false,
+    "model_downloads": 0,
+    "ollama_listener_observed": "127.0.0.1:11434"
+  }
+}

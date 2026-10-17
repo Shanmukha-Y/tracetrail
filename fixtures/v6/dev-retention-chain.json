@@ -1,0 +1,168 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002001",
+      "eventName": "DescribeLogGroups",
+      "eventSource": "logs.amazonaws.com",
+      "eventTime": "2026-07-01T05:10:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002001",
+      "requestParameters": {
+        "logGroupNamePrefix": "/synthetic/v6/retention-app"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.111",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV6D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/retention-auditor",
+        "principalId": "AIDA99950686FB2AB5B86",
+        "type": "IAMUser",
+        "userName": "retention-auditor"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002002",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-07-01T08:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002002",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/RetentionReview",
+        "roleSessionName": "retention-case-24"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/RetentionReview/retention-case-24",
+          "assumedRoleId": "AROA236400947A51E6A42:retention-case-24"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICV6D0001",
+          "expiration": "2026-07-01T09:00:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.112",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV6D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/retention-auditor",
+        "principalId": "AIDA99950686FB2AB5B86",
+        "type": "IAMUser",
+        "userName": "retention-auditor"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002003",
+      "eventName": "PutRetentionPolicy",
+      "eventSource": "logs.amazonaws.com",
+      "eventTime": "2026-07-01T08:03:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002003",
+      "requestParameters": {
+        "logGroupName": "/synthetic/v6/retention-app",
+        "retentionInDays": 14
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.113",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV6D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/RetentionReview/retention-case-24",
+        "principalId": "AROA236400947A51E6A42:retention-case-24",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-07-01T08:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/RetentionReview",
+            "principalId": "AROA236400947A51E6A42",
+            "type": "Role",
+            "userName": "RetentionReview"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002004",
+      "eventName": "DescribeLogGroups",
+      "eventSource": "logs.amazonaws.com",
+      "eventTime": "2026-07-01T05:09:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002004",
+      "requestParameters": {
+        "logGroupNamePrefix": "/synthetic/v6/unrelated-app"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.111",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV6N0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/separate-log-reader",
+        "principalId": "AIDA2D17D9D2986BBA061",
+        "type": "IAMUser",
+        "userName": "separate-log-reader"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002005",
+      "eventName": "PutRetentionPolicy",
+      "eventSource": "logs.amazonaws.com",
+      "eventTime": "2026-07-01T08:02:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002005",
+      "requestParameters": {
+        "logGroupName": "/synthetic/v6/unrelated-app",
+        "retentionInDays": 7
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.113",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV6N0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/separate-retention-worker",
+        "principalId": "AIDA60794CF5713BA3299",
+        "type": "IAMUser",
+        "userName": "separate-retention-worker"
+      }
+    }
+  ]
+}

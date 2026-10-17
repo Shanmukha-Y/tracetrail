@@ -3,11 +3,30 @@
 import json
 import socket
 from copy import deepcopy
+from hashlib import sha256
 
 import pytest
 
 from tracetrail.coverage import evidence_coverage
-from tracetrail.store import CloudTrailStore
+from tracetrail.store import CloudTrailStore, Query
+
+
+def test_finish_accounting_ids_are_exactly_visible_candidates_and_pending_pages():
+    result = evidence_coverage(
+        [evidence()],
+        [query({"access_key": "SYNTHETIC_CALLER_KEY"}, matched=12, truncated=True, next_offset=10)],
+    )
+    expected = [entry["id"] for entry in result["candidates"] + result["continuations"]]
+    assert result["finish_accounting_ids"] == expected
+    assert len(expected) == len(set(expected))
+    assert result["continuations"]
+    searched = next(c for c in result["candidates"] if c["searched"])
+    assert searched["id"] in result["finish_accounting_ids"]
+    compact = evidence_coverage(
+        [{**evidence(), "ref": "E0"}],
+        [query({"access_key": "SYNTHETIC_CALLER_KEY"}, matched=12, truncated=True, next_offset=10)],
+    )
+    assert compact["finish_accounting_ids"] == expected
 
 
 @pytest.fixture(autouse=True)
@@ -139,14 +158,18 @@ def test_successful_narrowed_query_preserves_all_scope_filters():
     assert item["searched"] is True
     assert item["attempts"] == [
         {
+            "attempt_id": "Q0",
             "tool_index": 0,
             "args": scope,
+            "successful": True,
             "matched": 0,
             "truncated": False,
             "error": None,
             "next_offset": None,
         }
     ]
+    assert item["has_successful_scoped_attempt"] is True
+    assert item["has_successful_unbounded_first_page"] is False
     assert candidate(report, "principal", "synthetic-user")["searched"] is True
     assert candidate(report, "issued_access_key", "SYNTHETIC_CALLER_KEY")["searched"] is False
     assert report["continuations"] == []
@@ -221,7 +244,16 @@ def test_continuation_keeps_actual_query_scope_and_observed_next_offset():
     }
     history = [query(args, matched=12, truncated=True, next_offset=6)]
     report = evidence_coverage([evidence()], history)
-    assert report["continuations"] == [{"tool_index": 0, "query": {**args, "offset": 6}}]
+    continuation = report["continuations"][0]
+    assert continuation == {
+        "id": continuation["id"],
+        "attempt_id": "Q0",
+        "tool_index": 0,
+        "original_args": args,
+        "next_offset": 6,
+        "query": {**args, "offset": 6},
+    }
+    assert continuation["id"].startswith("C")
     item = candidate(report, "principal", "synthetic-user")
     assert item["searched"] is True
     assert item["attempts"][0]["truncated"] is True
@@ -301,5 +333,162 @@ def test_inventory_and_scopes_are_independent_copies():
     found["sources"][0]["citation"] = "changed"
     found["attempts"][0]["args"]["access_key"] = "changed"
     report["continuations"][0]["query"]["access_key"] = "changed"
+    report["continuations"][0]["original_args"]["access_key"] = "changed-origin"
     assert item == original_item
     assert history == original_history
+
+
+def test_catalog_explains_supported_filters_without_changing_stable_pivot_ids():
+    report = evidence_coverage([evidence()], [])
+    kinds = {
+        "access_key": "credential_use",
+        "issued_access_key": "credential_issuance",
+        "principal": "principal_activity",
+        "session_issuer": "role_session_activity",
+        "source_ip": "source_activity",
+    }
+    for item in report["candidates"]:
+        field = next(iter(item["query"]))
+        expected_id = (
+            "P"
+            + sha256(
+                json.dumps(item["query"], sort_keys=True, separators=(",", ":")).encode()
+            ).hexdigest()[:12]
+        )
+        assert item["id"] == expected_id
+        assert item["kind"] == kinds[field]
+        assert item["local_query_supported"] is True
+        assert item["filter_meaning"]
+        assert item["has_successful_scoped_attempt"] is False
+        assert item["has_successful_unbounded_first_page"] is False
+    uses = candidate(report, "access_key", "SYNTHETIC_RETURNED_KEY")
+    assert "userIdentity.accessKeyId" in uses["filter_meaning"]
+    issuer = candidate(report, "issued_access_key", "SYNTHETIC_CALLER_KEY")
+    assert "responseElements.credentials.accessKeyId" in issuer["filter_meaning"]
+
+
+def test_attempt_ids_refer_to_actual_history_indices_including_failures_and_gets():
+    history = [
+        {"name": "get_event", "args": {"identifier": "x"}, "result": evidence()},
+        query({"access_key": "UNRELATED_KEY"}),
+        query({"access_key": "SYNTHETIC_CALLER_KEY"}, error={"code": "failed"}),
+        query({"access_key": "SYNTHETIC_CALLER_KEY", "event_name": "StopLogging"}),
+    ]
+    item = candidate(evidence_coverage([evidence()], history), "access_key", "SYNTHETIC_CALLER_KEY")
+    assert [a["attempt_id"] for a in item["attempts"]] == ["Q2", "Q3"]
+    assert [a["successful"] for a in item["attempts"]] == [False, True]
+    assert item["searched"] is item["has_successful_scoped_attempt"] is True
+    assert item["has_successful_unbounded_first_page"] is False
+
+
+@pytest.mark.parametrize(
+    "scope",
+    [
+        {"start_time": "2026-01-01T10:00:00Z"},
+        {"end_time": "2026-01-01T11:00:00Z"},
+        {"event_name": "GetObject"},
+        {"source_ip": "192.0.2.12"},
+        {"offset": 1},
+    ],
+)
+def test_time_and_additional_filters_or_later_pages_are_not_unbounded_first_page(scope):
+    history = [query({"access_key": "SYNTHETIC_CALLER_KEY", **scope})]
+    item = candidate(evidence_coverage([evidence()], history), "access_key", "SYNTHETIC_CALLER_KEY")
+    assert item["has_successful_scoped_attempt"] is True
+    assert item["has_successful_unbounded_first_page"] is False
+
+
+def test_unbounded_first_page_can_still_be_truncated_and_uses_query_defaults():
+    args = Query(access_key="SYNTHETIC_CALLER_KEY", limit=1).model_dump(mode="json")
+    item = candidate(
+        evidence_coverage([evidence()], [query(args, matched=2, truncated=True, next_offset=1)]),
+        "access_key",
+        "SYNTHETIC_CALLER_KEY",
+    )
+    assert item["has_successful_unbounded_first_page"] is True
+    assert item["attempts"][0]["truncated"] is True
+    assert "complete" not in item and "covered" not in item
+
+
+def test_executed_continuation_is_suppressed_with_null_defaults_and_equivalent_utc_bounds():
+    args = {
+        "access_key": "SYNTHETIC_CALLER_KEY",
+        "start_time": "2026-01-01T12:00:00+02:00",
+        "limit": 2,
+    }
+    first = query(args, matched=6, truncated=True, next_offset=2)
+    following_args = Query(**args, offset=2).model_dump(mode="json")
+    following = query(following_args, matched=6, truncated=True, next_offset=4)
+    report = evidence_coverage([evidence()], [first, following])
+    assert len(report["continuations"]) == 1
+    pending = report["continuations"][0]
+    assert pending["attempt_id"] == "Q1"
+    assert pending["original_args"] == following_args
+    assert pending["query"] == {**following_args, "offset": 4}
+
+
+def test_continuation_ids_are_stable_across_default_null_serialization_and_history_indices():
+    sparse = {"access_key": "SYNTHETIC_CALLER_KEY"}
+    full = Query(**sparse).model_dump(mode="json")
+    first = evidence_coverage(
+        [evidence()], [query(sparse, matched=12, truncated=True, next_offset=10)]
+    )
+    other = evidence_coverage(
+        [evidence()],
+        [
+            {"name": "get_event", "args": {}, "result": {}},
+            query(full, matched=12, truncated=True, next_offset=10),
+        ],
+    )
+    a, b = first["continuations"][0], other["continuations"][0]
+    assert a["id"] == b["id"]
+    assert a["attempt_id"] == "Q0" and b["attempt_id"] == "Q1"
+    assert a["original_args"] == sparse and b["original_args"] == full
+
+
+@pytest.mark.parametrize(
+    "difference",
+    [
+        {"limit": 1},
+        {"event_name": "GetObject"},
+        {"start_time": "2026-01-01T10:00:00Z"},
+        {"end_time": "2026-01-01T11:00:00Z"},
+        {"offset": 3},
+    ],
+)
+def test_other_successful_scopes_do_not_suppress_a_pending_continuation(difference):
+    args = {"access_key": "SYNTHETIC_CALLER_KEY", "limit": 2}
+    history = [
+        query(args, matched=4, truncated=True, next_offset=2),
+        query({**args, "offset": 2, **difference}),
+    ]
+    pending = evidence_coverage([evidence()], history)["continuations"]
+    assert len(pending) == 1
+    assert pending[0]["query"] == {**args, "offset": 2}
+
+
+def test_failed_continuation_remains_pending_and_duplicate_origins_are_deduplicated():
+    args = {"access_key": "SYNTHETIC_CALLER_KEY", "limit": 2}
+    history = [
+        query(args, matched=4, truncated=True, next_offset=2),
+        query(Query(**args).model_dump(mode="json"), matched=4, truncated=True, next_offset=2),
+        query({**args, "offset": 2}, error={"code": "failure"}),
+    ]
+    pending = evidence_coverage([evidence()], history)["continuations"]
+    assert len(pending) == 1
+    assert pending[0]["attempt_id"] == "Q0"
+    assert pending[0]["original_args"] == args
+
+
+@pytest.mark.parametrize("bad_scope", [{"limit": True}, {"offset": None}, {"unknown": "x"}])
+def test_invalid_query_scopes_are_preserved_as_attempts_but_cannot_claim_success(bad_scope):
+    args = {"access_key": "SYNTHETIC_CALLER_KEY", **bad_scope}
+    item = candidate(
+        evidence_coverage([evidence()], [query(args, matched=4, truncated=True, next_offset=2)]),
+        "access_key",
+        "SYNTHETIC_CALLER_KEY",
+    )
+    assert item["attempts"][0]["attempt_id"] == "Q0"
+    assert item["attempts"][0]["args"] == args
+    assert item["attempts"][0]["successful"] is False
+    assert item["has_successful_scoped_attempt"] is item["searched"] is False

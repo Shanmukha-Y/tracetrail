@@ -1,5 +1,139 @@
 # Frozen local evaluation
 
+## October 17 protocol v7 methodology and measured results
+
+The frozen v7 study uses `tracetrail-synthetic-v6`, selected with
+`--manifest evaluation/cases-v6.json`. Its manifest SHA-256 is
+`e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87`.
+The four synthetic cases contain 20 records, 14 relevant records, 16 fixed
+hypotheses, and 43 required observation atoms. Each split has two cases.
+
+| V6 suite case | Split | Evidence question |
+| --- | --- | --- |
+| `dev-retention-chain` | Development | Link earlier caller activity, role issuance, and retention requests across source addresses. Separate requested settings from business approval. |
+| `dev-topic-denial` | Development | Find the issuer of a denied topic request and related activity. Separate the API outcome, later topic state, and intent. |
+| `heldout-directory-path` | Held out | Recover original caller and child-request context for a user-metadata request. Separate the requested path from later user state. |
+| `heldout-trail-operations` | Held out | Link logging activity, credential issuance, original caller history, and a later status request. Separate API requests from logging state and approval. |
+
+The [frozen v7 protocol](protocol-v7.json) has file SHA-256
+`b00bb95ecb13990607c9cc4713c9628bf812cbf738b17537bb9a8acf6cbd8c18`.
+Its prompt SHA-256 is
+`544041d360b9a675be55254c61d2582314d6bbb7f61a521e39c028b0797c302e`.
+Source, schema, prompt, catalog, and manifest hashes were fixed before fresh
+inference. The reporting schema and instructions, exact fact projection,
+historical scorer, and fixed searches retain the v6 contract. Budgets remain
+three queries, at most four model calls, and 3,200 output tokens per call.
+
+V7 adds a model-authored ledger for every hypothesis before each action. A
+decision explicitly includes the required nullable `candidate_id`,
+`continuation_id`, `query`, and `identifier` fields, plus the required
+`dispositions` array. Omitted fields fail validation. Unused branch fields
+must be null, and `query_events` chooses exactly one candidate, continuation,
+or custom query. Code materializes only that choice, without an automatic
+search or replacement filter.
+
+For finish, all four branch fields are null. Every ID in
+`coverage.finish_accounting_ids` must appear exactly once in the model's
+dispositions, including already queried candidates and pending pages. The
+list only enumerates the visible capped catalog; it assigns no decision or
+reason. The model can defer a query and finish with budget left. A tested
+disposition needs an actual successful matching scope, and a pending page
+cannot be called tested. Validation checks references and recorded attempts,
+not whether the rationale or relevance judgment is true. Invalid plans remain
+invalid even if final reporting produces exact facts and raw scorer values.
+
+The final development check used one already exposed case from the v5 suite
+with Qwen adaptive and fixed search. Two earlier candidate batches and their
+failures are preserved separately. Fresh v6-suite development and held-out
+outputs were not used to tune the frozen protocol. The study defines 16 cells:
+adaptive runs for three models plus fixed Qwen search, once on each case.
+All 16 actual runs finished: ten completed structural checks and six were
+invalid. Every run remains in the denominator. Reviewed cases are now exposed
+data for later protocols informed by their outputs.
+
+### Full-suite means and primary field coverage
+
+Each row has four runs. All mean report metrics include invalid processes and
+retain the unchanged historical scorer. They do not certify a valid planning
+process. Primary declared field coverage gives credit only to required paths
+explicitly linked in the corresponding finding of a completed, valid process.
+Invalid processes earn zero credit and keep their required-field denominators.
+
+| Model and method | Valid processes | Mean selected-event precision | Mean selected-event recall | Mean raw strict support | Mean raw status accuracy | Primary declared field coverage |
+| --- | --- | --- | --- | --- | --- | --- |
+| Qwen adaptive | 3/4 | 100.00% | 87.50% | 81.25% | 100.00% | 23/43 |
+| Qwen fixed | 4/4 | 91.67% | 50.00% | 18.75% | 50.00% | 17/43 |
+| Gemma adaptive | 3/4 | 100.00% | 70.83% | 56.25% | 87.50% | 17/43 |
+| Mistral adaptive | 0/4 | 66.67% | 54.17% | 31.25% | 100.00% | 0/43 |
+
+Combined primary coverage was 57/172 unique required combinations of a claim,
+original source record, and exact field path. Duplicate links, global projected
+facts, and rationale text earn no credit. This metric does not test role truth,
+value correctness, relevance, or semantic entailment.
+
+| Model and method | Mean queries | Mean model calls | Mean seconds |
+| --- | --- | --- | --- |
+| Qwen adaptive | 2.00 | 4.00 | 199.29 |
+| Qwen fixed | 3.00 | 1.00 | 49.55 |
+| Gemma adaptive | 1.50 | 3.50 | 200.82 |
+| Mistral adaptive | 2.25 | 4.00 | 148.34 |
+
+### Development and held-out results
+
+Each row below contains two runs and eight fixed findings. Development results
+were not used to change the frozen protocol during the study. The primary
+coverage denominator is 21 required atoms for development and 22 for held-out
+cases, for each model and method.
+
+| Model and method | Split | Valid processes | Mean selected-event precision | Mean selected-event recall | Mean raw strict support | Mean raw status accuracy | Primary declared field coverage |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Qwen adaptive | Development | 2/2 | 100.00% | 100.00% | 100.00% | 100.00% | 18/21 |
+| Qwen adaptive | Held out | 1/2 | 100.00% | 75.00% | 62.50% | 100.00% | 5/22 |
+| Qwen fixed | Development | 2/2 | 83.33% | 50.00% | 12.50% | 50.00% | 8/21 |
+| Qwen fixed | Held out | 2/2 | 100.00% | 50.00% | 25.00% | 50.00% | 9/22 |
+| Gemma adaptive | Development | 1/2 | 100.00% | 66.67% | 50.00% | 87.50% | 7/21 |
+| Gemma adaptive | Held out | 2/2 | 100.00% | 75.00% | 62.50% | 87.50% | 10/22 |
+| Mistral adaptive | Development | 0/2 | 33.33% | 33.33% | 0.00% | 100.00% | 0/21 |
+| Mistral adaptive | Held out | 0/2 | 100.00% | 75.00% | 62.50% | 100.00% | 0/22 |
+
+### Evidence, failures, and limits
+
+Thirty-four of 64 findings failed the raw strict scorer. That scorer uses
+required atoms in the global deterministic projection, not every finding's
+declared links. Raw selected-set precision and recall can describe a retained
+report from an invalid process, rather than every record returned by a tool.
+Raw status accuracy also counts labels in invalid processes. Mistral's 100%
+status accuracy with zero valid processes illustrates why matching labels do
+not establish a working investigation or sound reasoning.
+
+The [Qwen evidence review](../docs/v7-evidence-review.md) compares its eight
+saved cells against exact records. It is an assistant source review, not
+independent human review. It records a key-use pivot falsely called tested by
+an issuance query, voluntary finishes with one query left, missing caller or
+status context, and incomplete declared links despite passing raw support.
+The invalid process and its final report remain preserved; no repair or
+replacement query was used.
+
+Original inference traces contain 50 actual model spans and 35 tool spans.
+The genuine local LangSmith SDK replayed all 16 outputs and produced 352
+numeric feedback items with `upload_results=False` and no new inference.
+The raw comparison SHA-256 is
+`830b9f4cfa63d86a9803585724b1692328329042b5863156babd5125aa3a660e`.
+The SDK artifact SHA-256 is
+`72fe231b57d92d1e67d5b8e6d41bc4ffa188b13e9a7dc6bea6ac44c6c0a85c9c`.
+These counts exclude earlier development candidates and the CLI demonstration.
+
+The fixed control uses only the original seed identity, source address, and
+caller key in a one-hour window on each side of the seed. It is a simple
+baseline. There is one run per cell and only two cases per split. Cases and
+annotations differ from earlier suites; these results establish no cross-suite
+improvement, model winner, or production reliability. See
+[results-v7.json](results-v7.json), [progress](../docs/progress.md), and
+[integration details](../docs/integrations.md) for the recorded experiment and
+its validation boundaries.
+
+## Preserved suites
+
 The CLI default remains `tracetrail-synthetic-v2`, selected by
 `evaluation/cases-v2.json`, so existing commands still work. Its fixtures are in
 `fixtures/v2/`. The v1 suite and its hashes remain available for earlier runs.
@@ -25,7 +159,7 @@ exposed for v5. All v2, v3, and v4 cases are now exposed for protocol v6. Their
 bytes, annotations, split labels, and results remain available for historical
 comparisons.
 
-The current protocol v6 comparison uses `tracetrail-synthetic-v5`, selected with
+The preserved protocol v6 comparison used `tracetrail-synthetic-v5`, selected with
 `--manifest evaluation/cases-v5.json`. Its manifest SHA-256 is
 `66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96`.
 The four cases contain 18 records, 14 relevant records, 16 hypotheses, and 96
@@ -50,14 +184,14 @@ use documentation ranges. The fixtures use the repository's MIT license.
 | `dev-caller-and-child-pivot` | Development | Link the caller and returned temporary key across changed source addresses. Keep approval and trail state uncertain where records do not establish them. |
 | `heldout-issued-key-chain` | Held out | Find the issuer of an observed temporary key and the original caller. Distinguish denied requests from success and test an approved-audit explanation. |
 
-| Current v5 case | Split | Evidence question |
+| Preserved v5 case | Original split, now exposed | Evidence question |
 | --- | --- | --- |
 | `dev-key-lifecycle` | Development | Link role assumption, caller history, and an access-key request. Separate requested status from later key state and distinguish callers at the same source address. |
 | `dev-network-denial` | Development | Investigate a denied security-group request and its credential issuer. Separate the API outcome from later resource state and intent. |
 | `heldout-publication-denial` | Held out | Link an object upload attempt to its temporary credential issuer and original caller. Separate request outcome from approved publication and distinguish same-address callers. |
 | `heldout-encryption-state` | Held out | Investigate a KMS request and its credential chain. Separate the request from later key state and approval; an unlogged read response is not state evidence. |
 
-One development record contains an instruction in a role description. It is
+One preserved development record contains an instruction in a role description. It is
 untrusted log data. It must not control the investigator.
 
 Each manifest defines the questions, fixed hypotheses, relevant event IDs, and
@@ -361,8 +495,8 @@ uv run pytest tests/test_evaluation.py
 Run development investigations with installed local Ollama models:
 
 ```sh
-uv run tracetrail compare --manifest evaluation/cases-v5.json \
-  --split development --output local-results/development-suite-v5.json
+uv run tracetrail compare --manifest evaluation/cases-v6.json \
+  --split development --output local-results/development-suite-v6.json
 ```
 
 The runner records model responses, evidence, tool history, errors, versions,

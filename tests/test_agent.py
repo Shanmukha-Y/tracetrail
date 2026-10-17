@@ -58,6 +58,8 @@ class TestOnlyModel:
                         "parsed": None,
                         "parsing_error": ValueError("Test-only schema failure"),
                     }
+                if callable(response):
+                    response = response(json.loads(messages[-1].content))
                 raw = AIMessage(content=json.dumps(response, sort_keys=True))
                 try:
                     parsed = schema.model_validate(response)
@@ -115,13 +117,44 @@ def evidence_store(tmp_path):
 
 
 def decision(action="finish", *, query=None, identifier=None):
-    return {
-        "action": action,
-        "rationale": "Test-only explanation check",
-        "claim_id": "intent",
-        "query": query,
-        "identifier": identifier,
-    }
+    """Build explicit test-only plans from the visible prompt, without inference."""
+
+    def response(payload):
+        pivots = [item["id"] for item in payload["coverage"]["candidates"]]
+        pivots += [item["id"] for item in payload["coverage"]["continuations"]]
+        return {
+            "ledger": [
+                {
+                    "claim_id": h["claim_id"],
+                    "evidence_refs": [],
+                    "open_question": "External context is unknown in this test.",
+                    "candidate_ids": [],
+                    "attempt_ids": [],
+                }
+                for h in HYPOTHESES
+            ],
+            "action": action,
+            "rationale": "Test-only explanation check",
+            "claim_id": "intent",
+            "candidate_id": None,
+            "continuation_id": None,
+            "query": query,
+            "identifier": identifier,
+            "dispositions": (
+                [
+                    {
+                        "pivot_ids": pivots,
+                        "disposition": "deferred",
+                        "reason": "Test-only deliberate early finish.",
+                        "attempt_ids": [],
+                    }
+                ]
+                if action == "finish" and pivots
+                else []
+            ),
+        }
+
+    return response
 
 
 def selection_for(store, event_ids=("seed",)):
@@ -608,6 +641,8 @@ def test_prompt_contains_returned_evidence_and_no_evaluation_gold(evidence_store
             "tool_history",
             "coverage",
             "remaining_queries",
+            "previous_plan",
+            "stop_reason",
         }
         assert payload["hypotheses"] == HYPOTHESES
         assert [item["event_id"] for item in payload["evidence"]] == ["seed"]
@@ -696,15 +731,15 @@ def test_test_only_failed_tool_is_visible_to_next_plan_and_final_report(evidence
         assert input_payload["seed"] == input_payload["evidence"][0]
 
 
-def test_test_only_missing_tool_arguments_are_recorded_then_reported(evidence_store):
+def test_test_only_missing_tool_arguments_are_invalid_without_tool_execution(evidence_store):
     result, _ = run_test_graph(
         evidence_store,
-        [decision("query_events"), decision(), selection_for(evidence_store)],
+        [decision("query_events"), selection_for(evidence_store)],
     )
-    assert result["status"] == "completed"
-    assert result["tool_history"][0]["result"]["error"]["code"] == "tool_exception"
-    assert {"phase": "tool", "error_type": "ValueError"} in result["failures"]
-    assert result["query_count"] == 1
+    assert result["status"] == "invalid"
+    assert result["tool_history"] == []
+    assert any(f["phase"] == "planning_validation" for f in result["failures"])
+    assert result["query_count"] == 0
 
 
 def test_test_only_timeline_orders_instants_with_timezone_offsets(evidence_store):

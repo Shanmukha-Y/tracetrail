@@ -1,0 +1,536 @@
+{
+  "cases": [
+    {
+      "annotations": [
+        {
+          "claim_id": "caller_key_match",
+          "expected_status": "supported",
+          "reason": "The original caller key appears in both records; another same-IP caller has a different key.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002001",
+            "60000000-0000-4000-8000-000000002002"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002001",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV6D0001"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002002",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV6D0001"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002001",
+              "field": "eventName",
+              "value": "DescribeLogGroups"
+            }
+          ]
+        },
+        {
+          "claim_id": "child_key_match",
+          "expected_status": "supported",
+          "reason": "The returned credential links the issuer to the later retention request despite the changed IP.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002002",
+            "60000000-0000-4000-8000-000000002003"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002002",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV6D0001"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002003",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV6D0001"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002003",
+              "field": "eventName",
+              "value": "PutRetentionPolicy"
+            }
+          ]
+        },
+        {
+          "claim_id": "retention_requested",
+          "expected_status": "supported",
+          "reason": "This is a requested setting, not proof of later log retention or approval.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002003"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002003",
+              "field": "eventName",
+              "value": "PutRetentionPolicy"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002003",
+              "field": "requestParameters.retentionInDays",
+              "value": 14
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_retention",
+          "expected_status": "uncertain",
+          "reason": "The supplied API records contain no business approval evidence.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002002",
+            "60000000-0000-4000-8000-000000002003"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002002",
+              "field": "requestParameters.roleSessionName",
+              "value": "retention-case-24"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002003",
+              "field": "eventName",
+              "value": "PutRetentionPolicy"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v6/dev-retention-chain.json",
+      "fixture_sha256": "a0332b26475cea74b7041cbe343ae654bc616dbb8e19457b0405c366326504ab",
+      "hypotheses": [
+        {
+          "claim_id": "caller_key_match",
+          "statement": "The seed caller key is also present in a DescribeLogGroups event."
+        },
+        {
+          "claim_id": "child_key_match",
+          "statement": "The key returned by the seed was used for PutRetentionPolicy."
+        },
+        {
+          "claim_id": "retention_requested",
+          "statement": "The PutRetentionPolicy request specified 14 retention days."
+        },
+        {
+          "claim_id": "approved_retention",
+          "statement": "This retention change was approved business maintenance."
+        }
+      ],
+      "id": "dev-retention-chain",
+      "notes": "Entirely invented records. Source IP matches do not establish identity; approval and unlogged state need separate evidence.",
+      "question": "Investigate the caller history and returned credentials of this role assumption. Find related retention activity across source addresses, separate the requested setting from approval, and cite the records for each conclusion.",
+      "relevant_event_ids": [
+        "60000000-0000-4000-8000-000000002001",
+        "60000000-0000-4000-8000-000000002002",
+        "60000000-0000-4000-8000-000000002003"
+      ],
+      "seed_event_id": "60000000-0000-4000-8000-000000002002",
+      "split": "development"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "issuer_key_match",
+          "expected_status": "supported",
+          "reason": "The exact returned key links the earlier issuer and the seed.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002101",
+            "60000000-0000-4000-8000-000000002102"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002101",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV6D0002"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002102",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV6D0002"
+            }
+          ]
+        },
+        {
+          "claim_id": "topic_deletion_succeeded",
+          "expected_status": "refuted",
+          "reason": "The explicit authorization error contradicts success of this request.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002102"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002102",
+              "field": "eventName",
+              "value": "DeleteTopic"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002102",
+              "field": "errorCode",
+              "value": "AuthorizationError"
+            }
+          ]
+        },
+        {
+          "claim_id": "later_topic_absence",
+          "expected_status": "uncertain",
+          "reason": "The read-only log has no returned topic attributes; the denied deletion does not prove later state.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002102",
+            "60000000-0000-4000-8000-000000002103"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002102",
+              "field": "requestParameters.topicArn",
+              "value": "arn:aws:sns:us-east-1:000000000000:synthetic-notifications-v6"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002103",
+              "field": "requestParameters.topicArn",
+              "value": "arn:aws:sns:us-east-1:000000000000:synthetic-notifications-v6"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002103",
+              "field": "responseElements",
+              "value": null
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002103",
+              "field": "eventName",
+              "value": "GetTopicAttributes"
+            }
+          ]
+        },
+        {
+          "claim_id": "malicious_intent",
+          "expected_status": "uncertain",
+          "reason": "A session name and an API denial do not establish malicious intent or approval.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002101",
+            "60000000-0000-4000-8000-000000002102"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002101",
+              "field": "requestParameters.roleSessionName",
+              "value": "notice-review-12"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002102",
+              "field": "errorCode",
+              "value": "AuthorizationError"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002102",
+              "field": "eventName",
+              "value": "DeleteTopic"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v6/dev-topic-denial.json",
+      "fixture_sha256": "66d6f9010265009a30b9cf1c21cdb9f7e8a3b394909e8148f70a50fb1b20de08",
+      "hypotheses": [
+        {
+          "claim_id": "issuer_key_match",
+          "statement": "The seed access key matches the key returned by the issuer event."
+        },
+        {
+          "claim_id": "topic_deletion_succeeded",
+          "statement": "The seed DeleteTopic request succeeded."
+        },
+        {
+          "claim_id": "later_topic_absence",
+          "statement": "The topic was absent when GetTopicAttributes was requested."
+        },
+        {
+          "claim_id": "malicious_intent",
+          "statement": "The seed DeleteTopic request was malicious."
+        }
+      ],
+      "id": "dev-topic-denial",
+      "notes": "Entirely invented records. Source IP matches do not establish identity; approval and unlogged state need separate evidence.",
+      "question": "Investigate this denied topic request. Find its credential issuer and related activity even where source addresses differ. Distinguish the recorded API outcome, later topic state, and the actor's intent.",
+      "relevant_event_ids": [
+        "60000000-0000-4000-8000-000000002101",
+        "60000000-0000-4000-8000-000000002102",
+        "60000000-0000-4000-8000-000000002103"
+      ],
+      "seed_event_id": "60000000-0000-4000-8000-000000002102",
+      "split": "development"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "caller_key_match",
+          "expected_status": "supported",
+          "reason": "The same original key links the caller history to the issuer.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002201",
+            "60000000-0000-4000-8000-000000002202"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002201",
+              "field": "eventName",
+              "value": "ListUsers"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002201",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV6H0001"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002202",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV6H0001"
+            }
+          ]
+        },
+        {
+          "claim_id": "issuer_key_match",
+          "expected_status": "supported",
+          "reason": "The returned signer key, not the shared API or source address, identifies the child request.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002202",
+            "60000000-0000-4000-8000-000000002203"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002202",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV6H0001"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002203",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV6H0001"
+            }
+          ]
+        },
+        {
+          "claim_id": "legacy_path_requested",
+          "expected_status": "refuted",
+          "reason": "The explicit requested path contradicts /legacy/; this says nothing about later user state.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002203"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002203",
+              "field": "eventName",
+              "value": "UpdateUser"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002203",
+              "field": "requestParameters.newPath",
+              "value": "/reviewed/"
+            }
+          ]
+        },
+        {
+          "claim_id": "later_user_path",
+          "expected_status": "uncertain",
+          "reason": "GetUser has no logged response state, so the later path is not established.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002203",
+            "60000000-0000-4000-8000-000000002204"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002203",
+              "field": "requestParameters.userName",
+              "value": "synthetic-metrics-reader"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002204",
+              "field": "requestParameters.userName",
+              "value": "synthetic-metrics-reader"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002204",
+              "field": "responseElements",
+              "value": null
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002204",
+              "field": "eventName",
+              "value": "GetUser"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v6/heldout-directory-path.json",
+      "fixture_sha256": "b417cf717271d3302dfdc0dd10a335a267aaae74d0474fc9296a14472ebcfaa3",
+      "hypotheses": [
+        {
+          "claim_id": "caller_key_match",
+          "statement": "A ListUsers event and the issuer event use the same original caller key."
+        },
+        {
+          "claim_id": "issuer_key_match",
+          "statement": "The seed request used the access key returned by the issuer event."
+        },
+        {
+          "claim_id": "legacy_path_requested",
+          "statement": "The UpdateUser request asked for the path /legacy/."
+        },
+        {
+          "claim_id": "later_user_path",
+          "statement": "The user was in path /reviewed/ when GetUser was requested."
+        }
+      ],
+      "id": "heldout-directory-path",
+      "notes": "Entirely invented records. Source IP matches do not establish identity; approval and unlogged state need separate evidence.",
+      "question": "Investigate this user-metadata request and its credential chain. Recover original caller context and related child requests across source addresses. Separate the requested path from later user state, and use each claim's own evidence.",
+      "relevant_event_ids": [
+        "60000000-0000-4000-8000-000000002201",
+        "60000000-0000-4000-8000-000000002202",
+        "60000000-0000-4000-8000-000000002203",
+        "60000000-0000-4000-8000-000000002204"
+      ],
+      "seed_event_id": "60000000-0000-4000-8000-000000002203",
+      "split": "heldout"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "caller_key_match",
+          "expected_status": "supported",
+          "reason": "The original key connects the earlier trail read and the issuer despite their different source IPs.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002301",
+            "60000000-0000-4000-8000-000000002302"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002301",
+              "field": "eventName",
+              "value": "GetTrail"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002301",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV6H0002"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002302",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV6H0002"
+            }
+          ]
+        },
+        {
+          "claim_id": "issuer_key_match",
+          "expected_status": "supported",
+          "reason": "The issuer returned the exact signer key used by the seed.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002302",
+            "60000000-0000-4000-8000-000000002303"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002302",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV6H0002"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002303",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV6H0002"
+            }
+          ]
+        },
+        {
+          "claim_id": "later_logging_state",
+          "expected_status": "uncertain",
+          "reason": "The read-only status log does not include isLogging; the request is not state proof.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002303",
+            "60000000-0000-4000-8000-000000002304"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002303",
+              "field": "requestParameters.name",
+              "value": "arn:aws:cloudtrail:us-east-1:000000000000:trail/synthetic-operations-v6"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002304",
+              "field": "requestParameters.name",
+              "value": "arn:aws:cloudtrail:us-east-1:000000000000:trail/synthetic-operations-v6"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002304",
+              "field": "responseElements",
+              "value": null
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002304",
+              "field": "eventName",
+              "value": "GetTrailStatus"
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_operations",
+          "expected_status": "uncertain",
+          "reason": "A role session name and a logging request do not establish business approval.",
+          "required_event_ids": [
+            "60000000-0000-4000-8000-000000002302",
+            "60000000-0000-4000-8000-000000002303"
+          ],
+          "required_observations": [
+            {
+              "event_id": "60000000-0000-4000-8000-000000002302",
+              "field": "requestParameters.roleSessionName",
+              "value": "operations-case-31"
+            },
+            {
+              "event_id": "60000000-0000-4000-8000-000000002303",
+              "field": "eventName",
+              "value": "StartLogging"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v6/heldout-trail-operations.json",
+      "fixture_sha256": "5242a2c47e604d612f04b4e4bcd9d232c6ed0655dd061695e56b218bbe5174fa",
+      "hypotheses": [
+        {
+          "claim_id": "caller_key_match",
+          "statement": "A GetTrail event and the issuer event use the same original caller key."
+        },
+        {
+          "claim_id": "issuer_key_match",
+          "statement": "The seed request used the access key returned by the issuer event."
+        },
+        {
+          "claim_id": "later_logging_state",
+          "statement": "The trail was logging when GetTrailStatus was requested."
+        },
+        {
+          "claim_id": "approved_operations",
+          "statement": "The StartLogging request was approved operations work."
+        }
+      ],
+      "id": "heldout-trail-operations",
+      "notes": "Entirely invented records. Source IP matches do not establish identity; approval and unlogged state need separate evidence.",
+      "question": "Investigate this logging request. Follow the credential issuer, original caller, and related status request across source addresses and time. Separate API activity from later logging state and business approval.",
+      "relevant_event_ids": [
+        "60000000-0000-4000-8000-000000002301",
+        "60000000-0000-4000-8000-000000002302",
+        "60000000-0000-4000-8000-000000002303",
+        "60000000-0000-4000-8000-000000002304"
+      ],
+      "seed_event_id": "60000000-0000-4000-8000-000000002303",
+      "split": "heldout"
+    }
+  ],
+  "data_origin": "Entirely invented fresh CloudTrail records; no actual account, incident, person, private log, or public sample is represented.",
+  "design_notes": "Four compact cases for missing caller and child-key context, changed source addresses, overly restrictive AND filters, direct API contradictions, and unknown state or business approval. Only questions, hypotheses, and retrieved source records belong in model input.",
+  "fixture_license": "MIT (same as repository)",
+  "freeze_policy": "Review and freeze manifest and fixture hashes before fresh inference. Preserve all older suites and results without edits. Never tune this suite against model outputs.",
+  "schema_version": "1",
+  "suite_id": "tracetrail-synthetic-v6"
+}

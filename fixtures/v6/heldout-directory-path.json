@@ -1,0 +1,177 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002201",
+      "eventName": "ListUsers",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-08-05T06:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002201",
+      "requestParameters": null,
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.131",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV6H0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/directory-checker",
+        "principalId": "AIDADE2B29630AF4E5D1E",
+        "type": "IAMUser",
+        "userName": "directory-checker"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002202",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-08-05T08:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002202",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/DirectoryMetadata",
+        "roleSessionName": "directory-task-58"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/DirectoryMetadata/directory-task-58",
+          "assumedRoleId": "AROA759E19A54C952E9E0:directory-task-58"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICV6H0001",
+          "expiration": "2026-08-05T09:00:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.132",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV6H0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/directory-checker",
+        "principalId": "AIDADE2B29630AF4E5D1E",
+        "type": "IAMUser",
+        "userName": "directory-checker"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002203",
+      "eventName": "UpdateUser",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-08-05T08:03:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002203",
+      "requestParameters": {
+        "newPath": "/reviewed/",
+        "userName": "synthetic-metrics-reader"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.133",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV6H0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/DirectoryMetadata/directory-task-58",
+        "principalId": "AROA759E19A54C952E9E0:directory-task-58",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-08-05T08:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/DirectoryMetadata",
+            "principalId": "AROA759E19A54C952E9E0",
+            "type": "Role",
+            "userName": "DirectoryMetadata"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002204",
+      "eventName": "GetUser",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-08-05T08:05:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002204",
+      "requestParameters": {
+        "userName": "synthetic-metrics-reader"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.134",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV6H0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/DirectoryMetadata/directory-task-58",
+        "principalId": "AROA759E19A54C952E9E0:directory-task-58",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-08-05T08:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/DirectoryMetadata",
+            "principalId": "AROA759E19A54C952E9E0",
+            "type": "Role",
+            "userName": "DirectoryMetadata"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "60000000-0000-4000-8000-000000002205",
+      "eventName": "GetUser",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-08-05T08:04:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "96000000-0000-4000-8000-000000002205",
+      "requestParameters": {
+        "userName": "synthetic-metrics-reader"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.134",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v6-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV6N0005",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/directory-reader-other",
+        "principalId": "AIDACF22E28D2139BD645",
+        "type": "IAMUser",
+        "userName": "directory-reader-other"
+      }
+    }
+  ]
+}

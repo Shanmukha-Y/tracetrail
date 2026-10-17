@@ -1,0 +1,146 @@
+{
+  "base_commit": "b6e42e0f6572ae37640907315a09f3325222d62b",
+  "earlier_candidates": [
+    {
+      "artifacts": {
+        "audit": {
+          "path": "local-results/development-v7-suite-v5.audit-summary.json",
+          "sha256": "f2be2d00e724f3266ddae3c5445c156d6fe3ce7c3286136e3683e1f91cc377d5"
+        },
+        "protocol": {
+          "path": "local-results/protocol-v7-development.json",
+          "sha256": "a95521adf848ae163d6df310260f7181ba316caeec664b32362cb63b00124ac8"
+        },
+        "raw_results": {
+          "path": "local-results/development-v7-suite-v5.json",
+          "sha256": "57031546688f19dd37a56822b5cad3bc3da3f03f8ef4a94f425ad49996a68db7"
+        },
+        "sdk_evaluation": {
+          "path": "local-results/development-v7-suite-v5.langsmith-local.json",
+          "sha256": "31603ffa547220e5cd0e07be85a282cea5dda0b11c23f36bc867c7c43eaa1a51"
+        }
+      },
+      "candidate": "optional-branch-fields",
+      "runs": 2
+    },
+    {
+      "artifacts": {
+        "audit": {
+          "path": "local-results/development-v7-corrected-suite-v5.audit-summary.json",
+          "sha256": "310db85cc53dc9df0a87821b65024858a5a00120d56d3a009fc2266462a5ca65"
+        },
+        "protocol": {
+          "path": "local-results/protocol-v7-corrected-development.json",
+          "sha256": "7ff4c0f7a58543990cd81ce8709a78f87eb618629091aea8bafc4d9ed33def55"
+        },
+        "raw_results": {
+          "path": "local-results/development-v7-corrected-suite-v5.json",
+          "sha256": "158d9cc63d2ede65dbe8c38b7f55ad16ae8752ea45ac44914435d88e67172aeb"
+        },
+        "sdk_evaluation": {
+          "path": "local-results/development-v7-corrected-suite-v5.langsmith-local.json",
+          "sha256": "ca6e36196b8c5180374a644f06f7ef73c5378d98761a1bdc299629340b3b7f51"
+        }
+      },
+      "candidate": "required-nullable-branches",
+      "runs": 2
+    }
+  ],
+  "expected_development_runs": 2,
+  "expected_exposed_runs_total": 6,
+  "expected_fresh_runs": 16,
+  "exposed_development_manifest": {
+    "path": "evaluation/cases-v5.json",
+    "sha256": "66f704a593c5d152d82f683cded4b1fa8014f58fe05f337d0bdaef615cde3e96"
+  },
+  "final_development_protocol": {
+    "path": "local-results/protocol-v7-final-development.json",
+    "raw_results_path": "local-results/development-v7-final-suite-v5.json",
+    "sha256": "8b55688206bbeefd7e19464de55d0a7d484282c5d83ce70a918531212fe3f374"
+  },
+  "fresh_manifest": {
+    "development_cases": 2,
+    "heldout_cases": 2,
+    "hypotheses": 16,
+    "path": "evaluation/cases-v6.json",
+    "records": 20,
+    "relevant_records": 14,
+    "required_observation_atoms": 43,
+    "sha256": "e49257ef91352b7e1686bebc79bd04f61078e0da8be39651c1495aeadf702b87"
+  },
+  "frozen_at": "2026-10-17T14:11:13.966099+00:00",
+  "hosted_uploads": false,
+  "limitations": [
+    "Four independent fresh synthetic cases only; one repeat per cell.",
+    "Earlier suites and development outputs are exposed.",
+    "Planning schema, instructions, catalog and validation change together; no isolated attribution.",
+    "Structure, field-path coverage and exact values do not prove semantic correctness."
+  ],
+  "models": [
+    "qwen3.8:27b-q4_K_M",
+    "gemma4:31b-it-q4_K_M",
+    "mistral-small3.2:24b"
+  ],
+  "phase": "final",
+  "planning": {
+    "early_finish": "all visible candidate/continuation IDs dispositioned; grouping allowed; no minimum query count",
+    "failure_policy": "preserve raw decision, mark invalid process, no retry or replacement query; report still attempted within existing bound",
+    "finish_accounting_ids": "exact visible capped candidate and pending continuation IDs; includes queried candidates; no assigned decisions",
+    "ledger": "one model-authored entry per supplied claim before action",
+    "query_choice": "explicit candidate ID, pending continuation ID, or custom Query; no automatic search",
+    "semantic_limits": "relevance, ledger gaps, disposition reasons, report statuses, approval and intent are not verified",
+    "stop_reason": "objective graph budget exhaustion is separate from model finish",
+    "validation": "branch exclusivity, known references, exact filter materialization and actual query attempt scope only",
+    "wire_fields": "candidate_id, continuation_id, query, identifier are required nullable fields; dispositions is a required array"
+  },
+  "prompt_sha256": "544041d360b9a675be55254c61d2582314d6bbb7f61a521e39c028b0797c302e",
+  "protocol": {
+    "chronology": "utc-order-and-signed-seconds-from-seed",
+    "citation_encoding": "local-alias-to-file-hash-index",
+    "finding_support": "model-authored-field-links-v1",
+    "max_projected_bytes": 1000000,
+    "max_projected_observations": 2000,
+    "max_prompt_payload_bytes": 48000,
+    "max_queries": 3,
+    "model_timeout_seconds": 150,
+    "num_ctx": 16384,
+    "num_predict": 3200,
+    "observation_source": "selected-record-projection-v1",
+    "planning": "claim-ledger-and-explicit-pivot-choice-v1",
+    "query_limit": 20,
+    "run_deadline_seconds": 600,
+    "seed": 42,
+    "structured_method": "json_schema",
+    "temperature": 0,
+    "thinking": false,
+    "version": "tracetrail-v7"
+  },
+  "reference_model": "qwen3.8:27b-q4_K_M",
+  "repeats_per_cell": 1,
+  "report_instruction_sha256": "75280b43030e851dbc7407c08c712b7fc072242ac6cf821f7182543999660028",
+  "schema_sha256": {
+    "claim_plan": "02f6febc6b962fcf3c0aeda196227aa9ee641c80e837b413a5e1395a580b38dd",
+    "decision": "06c7453fdf366e5664ef07eb0f89eeb05610287085adf592277bde5021e20ddf",
+    "evidence_link": "b4cdf4f393c532ebee652dd46e0400e4d13a4b4e4a1bd225a8aa169d1b3848a9",
+    "materialized_analysis": "496dfde561e3cd91cb9cabfdaeb5b8b8477ef96004833684bc8e242280d94914",
+    "model_finding": "16eee8a59d424e7afdfc2efabe6ea153ec40cf9369266ba0a833efe04dfc66aa",
+    "model_report_selection": "53b27ddfb3b20c52bd882e0ad4febd283075e692327b5d33696e1d8a4c3b54e3",
+    "pivot_disposition": "91f5db5e788b80a0b5c7d2cefc7823e16377ce8638c7398fdc63363e7725ed41",
+    "query": "11cec0cf3fed8037b0ab09a36a43212a58b07f57f77f3521e50d5bdba35772ad"
+  },
+  "scorer_changed": false,
+  "source_sha256": {
+    "src/tracetrail/__init__.py": "3453b39ea3b1b7b85a24e0b95fd2a27a1b98222d2bad0765a31bfd17512e69fc",
+    "src/tracetrail/agent.py": "08b58014b66089c5aa8132ef99797f3e4996f4a3e75c6e1ee22c18d74e967037",
+    "src/tracetrail/claims.py": "cb75c7c7c34c8cff70fd7c11ce49808d386d52deaf2fc9fca4c3701d5327bf26",
+    "src/tracetrail/cli.py": "3cea2482f1a7a082a114302a67b70a7a16bbf8ce4e61e98a2e5c0baf293a95ce",
+    "src/tracetrail/coverage.py": "4690845f8fc685a54011d6f7c64cd1c0b4e45aa6b44b36a47ad7327e15688b6e",
+    "src/tracetrail/evaluation.py": "e755383bc49e87edfceede571cf886382aec7ec3a2465637711dd8e9ba4bcce1",
+    "src/tracetrail/facts.py": "739e665de4754be64bef8e9370de37f71b69b05fa9344f59cc0ee402a8e0c355",
+    "src/tracetrail/local_model.py": "a2a24421f791a99532e4d9df64cdc3144430aa65d058b9b1ac32942f14d28abd",
+    "src/tracetrail/planning.py": "5d8493315d117382afb84298a03419a05020f47d4dc5bb78b77201e1087a62fe",
+    "src/tracetrail/store.py": "cd0a17f28dc80a2c301ad63d37f31dda02075140a542cd4b40ff110cfe514a02",
+    "src/tracetrail/telemetry.py": "3d640f543cd2d1b156772d87425b4ab0b2b453279d8a71fafc738010d94d2eef"
+  },
+  "unchanged_reporting": "v6 report selection, field links, exact projection, fixed queries, historical scorer and budget values"
+}
