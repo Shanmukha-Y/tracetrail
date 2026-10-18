@@ -640,6 +640,7 @@ def test_prompt_contains_returned_evidence_and_no_evaluation_gold(evidence_store
             "chronology",
             "tool_history",
             "coverage",
+            "credential_map",
             "remaining_queries",
             "previous_plan",
             "stop_reason",

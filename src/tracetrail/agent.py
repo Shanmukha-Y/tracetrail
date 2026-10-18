@@ -19,6 +19,7 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from tracetrail.claims import finding_citations, validate_finding_links
 from tracetrail.coverage import evidence_coverage
+from tracetrail.credential_map import credential_map
 from tracetrail.facts import chronological_context, project_observations
 from tracetrail.local_model import verify_local_weights
 from tracetrail.planning import Decision, materialize_query, validate_decision
@@ -29,7 +30,7 @@ REFERENCE_MODEL = "qwen3.8:27b-q4_K_M"
 MODELS = (REFERENCE_MODEL, "gemma4:31b-it-q4_K_M", "mistral-small3.2:24b")
 OLLAMA_URL = "http://127.0.0.1:11434"
 PROTOCOL = {
-    "version": "tracetrail-v7",
+    "version": "tracetrail-v8",
     "temperature": 0,
     "seed": 42,
     "num_ctx": 16384,
@@ -48,6 +49,7 @@ PROTOCOL = {
     "chronology": "utc-order-and-signed-seconds-from-seed",
     "finding_support": "model-authored-field-links-v1",
     "planning": "claim-ledger-and-explicit-pivot-choice-v1",
+    "credential_context": "returned-record-credential-map-v1",
 }
 
 SYSTEM = """You investigate local CloudTrail records with read-only evidence tools.
@@ -73,6 +75,14 @@ The coverage inventory contains observed-only candidate filters, their source pa
 meanings, and actual attempted query scopes. local_query_supported means this filter is available;
 it does not promise matching records. searched means an attempt succeeded under its recorded
 AND filters, time bounds and pagination, not that this candidate or a chain was fully investigated.
+The credential_map groups exact fields from returned records. Signer occurrences show keys
+in userIdentity.accessKeyId; returned occurrences show responseElements.credentials.accessKeyId.
+Searching records returning a key and searching records signed with it are different scopes.
+For each open question, consider which available lookup could observe the missing relation.
+Choose the most useful test or explain deliberate deferral. One query need not cover every
+candidate. An unqueried supported lookup is available, but matching records are not guaranteed.
+Empty occurrence lists mean none among returned records. This map does not establish causality,
+human identity, approval or intent, and cannot create absent response fields.
 Choose the query that best tests a supplied explanation. For query_events set exactly one of:
 candidate_id (executes its exact filter with limit=20), continuation_id (executes that pending
 page with the same scope), or query (a custom Query). Set other branch arguments to null.
@@ -377,15 +387,16 @@ def investigate(
                 previous_plan["identifier"] = aliases.get(
                     previous_plan["identifier"], previous_plan["identifier"]
                 )
+        compact_evidence = [compact(item) for item in state["evidence"]]
+        coverage = evidence_coverage(compact_evidence, history_summary)
         payload = {
             **context,
             "seed": compact(seed),
             "evidence": [compact(by_ref[row["citation"]]) for row in chronology],
             "chronology": [{**row, "citation": aliases[row["citation"]]} for row in chronology],
             "tool_history": history_summary,
-            "coverage": evidence_coverage(
-                [compact(item) for item in state["evidence"]], history_summary
-            ),
+            "coverage": coverage,
+            "credential_map": credential_map(compact_evidence, coverage),
             "remaining_queries": PROTOCOL["max_queries"] - state["query_count"],
             "previous_plan": previous_plan,
             "stop_reason": state["stop_reason"],
@@ -635,6 +646,14 @@ def investigate(
         "coverage": evidence_coverage(state["evidence"], state["tool_history"]),
         "decision_history": state["decision_history"],
         "stop_reason": state["stop_reason"],
+        "termination": {
+            "stop_reason": state["stop_reason"],
+            "queries_used": state["query_count"],
+            "query_limit": PROTOCOL["max_queries"],
+            "queries_remaining": PROTOCOL["max_queries"] - state["query_count"],
+            "source": "graph-counters",
+            "model_reasons_semantically_verified": False,
+        },
         "validation_scope": {
             "citations_and_observation_values": "exact-record-validation",
             "finding_field_links": "exact-record-reference-only",

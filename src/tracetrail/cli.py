@@ -22,6 +22,14 @@ from tracetrail.agent import MODELS, OLLAMA_URL, PROTOCOL, investigate
 from tracetrail.evaluation import load_cases, score_run
 from tracetrail.local_model import verify_local_weights
 from tracetrail.store import CloudTrailStore, Query
+from tracetrail.support_evaluation import SCORER_ID, score_claim_support
+
+
+def score_result(case: dict, result: dict) -> None:
+    """Keep the historical metric contract and label the new primary scorer."""
+    result["metrics"] = score_run(case, result)
+    result["claim_support_metrics"] = score_claim_support(case, result)
+    result["evaluation"] = {"primary_scorer": SCORER_ID}
 
 
 def write_json(path: Path, data: dict) -> None:
@@ -107,7 +115,7 @@ def run_case(case: dict, root: Path, model: str, strategy: str) -> dict:
     if info.get("cleanup_error"):
         result["failures"].append({"phase": "unload", **info["cleanup_error"]})
         result["status"] = "degraded"
-    result["metrics"] = score_run(case, result)
+    score_result(case, result)
     return result
 
 
@@ -129,6 +137,7 @@ def compare(args: argparse.Namespace) -> int:
         "created_at": datetime.now(UTC).isoformat(),
         "case_manifest_sha256": hashlib.sha256(manifest.read_bytes()).hexdigest(),
         "protocol": PROTOCOL,
+        "evaluation": {"primary_scorer": SCORER_ID},
         "selected_cases": [case["id"] for case in cases],
         "host": {"system": platform.system(), "machine": platform.machine()},
         "versions": {
@@ -160,8 +169,8 @@ def compare(args: argparse.Namespace) -> int:
                         "error": str(exc),
                         "test_only": False,
                     }
-                if "metrics" not in result:
-                    result["metrics"] = score_run(case, result)
+                if "claim_support_metrics" not in result:
+                    score_result(case, result)
                 data["runs"].append(result)
                 write_json(args.output, data)
                 print(f"Saved status={result['status']}", file=sys.stderr, flush=True)
@@ -207,6 +216,7 @@ def parser() -> argparse.ArgumentParser:
     offline = commands.add_parser("local-evaluate")
     offline.add_argument("results", type=Path)
     offline.add_argument("--root", type=Path, default=Path("."))
+    offline.add_argument("--scorer", help="Must match the scorer recorded in the results")
     return p
 
 
@@ -234,7 +244,9 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "local-evaluate":
             from tracetrail.telemetry import evaluate_local
 
-            output = evaluate_local(args.results, args.root)
+            output = evaluate_local(
+                args.results, args.root, **({"scorer": args.scorer} if args.scorer else {})
+            )
             print(json.dumps(output, indent=2, default=str))
             return int(output["status"] != "completed")
         else:

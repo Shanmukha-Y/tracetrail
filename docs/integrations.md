@@ -29,6 +29,8 @@ newest available releases:
 
 The tested runtime uses Python 3.11. Compatible metadata does not prove model
 quality. The stored inference results and tests provide separate evidence.
+Installed versions and the pinned LangSmith evaluation signature and source
+were checked again on 2026-10-18. No package was changed.
 
 ## LangChain and Ollama
 
@@ -261,13 +263,33 @@ necessary. The evaluator-tracing option was introduced in the official
 [0.13.0 release](https://github.com/langchain-ai/langsmith-sdk/releases/tag/v0.13.0).
 
 The target replays stored inference outputs. It does not make new model calls.
-The evaluator recomputes the annotation metrics against the frozen local
-fixture records. It checks evidence support, required field observations, and
-expected claim status. It does not accept a citation merely because the
-citation exists. The case manifest and fixture hashes must match the stored
-run. The output file ends in `.langsmith-local.json` and contains real SDK
-evaluation traces and feedback. Its replay timestamps describe evaluation,
-while the original model execution timestamps remain in the stored result.
+The evaluator recomputes metrics against the frozen local fixture records.
+The case manifest and fixture hashes must match the stored run. SDK target
+traces and feedback stay in a separate artifact. Replay timestamps describe
+evaluation; original execution timestamps remain in the stored result.
+
+New comparisons record `evaluation.primary_scorer="claim-support-v1"` in the
+batch and every run. Historical `metrics` remain under their original
+contract; new scores use the separate `claim_support_metrics` field. The new
+scorer checks each finding's own declared field links against exact source
+values and presence. It does not borrow global projected observations.
+Raw report credit and credit gated by process validity remain separate.
+Neither score establishes semantic entailment.
+
+Offline evaluation reads the recorded scorer ID. Unknown IDs, mixed or
+missing run IDs, and conflicting batch IDs are rejected before the SDK runs.
+An optional `local-evaluate --scorer` must match the recorded ID; it cannot
+apply a new scorer to old outputs. Batches without scorer IDs remain
+`legacy-v1`, with their original unprefixed feedback, artifact envelope, and
+`.langsmith-local.json` suffix.
+
+The new scorer uses an explicit numeric allowlist and prefixes SDK feedback
+keys with `claim_support_v1__`. Its artifact ends in
+`.claim-support-v1.langsmith-local.json`. The artifact's `evaluation` metadata
+records the primary scorer, `scorer_id`, scorer `source_sha256`,
+`stored_output_replay=true`, and `post_hoc=false`. Replays do not rewrite the
+source result or overwrite an existing artifact. An output path that resolves
+to the source is rejected as well.
 
 Evaluation selects the `case_manifest_path` recorded in the result batch. The
 path must be relative to the repository root and stay under `evaluation/`.

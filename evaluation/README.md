@@ -1,5 +1,80 @@
 # Frozen local evaluation
 
+## October 18 protocol v8 and finding-level support
+
+The v7 suite has four independently authored synthetic cases, two per split,
+with 20 records, 15 relevant records, 16 fixed hypotheses and 51 exact typed
+required atoms. It was frozen before v8 inference. Earlier suites, including
+the exposed v6 development case, retain their original bytes and labels.
+
+The [v8 protocol](protocol-v8.json) freezes 13 source files, eight schemas,
+the prompt, models, budgets, scorer source and manifest. SHA-256:
+`e025493b6f2309d86c9339b4217a7bf1aedbbd51aa209d837d1e75e8f4cefcca`. Manifest SHA-256:
+`56c128e29c8e3588f9cd4fbac83759538db9e20143df91a54e2fb425456fc75a`. V8 adds a returned-record credential map
+and a short planning instruction. No query is forced or selected by code.
+Report instructions, schemas, projection, tools, fixed searches and budgets
+retain their earlier contracts. All methods share the added context.
+
+The separate [measurement contract](../docs/measurement.md) requires each
+finding's own exact links. It never credits a required atom from global
+observations, another finding, rationale or bare citations. Source identity,
+selection, actual return, typed value and presence must match. Raw contract
+support and process-valid primary credit remain separate; invalid processes
+retain every expected claim and atom and earn zero primary credit. The old
+global-projection metrics remain in `metrics`; the new values use
+`claim_support_metrics`. SDK dispatch is explicit, versioned and namespaced.
+Complete annotation contracts do not prove semantic entailment. Selected-event precision and recall are raw means that include invalid processes. Primary claim and atom credit is process-gated.
+
+| Model and method | Valid processes | Mean raw selected-event precision / recall | Complete primary claim contracts | Primary required atoms | Mean queries | Mean seconds |
+| --- | --- | --- | --- | --- | --- | --- |
+| Qwen adaptive | 3/4 | 100.00% / 81.25% | 3/16 | 24/51 | 2.00 | 214.93 |
+| Qwen fixed | 4/4 | 100.00% / 45.83% | 2/16 | 23/51 | 3.00 | 62.73 |
+| Gemma adaptive | 2/4 | 100.00% / 93.75% | 1/16 | 17/51 | 2.50 | 267.29 |
+| Mistral adaptive | 1/4 | 75.00% / 50.00% | 0/16 | 5/51 | 2.00 | 133.29 |
+
+| Model and method | Split | Valid processes | Mean raw selected-event precision / recall | Complete primary claim contracts | Primary required atoms | Mean queries | Mean seconds |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Qwen adaptive | development | 2/2 | 100.00% / 87.50% | 1/8 | 16/26 | 2.00 | 216.01 |
+| Qwen adaptive | heldout | 1/2 | 100.00% / 75.00% | 2/8 | 8/25 | 2.00 | 213.84 |
+| Qwen fixed | development | 2/2 | 100.00% / 41.67% | 1/8 | 11/26 | 3.00 | 64.96 |
+| Qwen fixed | heldout | 2/2 | 100.00% / 50.00% | 1/8 | 12/25 | 3.00 | 60.49 |
+| Gemma adaptive | development | 1/2 | 100.00% / 100.00% | 0/8 | 9/26 | 2.50 | 278.98 |
+| Gemma adaptive | heldout | 1/2 | 100.00% / 87.50% | 1/8 | 8/25 | 2.50 | 255.59 |
+| Mistral adaptive | development | 1/2 | 100.00% / 75.00% | 0/8 | 5/26 | 2.00 | 144.35 |
+| Mistral adaptive | heldout | 0/2 | 50.00% / 25.00% | 0/8 | 0/25 | 2.00 | 122.23 |
+
+These are 10 completed and 6 invalid processes from 16 actual
+local runs, one repeat per cell. Every failure is retained. Primary required
+atom coverage totals 69/204. Query and latency means include
+invalid runs. The [numeric results](results-v8.json) preserve separate legacy
+and new metrics, per-cell and split rows, effective weights and artifact hashes.
+The [assistant evidence review](../docs/v8-evidence-review.md) separates actual
+semantic errors, missing retrieval, incomplete links and correct uncertainty.
+It is not independent human review. There is no cross-suite, cross-scorer,
+model-winner or production-reliability claim.
+
+All 16 fresh saved outputs received genuine offline SDK evaluation with 336
+prefixed feedback items, no uploads and no new replay inference. Independent
+verification re-derived all 21 new counters without calling the scorer, and
+checked exact raw/SDK trace identity, prompts, schemas, tool scopes, source
+records, maps, projections and budgets. The exposed two-run development check
+received 42 separate SDK feedback items before the final malformed-metadata
+guard. Its archived source and original raw/SDK artifacts remain unchanged.
+
+```sh
+uv run tracetrail compare --manifest evaluation/cases-v7.json \
+  --output local-results/comparison-v8.json
+uv run tracetrail local-evaluate local-results/comparison-v8.json \
+  --scorer claim-support-v1
+```
+
+The comparison returns nonzero if any process is invalid or failed, while
+saving every cell. Offline replay recomputes the recorded contract and refuses
+unknown/mixed IDs, source replacement and existing-artifact replacement.
+Raw outputs and feedback remain in ignored private local files. See
+[progress and release checks](../docs/progress.md) for the separate actual CLI
+demo, preserved development failure, full hashes and remaining work.
+
 ## October 17 protocol v7 methodology and measured results
 
 The frozen v7 study uses `tracetrail-synthetic-v6`, selected with

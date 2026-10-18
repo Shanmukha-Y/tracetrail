@@ -165,6 +165,7 @@ def test_unload_failure_preserves_report_and_marks_case_degraded(
     monkeypatch.setattr(
         cli, "score_run", lambda case, result: {"failure_count": len(result["failures"])}
     )
+    monkeypatch.setattr(cli, "score_claim_support", lambda case, result: {"process_valid": False})
     result = cli.run_case(synthetic_case, tmp_path, cli.MODELS[0], "adaptive")
     assert result["status"] == "degraded"
     assert result["evidence"] == captured["original"]["evidence"]

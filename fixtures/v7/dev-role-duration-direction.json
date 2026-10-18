@@ -1,0 +1,164 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003101",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-09-01T04:20:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003101",
+      "requestParameters": null,
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.21",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV7D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/duration-review-desk",
+        "principalId": "AIDAFE28F4A39811F18FE",
+        "type": "IAMUser",
+        "userName": "duration-review-desk"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003102",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-09-01T07:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003102",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/SessionPolicyReview",
+        "roleSessionName": "duration-check-28"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/SessionPolicyReview/duration-check-28",
+          "assumedRoleId": "AROABB75D169662E705B6:duration-check-28"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICV7D0001",
+          "expiration": "2026-09-01T08:00:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.22",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV7D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/duration-review-desk",
+        "principalId": "AIDAFE28F4A39811F18FE",
+        "type": "IAMUser",
+        "userName": "duration-review-desk"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003103",
+      "eventName": "UpdateRole",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-01T07:04:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003103",
+      "requestParameters": {
+        "maxSessionDuration": 7200,
+        "roleName": "LedgerRunnerV7"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.23",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV7D0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/SessionPolicyReview/duration-check-28",
+        "principalId": "AROABB75D169662E705B6:duration-check-28",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-09-01T07:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/SessionPolicyReview",
+            "principalId": "AROABB75D169662E705B6",
+            "type": "Role",
+            "userName": "SessionPolicyReview"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003104",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-09-01T04:19:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003104",
+      "requestParameters": null,
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.21",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV7N0001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/separate-identity-check",
+        "principalId": "AIDAB33CAB681143EA941",
+        "type": "IAMUser",
+        "userName": "separate-identity-check"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003105",
+      "eventName": "UpdateRole",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-01T07:03:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003105",
+      "requestParameters": {
+        "maxSessionDuration": 3600,
+        "roleName": "UnrelatedRunnerV7"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.23",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV7N0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/separate-role-worker",
+        "principalId": "AIDA458390C249C8023F9",
+        "type": "IAMUser",
+        "userName": "separate-role-worker"
+      }
+    }
+  ]
+}

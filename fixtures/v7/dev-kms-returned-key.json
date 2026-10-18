@@ -1,0 +1,178 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003201",
+      "eventName": "ListKeys",
+      "eventSource": "kms.amazonaws.com",
+      "eventTime": "2026-09-04T06:10:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003201",
+      "requestParameters": null,
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.31",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV7D0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/key-window-auditor",
+        "principalId": "AIDAED61CFB36D868AE64",
+        "type": "IAMUser",
+        "userName": "key-window-auditor"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003202",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-09-04T08:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003202",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/KeyAvailabilityReview",
+        "roleSessionName": "availability-check-64"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/KeyAvailabilityReview/availability-check-64",
+          "assumedRoleId": "AROA39BE5C0001DA97922:availability-check-64"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICV7D0002",
+          "expiration": "2026-09-04T09:00:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.32",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV7D0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/key-window-auditor",
+        "principalId": "AIDAED61CFB36D868AE64",
+        "type": "IAMUser",
+        "userName": "key-window-auditor"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003203",
+      "eventName": "EnableKey",
+      "eventSource": "kms.amazonaws.com",
+      "eventTime": "2026-09-04T08:03:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003203",
+      "requestParameters": {
+        "keyId": "arn:aws:kms:us-east-1:000000000000:key/70000000-0000-4000-8000-000000007002"
+      },
+      "responseElements": {
+        "keyId": "arn:aws:kms:us-east-1:000000000000:key/70000000-0000-4000-8000-000000007002"
+      },
+      "sourceIPAddress": "203.0.113.33",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV7D0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/KeyAvailabilityReview/availability-check-64",
+        "principalId": "AROA39BE5C0001DA97922:availability-check-64",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-09-04T08:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/KeyAvailabilityReview",
+            "principalId": "AROA39BE5C0001DA97922",
+            "type": "Role",
+            "userName": "KeyAvailabilityReview"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003204",
+      "eventName": "DescribeKey",
+      "eventSource": "kms.amazonaws.com",
+      "eventTime": "2026-09-04T08:06:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003204",
+      "requestParameters": {
+        "keyId": "arn:aws:kms:us-east-1:000000000000:key/70000000-0000-4000-8000-000000007002"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.34",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV7D0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/KeyAvailabilityReview/availability-check-64",
+        "principalId": "AROA39BE5C0001DA97922:availability-check-64",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-09-04T08:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/KeyAvailabilityReview",
+            "principalId": "AROA39BE5C0001DA97922",
+            "type": "Role",
+            "userName": "KeyAvailabilityReview"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003205",
+      "eventName": "DescribeKey",
+      "eventSource": "kms.amazonaws.com",
+      "eventTime": "2026-09-04T08:05:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003205",
+      "requestParameters": {
+        "keyId": "arn:aws:kms:us-east-1:000000000000:key/70000000-0000-4000-8000-000000007002"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.34",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV7N0003",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/separate-key-inspector",
+        "principalId": "AIDAE123E51339842FAC6",
+        "type": "IAMUser",
+        "userName": "separate-key-inspector"
+      }
+    }
+  ]
+}

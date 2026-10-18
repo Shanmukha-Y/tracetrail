@@ -10,7 +10,7 @@ Use Python 3.11 or later, [uv](https://docs.astral.sh/uv/), and a local [Ollama]
 
 ```sh
 uv sync --frozen
-uv run tracetrail demo --manifest evaluation/cases-v6.json --case dev-retention-chain
+uv run tracetrail demo --manifest evaluation/cases-v7.json --case dev-role-duration-direction
 ```
 
 The default model is `qwen3.8:27b-q4_K_M`. The approved comparison models are `gemma4:31b-it-q4_K_M` and `mistral-small3.2:24b`. These tags must already resolve to local GGUF weights. TraceTrail checks raw Ollama metadata for remote routing, rejects other tags, ignores proxy settings and ambient API credentials, and disables HTTP redirects. It does not download models. Model use is sequential, with a process lock and an unload after each run. Stop other model sessions before a comparison.
@@ -22,7 +22,7 @@ uv run tracetrail query fixtures/v2/dev-role-pivot.json \
   --filter '{"event_name":"AssumeRole","limit":5}'
 uv run tracetrail resolve fixtures/v2/dev-role-pivot.json \
   10000000-0000-4000-8000-000000000003
-uv run tracetrail compare --manifest evaluation/cases-v6.json \
+uv run tracetrail compare --manifest evaluation/cases-v7.json \
   --output local-results/comparison.json
 uv run tracetrail local-evaluate local-results/comparison.json
 ```
@@ -35,7 +35,7 @@ uv run tracetrail investigate local-logs/cloudtrail/ \
   --hypotheses local-logs/hypotheses.json
 ```
 
-Keep the hypotheses file outside a directory that you pass as a CloudTrail input. The store expects each input JSON file to contain a `Records` array. Query tools make exact matches on identity, caller access key, issued access key, session issuer, source address, event name, and time. `issued_access_key` finds the STS record whose `responseElements.credentials.accessKeyId` matches a temporary key. Inputs have size and event budgets. A query returns at most 20 records and reports truncation. To fetch another page, submit its `next_offset` with the same filters. Each page uses one query. No query text is executed as code.
+Keep the hypotheses file outside a directory that you pass as a CloudTrail input. The store expects each input JSON file to contain a `Records` array. Query tools make exact matches on identity, caller access key, issued access key, session issuer, source address, event name, and time. `issued_access_key` finds records whose `responseElements.credentials.accessKeyId` matches the requested value. It does not infer issuance from an event name. Inputs have size and event budgets. A query returns at most 20 records and reports truncation. To fetch another page, submit its `next_offset` with the same filters. Each page uses one query. No query text is executed as code.
 
 ## Evidence and conclusions
 
@@ -55,7 +55,11 @@ A correct citation alone does not establish that a conclusion is true. CloudTrai
 
 Before each action, the planner writes a ledger for every supplied hypothesis. It names returned evidence, an open question, candidate filters, and actual query attempt IDs. The candidate inventory derives only from returned records and recorded query scopes. It never searches the store or selects events for the report. The model can choose one observed candidate, one custom query, one pending page, or an exact event lookup. Code executes only that choice. A candidate uses its exact filter with a limit of 20; a continuation keeps the earlier filters and page limit.
 
+An observed credential map separates keys that signed requests from keys returned in responses. Each occurrence has an exact citation and field path. The map shows existing use and issuance lookup IDs and their actual query scopes. It reads only returned evidence, preserves literal identity types, and discloses its limits. It does not predict matching records, choose queries, identify a human operator, or establish causality. Both methods receive this same context.
+
 The model can finish with unused queries. It must account for every visible candidate and pending page, including already queried candidates, as deferred, not relevant, or tested under a recorded scope. A tested candidate needs an actual successful matching query; a pending page cannot count as tested. This accounting checks references and attempted scopes, not the truth of the model's explanation or completeness of the investigation. An invalid plan stops further tools and preserves its raw output and errors. A later valid report does not clear the invalid planning status. Filters, time bounds, errors, pagination, decisions, and the stop reason remain visible.
+
+The saved `termination` object reports query use, remaining budget and stop reason from graph counters. Model explanations remain unverified. A model finish with one query left is not budget exhaustion.
 
 ```mermaid
 flowchart LR
@@ -75,32 +79,34 @@ flowchart LR
 
 Each investigation captures real LangChain/LangGraph execution spans in a local callback collector. The LangSmith SDK can also score the saved outputs with `evaluate(upload_results=False)`. The offline evaluation recomputes the annotated metrics and writes SDK evaluation traces and feedback beside the input file. It replays saved outputs and makes no new inference calls.
 
+New batches explicitly select `claim-support-v1`. This scorer checks each finding's own field links against exact selected, returned source records and typed annotations. Global projected facts cannot fill missing links. Raw support and process-valid primary support stay separate; invalid runs earn zero primary credit and keep their denominators. Historical `metrics` retain the original scorer. New values use `claim_support_metrics`, with separate prefixed SDK feedback and a scorer source fingerprint. See the [measurement contracts](docs/measurement.md). Exact annotation support still does not prove semantic correctness.
+
 Local trace files and offline SDK evaluation are the project's LangSmith integration. They need no LangSmith account, API key, hosted project, or server. TraceTrail disables ambient and inherited tracing settings, and the offline SDK client rejects HTTP requests. The separate LangSmith server and web UI are outside this local project's scope. See [verified integration details](docs/integrations.md).
 
 ## Compare methods and models
 
-The [frozen synthetic suites](evaluation/README.md) preserve their exact fixtures and annotations. The current v6 suite has two development cases and two held-out cases, frozen before protocol v7 inference. Earlier suites are exposed regression data. The CLI's default comparison still uses v2 for compatibility; pass `--manifest evaluation/cases-v6.json` to select v6. All events, accounts, credentials, and names are invented. The fixtures represent API sequences, not real incidents. Earlier fixture bytes and measured results remain available. See [CloudTrail semantics and limits](docs/cloudtrail.md).
+The [frozen synthetic suites](evaluation/README.md) preserve exact fixtures and annotations. The current v7 suite has two development cases and two held-out cases, independently authored and frozen before protocol v8 inference. All earlier suites are exposed regression data. Original split labels remain historical after exposure. The CLI default still uses v2 for compatibility; pass `--manifest evaluation/cases-v7.json` to select v7. All events, accounts, credentials and names are invented. The fixtures represent API sequences, not real incidents. Earlier fixture bytes and measured results remain available. See [CloudTrail semantics and limits](docs/cloudtrail.md).
 
 The adaptive method lets the model choose queries. The fixed method always searches the seed identity, source address, and access key in a one-hour window on each side of the seed. Both methods use the same evidence tools, record limits, report prompt, and report schema. The adaptive method also makes planning calls. Those calls count toward its latency and model cost. All three models receive the same frozen prompts, cases, schemas, and budgets. Qwen is the reference for the method comparison.
 
-The frozen [v7 protocol fingerprint](evaluation/protocol-v7.json) records source, schema, prompt, and manifest hashes. V7 adds hypothesis ledgers, explicit query choices, and finish accounting. Reporting, local fact projection, fixed searches, the scorer, and budgets retain the v6 contract. Planning instructions, catalog, schema, and validation change together, so their effects cannot be isolated. Runtime validation receives no answer annotations or case-specific support rules.
+The frozen [v8 protocol fingerprint](evaluation/protocol-v8.json) records 13 source files, eight schemas, the prompt, scorer and manifest hashes. V8 adds the observed credential map and a short direction-specific planning instruction. Report instructions, schemas, exact projection, fixed searches, budgets and the historical scorer retain their prior contracts. Both methods receive the added context. The map and instruction change together, so their effects cannot be isolated. Runtime validation receives no answer annotations or case-specific support rules.
 
-The October 17 v7 comparison ran four cases per group, two per split. Ten of 16 investigations completed structural checks; six processes were invalid. All raw means below retain those invalid runs.
+The October 18 v8 comparison ran 16 actual local investigations on four new synthetic cases, with two cases per split and one repeat per cell. 10 processes completed structural checks. All failures remain in the denominators.
 
-| Model and method | Valid processes | Mean selected-event recall | Raw strict support | Primary declared field coverage |
-| --- | --- | --- | --- | --- |
-| Qwen adaptive | 3/4 | 87.50% | 81.25% | 23/43 |
-| Qwen fixed | 4/4 | 50.00% | 18.75% | 17/43 |
-| Gemma adaptive | 3/4 | 70.83% | 56.25% | 17/43 |
-| Mistral adaptive | 0/4 | 54.17% | 31.25% | 0/43 |
+| Model and method | Valid processes | Mean raw selected-event precision / recall | Complete primary claim contracts | Primary required atoms | Mean queries | Mean seconds |
+| --- | --- | --- | --- | --- | --- | --- |
+| Qwen adaptive | 3/4 | 100.00% / 81.25% | 3/16 | 24/51 | 2.00 | 214.93 |
+| Qwen fixed | 4/4 | 100.00% / 45.83% | 2/16 | 23/51 | 3.00 | 62.73 |
+| Gemma adaptive | 2/4 | 100.00% / 93.75% | 1/16 | 17/51 | 2.50 | 267.29 |
+| Mistral adaptive | 1/4 | 75.00% / 50.00% | 0/16 | 5/51 | 2.00 | 133.29 |
 
-Thirty-four of 64 findings failed strict support checks. Raw strict support uses globally projected facts, including retained reports from invalid processes; it does not prove complete model-authored links or valid planning. Primary field coverage counts only completed, valid processes, while keeping every required field in the denominator: 57/172 overall. Mistral matched every status label despite all four processes being invalid. Correct labels do not establish sound reasoning.
+Primary support uses the new finding-level contract. It counts only a corresponding finding's explicit source links in a valid process. All 204 required atoms remain in the denominator; 69 receive primary credit. Complete claim contracts additionally require the fixed statement, status and all required records and atoms. These counts are not a semantic accuracy or hallucination measure. Legacy metrics remain separately available. Selected-event precision and recall are raw means that include invalid processes. Primary claim and atom credit is process-gated.
 
-The [Qwen evidence review](docs/v7-evidence-review.md) documents incomplete searches, an invalid claim that a key-use pivot was tested by an issuance query, and incorrect prose about remaining budget. It is an assistant source review, not independent human review. These four synthetic cases establish no model winner or production reliability. New cases and annotations also prevent a cross-suite improvement claim. The fixed control is a simple seed-based search within one hour on each side of the seed. See [v7 results](evaluation/results-v7.json), the [evaluation guide](evaluation/README.md), and [measured progress](docs/progress.md) for split scores, query cost, local SDK evidence, and preserved failures.
+The credential map does not establish a planning improvement. Source review found early stopping, false query-scope and budget explanations, incomplete field links, and semantic errors. The [assistant evidence review](docs/v8-evidence-review.md) separates these failures from correct uncertainty. It is not independent human review. Four cases cannot establish a model winner, a broad adaptive advantage, or production reliability. The fixed control is three seed searches within one hour on each side of the seed. See [v8 results](evaluation/results-v8.json), the [evaluation guide](evaluation/README.md), and [measured progress](docs/progress.md). Earlier results and reviews remain preserved.
 
 The October 15 [v5 results](evaluation/results-v5.json) and October 16 [v6 results](evaluation/results-v6.json) remain preserved with their dated analysis in the evaluation guide and progress record.
 
-Metrics cover relevant-event precision and recall, exact evidence support for fixed propositions, unsupported assertions, insufficient evidence, tool errors, query count, model calls, and latency. The scorer checks the required records and field observations for each proposition. It does not act as a general natural-language judge. Saved failures stay in the evaluation denominator. A small synthetic suite cannot establish production reliability.
+Metrics cover relevant-event precision and recall, fixed annotation support, insufficient-evidence labels, tool errors, query count, model calls, and latency. Annotation support failures are not a count of hallucinations. The scorer does not act as a general natural-language judge; free prose and evidence roles need source review. Saved failures stay in the evaluation denominator. A small synthetic suite cannot establish production reliability.
 
 ## Check the code
 

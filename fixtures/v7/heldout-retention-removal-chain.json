@@ -1,0 +1,178 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003401",
+      "eventName": "DescribeLogStreams",
+      "eventSource": "logs.amazonaws.com",
+      "eventTime": "2026-09-16T07:10:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003401",
+      "requestParameters": {
+        "logGroupName": "/synthetic/v7/pipeline-records"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.51",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV7H0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/pipeline-records-desk",
+        "principalId": "AIDAA0B124E8D7879D2BB",
+        "type": "IAMUser",
+        "userName": "pipeline-records-desk"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003402",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-09-16T10:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003402",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::000000000000:role/RetentionOperationsReview",
+        "roleSessionName": "archive-window-53"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/RetentionOperationsReview/archive-window-53",
+          "assumedRoleId": "AROA137986038BA05D068:archive-window-53"
+        },
+        "credentials": {
+          "accessKeyId": "ASIASYNTHETICV7H0002",
+          "expiration": "2026-09-16T11:00:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.52",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV7H0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/pipeline-records-desk",
+        "principalId": "AIDAA0B124E8D7879D2BB",
+        "type": "IAMUser",
+        "userName": "pipeline-records-desk"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003403",
+      "eventName": "DeleteRetentionPolicy",
+      "eventSource": "logs.amazonaws.com",
+      "eventTime": "2026-09-16T10:04:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003403",
+      "requestParameters": {
+        "logGroupName": "/synthetic/v7/pipeline-records"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.53",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV7H0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/RetentionOperationsReview/archive-window-53",
+        "principalId": "AROA137986038BA05D068:archive-window-53",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-09-16T10:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/RetentionOperationsReview",
+            "principalId": "AROA137986038BA05D068",
+            "type": "Role",
+            "userName": "RetentionOperationsReview"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003404",
+      "eventName": "DescribeLogGroups",
+      "eventSource": "logs.amazonaws.com",
+      "eventTime": "2026-09-16T10:06:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003404",
+      "requestParameters": {
+        "logGroupNamePrefix": "/synthetic/v7/pipeline-records"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.54",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "ASIASYNTHETICV7H0002",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/RetentionOperationsReview/archive-window-53",
+        "principalId": "AROA137986038BA05D068:archive-window-53",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-09-16T10:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/RetentionOperationsReview",
+            "principalId": "AROA137986038BA05D068",
+            "type": "Role",
+            "userName": "RetentionOperationsReview"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "70000000-0000-4000-8000-000000003405",
+      "eventName": "DescribeLogGroups",
+      "eventSource": "logs.amazonaws.com",
+      "eventTime": "2026-09-16T10:05:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "97000000-0000-4000-8000-000000003405",
+      "requestParameters": {
+        "logGroupNamePrefix": "/synthetic/v7/pipeline-records"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.54",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v7-fixture",
+      "userIdentity": {
+        "accessKeyId": "AKIASYNTHETICV7N0005",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/independent-log-inspector",
+        "principalId": "AIDA1FCB0313EDB6A2049",
+        "type": "IAMUser",
+        "userName": "independent-log-inspector"
+      }
+    }
+  ]
+}

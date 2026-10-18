@@ -13,6 +13,131 @@ The repository stays private until the release checks pass. Workflow Sentinel is
 - Preserved earlier synthetic suites and a frozen two-case v4 suite with field support annotations.
 - CI for lint, formatting, and tests without inference or hosted tracing.
 
+## October 18: credential context and finding-level measurement
+
+The [v7 source review](v7-evidence-review.md) exposed premature stopping,
+credential-scope confusion and false budget explanations. It also showed a
+measurement gap: globally projected fields could credit a finding that never
+linked them. V8 preserves every historical scorer value and adds the separate
+[claim-support-v1 contract](measurement.md).
+
+The observed credential map groups exact signer and returned-key occurrences
+from already returned records. It copies literal identity types, exact paths,
+existing lookup IDs and actual complete query scopes. It never scans hidden
+records, predicts matches, chooses a query or supplies a claim conclusion.
+Limits and omissions are explicit. A short planning addition asks the model
+which available lookup could observe a missing relation. Existing schemas,
+tools, budgets, query-scope guards and failure policy stay unchanged.
+Machine termination counters are separate from unverified model reasons.
+
+### Development and freeze
+
+One already exposed v6-suite case, `heldout-directory-path`, received actual
+Qwen adaptive and fixed runs. Its original split name remains historical;
+it was development evidence for this increment. The adaptive run remained
+invalid after two queries, with one unused. It retrieved 75% of relevant
+events, but falsely marked a child-use scope tested. Its raw new score was
+2/4 complete claim contracts and 7/11 atoms; primary credit was zero.
+The fixed run completed with 50% recall, zero complete contracts and 5/11
+primary atoms. Durations were 208.07 and
+67.54 seconds. This failed exposed
+check does not show a planning improvement. Both outputs and all errors remain.
+
+The candidate's genuine offline SDK replay produced 42 prefixed feedback
+items from two saved outputs, with no new inference or uploads. Its raw,
+SDK and audit artifacts were saved before the sole later source change:
+a scorer guard for malformed, non-string saved failure phases. The guard
+preserves raw support but makes primary validity fail closed. It does not
+change ordinary runtime output or planning. All 13 candidate source files
+remain in a byte-verified private archive. The final suite and runtime were
+frozen after the guard and 644 passing tests, before any fresh inference.
+
+Final protocol SHA-256: `e025493b6f2309d86c9339b4217a7bf1aedbbd51aa209d837d1e75e8f4cefcca`.
+Final prompt SHA-256: `5d801a719e65e23a28deb1ee8088416c20fe9bb5d0c7d599098a11993ec0828a`.
+Fresh manifest SHA-256: `56c128e29c8e3588f9cd4fbac83759538db9e20143df91a54e2fb425456fc75a`.
+The independent v7 suite contains 20 invented records, 15 relevant records,
+16 hypotheses and 51 exact typed required atoms. Separate assistant reviews
+checked source semantics, privacy, annotations and reachability within three
+queries. Both splits were frozen before inference; neither tuned this run.
+
+### Fresh comparison and review
+
+The October 18 v8 comparison ran 16 actual local investigations on four new synthetic cases, with two cases per split and one repeat per cell. 10 processes completed structural checks. All failures remain in the denominators.
+
+| Model and method | Valid processes | Mean raw selected-event precision / recall | Complete primary claim contracts | Primary required atoms | Mean queries | Mean seconds |
+| --- | --- | --- | --- | --- | --- | --- |
+| Qwen adaptive | 3/4 | 100.00% / 81.25% | 3/16 | 24/51 | 2.00 | 214.93 |
+| Qwen fixed | 4/4 | 100.00% / 45.83% | 2/16 | 23/51 | 3.00 | 62.73 |
+| Gemma adaptive | 2/4 | 100.00% / 93.75% | 1/16 | 17/51 | 2.50 | 267.29 |
+| Mistral adaptive | 1/4 | 75.00% / 50.00% | 0/16 | 5/51 | 2.00 | 133.29 |
+
+Primary support uses the new finding-level contract. It counts only a corresponding finding's explicit source links in a valid process. All 204 required atoms remain in the denominator; 69 receive primary credit. Complete claim contracts additionally require the fixed statement, status and all required records and atoms. These counts are not a semantic accuracy or hallucination measure. Legacy metrics remain separately available. Selected-event precision and recall are raw means that include invalid processes. Primary claim and atom credit is process-gated.
+
+The credential map does not establish a planning improvement. Source review found early stopping, false query-scope and budget explanations, incomplete field links, and semantic errors. The [assistant evidence review](v8-evidence-review.md) separates these failures from correct uncertainty. It is not independent human review. Four cases cannot establish a model winner, a broad adaptive advantage, or production reliability. The fixed control is three seed searches within one hour on each side of the seed. See [v8 results](../evaluation/results-v8.json) and the [evaluation guide](../evaluation/README.md). Earlier results and reviews remain preserved.
+
+
+| Model and method | Split | Valid processes | Mean raw selected-event precision / recall | Complete primary claim contracts | Primary required atoms | Mean queries | Mean seconds |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Qwen adaptive | development | 2/2 | 100.00% / 87.50% | 1/8 | 16/26 | 2.00 | 216.01 |
+| Qwen adaptive | heldout | 1/2 | 100.00% / 75.00% | 2/8 | 8/25 | 2.00 | 213.84 |
+| Qwen fixed | development | 2/2 | 100.00% / 41.67% | 1/8 | 11/26 | 3.00 | 64.96 |
+| Qwen fixed | heldout | 2/2 | 100.00% / 50.00% | 1/8 | 12/25 | 3.00 | 60.49 |
+| Gemma adaptive | development | 1/2 | 100.00% / 100.00% | 0/8 | 9/26 | 2.50 | 278.98 |
+| Gemma adaptive | heldout | 1/2 | 100.00% / 87.50% | 1/8 | 8/25 | 2.50 | 255.59 |
+| Mistral adaptive | development | 1/2 | 100.00% / 75.00% | 0/8 | 5/26 | 2.00 | 144.35 |
+| Mistral adaptive | heldout | 0/2 | 50.00% / 25.00% | 0/8 | 0/25 | 2.00 | 122.23 |
+
+The local audit recomputed legacy and finding-level scores, actual
+model and tool spans, wire schemas and prompts, source identities, exact
+projections, credential maps, budgets and SDK feedback. A separate verifier
+derived all 21 claim counters without calling the new scorer. Raw report
+materialization matches alias-resolved model output; no missing links,
+references, statuses or queries were repaired. See the numeric summary for
+per-cell and split values, effective weight digests and artifact hashes.
+
+Fresh raw SHA-256: `79c716bef1ea6d5a0e319d4645f029c941dbc5c92ad1f3b270e677bf0237dbce`.
+Fresh SDK SHA-256: `57e328f1912fa3485d73936472c58406557f4db29525dfccde83fcd15685dab1`.
+Independent verification SHA-256: `569383acffda8d15fd8065a3586abc351bd5e33b421c6307a0c490b353f045cb`.
+
+The genuine offline SDK evaluated 16 fresh saved outputs and two development
+outputs: 378 prefixed numeric feedback items.
+Each replay trace preserves its exact input and saved output. Replay trees
+contain no model or tool calls. Original investigation traces retain actual
+inference and read-only tool use. Hosted export remains disabled; no account,
+credential, terms, licensed server or paid API was configured.
+
+The separate CLI demo ran `dev-role-duration-direction` with actual Qwen
+adaptive inference. Its status is `completed`, with
+2 queries,
+4 model calls and
+206.24 seconds. It is an additional
+repeat, not a benchmark cell. Reproduce it with:
+
+```sh
+uv run tracetrail demo --manifest evaluation/cases-v7.json \
+  --case dev-role-duration-direction --output local-results/demo-v8.json
+```
+
+All 19 investigations used actual sequential local
+Ollama calls: 59 model spans and 45 tool
+spans. Raw outputs, trace trees, SDK feedback and source reviews remain in
+ignored private files. Numeric summaries, invented fixtures and fingerprints
+are versioned. Ruff and all 644 local tests pass. Unit-test models are separate
+from these actual capability results.
+
+### Remaining release checks
+
+- Improve credential-direction reasoning and use of available local context.
+  The observed map alone does not resolve these failures.
+- Reduce premature stopping, false tested-scope claims and false budget prose
+  without hidden searches, minimum-query rules or benchmark branches.
+- Require complete finding-level links while preserving the distinction
+  between annotation support and semantic correctness.
+- Add independent cases, repeated runs and human source review. All current
+  cases are exposed for future work informed by these results.
+- Keep the repository private. Offline LangSmith works; hosted export stays
+  disabled and is not needed for the local scope.
+
 ## October 17: explicit planning choices and query scope
 
 The [preserved failure diagnosis](oct17-diagnosis.md) identifies early finish

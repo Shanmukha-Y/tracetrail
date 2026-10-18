@@ -158,6 +158,7 @@ def evaluate_local(
     fixture_root: str | Path = ".",
     *,
     output_path: str | Path | None = None,
+    scorer: str | None = None,
 ) -> dict[str, Any]:
     """Score stored inference outputs with the real offline LangSmith evaluator.
 
@@ -165,6 +166,12 @@ def evaluate_local(
     not publish an experiment, and preserves local SDK traces and feedback.
     """
     from tracetrail.evaluation import load_cases, score_run
+    from tracetrail.support_evaluation import (
+        NUMERIC_METRIC_KEYS,
+        SCORER_ID,
+        score_claim_support,
+        scorer_fingerprint,
+    )
 
     source = Path(results_path)
     root = Path(fixture_root).resolve()
@@ -184,6 +191,35 @@ def evaluate_local(
     runs = batch.get("runs")
     if not isinstance(runs, list) or not runs:
         raise ValueError("The results must contain at least one stored run.")
+
+    def recorded_scorer(document: dict[str, Any]) -> str:
+        evaluation = document.get("evaluation")
+        if evaluation is None:
+            return "legacy-v1"
+        if not isinstance(evaluation, dict):
+            raise ValueError("The recorded scorer metadata must be an object.")
+        value = evaluation.get("primary_scorer")
+        if value not in ("legacy-v1", SCORER_ID):
+            raise ValueError("Unknown recorded scorer ID.")
+        return value
+
+    selected_scorer = recorded_scorer(batch)
+    if scorer is not None and scorer != selected_scorer:
+        raise ValueError("The requested scorer conflicts with the recorded scorer.")
+    if any(not isinstance(run, dict) or recorded_scorer(run) != selected_scorer for run in runs):
+        raise ValueError("The results contain mixed or missing recorded scorer IDs.")
+    suffix = (
+        ".langsmith-local.json"
+        if selected_scorer == "legacy-v1"
+        else ".claim-support-v1.langsmith-local.json"
+    )
+    destination = (
+        Path(output_path) if output_path is not None else source.with_name(source.stem + suffix)
+    )
+    if destination.resolve() == source.resolve():
+        raise ValueError("The evaluation output must differ from the source results.")
+    if destination.exists():
+        raise ValueError("The evaluation output already exists; choose a new output path.")
     manifest = json.loads(manifest_path.read_bytes())
     if batch.get("suite_id") != manifest["suite_id"]:
         raise ValueError("The results have a different evaluation suite ID.")
@@ -222,11 +258,18 @@ def evaluate_local(
         case = cases[inputs["case_id"]]
         if reference_outputs["annotations"] != case["annotations"]:
             raise ValueError("The reference annotations changed during evaluation.")
-        metrics = score_run(case, outputs["result"])
+        metrics = (
+            score_run(case, outputs["result"])
+            if selected_scorer == "legacy-v1"
+            else score_claim_support(case, outputs["result"])
+        )
         scores = []
         for key, value in metrics.items():
+            if selected_scorer != "legacy-v1" and key not in NUMERIC_METRIC_KEYS:
+                continue
             if isinstance(value, (int, float, bool)) and math.isfinite(float(value)):
-                scores.append({"key": key, "score": value})
+                feedback_key = key if selected_scorer == "legacy-v1" else "claim_support_v1__" + key
+                scores.append({"key": feedback_key, "score": value})
         if not scores:
             raise ValueError("The evidence scorer returned no numeric metrics.")
         return {"results": scores}
@@ -269,11 +312,6 @@ def evaluate_local(
                 "sdk_feedback": feedback,
             }
         )
-    destination = (
-        Path(output_path)
-        if output_path is not None
-        else source.with_name(source.stem + ".langsmith-local.json")
-    )
     document = {
         "schema_version": "1",
         "mode": "offline-stored-output-evaluation",
@@ -288,6 +326,13 @@ def evaluate_local(
         "status": "evaluation_failed" if evaluation_failed else "completed",
         "evaluated_runs": serialized_rows,
     }
+    if selected_scorer != "legacy-v1":
+        document["evaluation"] = {
+            "primary_scorer": selected_scorer,
+            **scorer_fingerprint(),
+            "stored_output_replay": True,
+            "post_hoc": False,
+        }
     _write_json(destination, document)
     return {
         "path": str(destination),

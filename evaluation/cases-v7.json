@@ -1,0 +1,585 @@
+{
+  "cases": [
+    {
+      "annotations": [
+        {
+          "claim_id": "caller_context",
+          "expected_status": "supported",
+          "reason": "The original signing key links caller history to the seed.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003101",
+            "70000000-0000-4000-8000-000000003102"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003101",
+              "field": "eventName",
+              "value": "GetCallerIdentity"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003101",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV7D0001"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003102",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV7D0001"
+            }
+          ]
+        },
+        {
+          "claim_id": "issued_child",
+          "expected_status": "supported",
+          "reason": "The returned key, rather than the original caller key, signed the child request.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003102",
+            "70000000-0000-4000-8000-000000003103"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003102",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV7D0001"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003103",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV7D0001"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003103",
+              "field": "eventName",
+              "value": "UpdateRole"
+            }
+          ]
+        },
+        {
+          "claim_id": "same_caller_credential",
+          "expected_status": "refuted",
+          "reason": "The two signing key IDs differ. This claim concerns these exact two records.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003102",
+            "70000000-0000-4000-8000-000000003103"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003102",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV7D0001"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003103",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV7D0001"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003103",
+              "field": "eventName",
+              "value": "UpdateRole"
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_duration",
+          "expected_status": "uncertain",
+          "reason": "The session name and requested setting do not establish maintenance approval.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003102",
+            "70000000-0000-4000-8000-000000003103"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003102",
+              "field": "requestParameters.roleSessionName",
+              "value": "duration-check-28"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003103",
+              "field": "eventName",
+              "value": "UpdateRole"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003103",
+              "field": "requestParameters.maxSessionDuration",
+              "value": 7200
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v7/dev-role-duration-direction.json",
+      "fixture_sha256": "5c99627759dc58f068947e55dd7134df51dfcaa1ad06c78f10ff26549769202b",
+      "hypotheses": [
+        {
+          "claim_id": "caller_context",
+          "statement": "The seed caller credential also signed the GetCallerIdentity event."
+        },
+        {
+          "claim_id": "issued_child",
+          "statement": "The UpdateRole request was signed with the credential returned by the seed."
+        },
+        {
+          "claim_id": "same_caller_credential",
+          "statement": "The seed caller credential also signed the UpdateRole request."
+        },
+        {
+          "claim_id": "approved_duration",
+          "statement": "The role-duration change was approved maintenance."
+        }
+      ],
+      "id": "dev-role-duration-direction",
+      "notes": "Entirely invented source records. Caller and returned credentials have different roles. Shared IP values do not establish identity or approval.",
+      "question": "Investigate this role assumption. Recover caller context and requests made with the returned credential, even across source-address changes and a wider time window. Distinguish the caller from the issued session and test maintenance approval.",
+      "relevant_event_ids": [
+        "70000000-0000-4000-8000-000000003101",
+        "70000000-0000-4000-8000-000000003102",
+        "70000000-0000-4000-8000-000000003103"
+      ],
+      "seed_event_id": "70000000-0000-4000-8000-000000003102",
+      "split": "development"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "original_history",
+          "expected_status": "supported",
+          "reason": "The caller-history key matches the original key at issuance, not the returned key.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003201",
+            "70000000-0000-4000-8000-000000003202"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003201",
+              "field": "eventName",
+              "value": "ListKeys"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003201",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV7D0002"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003202",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV7D0002"
+            }
+          ]
+        },
+        {
+          "claim_id": "seed_uses_issuer_caller",
+          "expected_status": "refuted",
+          "reason": "The issuer caller key and the seed signer key are different.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003202",
+            "70000000-0000-4000-8000-000000003203"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003202",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV7D0002"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003203",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV7D0002"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003203",
+              "field": "eventName",
+              "value": "EnableKey"
+            }
+          ]
+        },
+        {
+          "claim_id": "later_read_key",
+          "expected_status": "supported",
+          "reason": "The returned session credential signed both requests across a source-address change.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003203",
+            "70000000-0000-4000-8000-000000003204"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003203",
+              "field": "eventName",
+              "value": "EnableKey"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003204",
+              "field": "eventName",
+              "value": "DescribeKey"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003203",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV7D0002"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003204",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV7D0002"
+            }
+          ]
+        },
+        {
+          "claim_id": "key_enabled_later",
+          "expected_status": "uncertain",
+          "reason": "The affected ARN in the write event is not a later key-state observation; the read response state is not logged.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003203",
+            "70000000-0000-4000-8000-000000003204"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003203",
+              "field": "requestParameters.keyId",
+              "value": "arn:aws:kms:us-east-1:000000000000:key/70000000-0000-4000-8000-000000007002"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003204",
+              "field": "requestParameters.keyId",
+              "value": "arn:aws:kms:us-east-1:000000000000:key/70000000-0000-4000-8000-000000007002"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003204",
+              "field": "eventName",
+              "value": "DescribeKey"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003204",
+              "field": "responseElements",
+              "value": null
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v7/dev-kms-returned-key.json",
+      "fixture_sha256": "fa10d3462917061fc3c98655eda34bf977615b50e2020e083e52e658e5de6c9e",
+      "hypotheses": [
+        {
+          "claim_id": "original_history",
+          "statement": "A ListKeys event and the credential issuer event used the same caller credential."
+        },
+        {
+          "claim_id": "seed_uses_issuer_caller",
+          "statement": "The EnableKey request used the issuer event's caller credential."
+        },
+        {
+          "claim_id": "later_read_key",
+          "statement": "The EnableKey and DescribeKey requests used the same signer credential."
+        },
+        {
+          "claim_id": "key_enabled_later",
+          "statement": "The target key was enabled when DescribeKey was requested."
+        }
+      ],
+      "id": "dev-kms-returned-key",
+      "notes": "Entirely invented source records. Caller and returned credentials have different roles. Shared IP values do not establish identity or approval.",
+      "question": "Investigate this key request and the direction of its credential chain. Find the issuer caller context and related later requests. Keep the returned key ARN separate from evidence of the key state at a later time.",
+      "relevant_event_ids": [
+        "70000000-0000-4000-8000-000000003201",
+        "70000000-0000-4000-8000-000000003202",
+        "70000000-0000-4000-8000-000000003203",
+        "70000000-0000-4000-8000-000000003204"
+      ],
+      "seed_event_id": "70000000-0000-4000-8000-000000003203",
+      "split": "development"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "original_caller_link",
+          "expected_status": "supported",
+          "reason": "The original caller key, not an unrelated same-service request, links the context and issuer.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003301",
+            "70000000-0000-4000-8000-000000003302"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003301",
+              "field": "eventName",
+              "value": "GetCallerIdentity"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003301",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV7H0001"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003302",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV7H0001"
+            }
+          ]
+        },
+        {
+          "claim_id": "returned_signer_link",
+          "expected_status": "supported",
+          "reason": "The issuer returned the exact credential that signed the seed.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003302",
+            "70000000-0000-4000-8000-000000003303"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003302",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIASYNTHETICV7H0001"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003303",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV7H0001"
+            }
+          ]
+        },
+        {
+          "claim_id": "label_change_succeeded",
+          "expected_status": "refuted",
+          "reason": "The explicit authorization denial contradicts success of this request.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003303"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003303",
+              "field": "eventName",
+              "value": "SetTopicAttributes"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003303",
+              "field": "errorCode",
+              "value": "AuthorizationError"
+            }
+          ]
+        },
+        {
+          "claim_id": "label_later_state",
+          "expected_status": "uncertain",
+          "reason": "The denied write and null read response do not establish the later display name, including any pre-existing value.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003303",
+            "70000000-0000-4000-8000-000000003304"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003303",
+              "field": "requestParameters.attributeName",
+              "value": "DisplayName"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003303",
+              "field": "requestParameters.attributeValue",
+              "value": "Synthetic review notices"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003303",
+              "field": "requestParameters.topicArn",
+              "value": "arn:aws:sns:us-east-1:000000000000:synthetic-topic-label-v7"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003304",
+              "field": "requestParameters.topicArn",
+              "value": "arn:aws:sns:us-east-1:000000000000:synthetic-topic-label-v7"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003304",
+              "field": "eventName",
+              "value": "GetTopicAttributes"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003304",
+              "field": "responseElements",
+              "value": null
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v7/heldout-topic-label-denial.json",
+      "fixture_sha256": "84d8379fca6d9cfc01e8197e5d6f2363eea34fe9e55125743dd63494e14eb756",
+      "hypotheses": [
+        {
+          "claim_id": "original_caller_link",
+          "statement": "The caller credential in the issuer event appears in a GetCallerIdentity event."
+        },
+        {
+          "claim_id": "returned_signer_link",
+          "statement": "The seed request used the credential returned by the issuer event."
+        },
+        {
+          "claim_id": "label_change_succeeded",
+          "statement": "The recorded SetTopicAttributes request succeeded."
+        },
+        {
+          "claim_id": "label_later_state",
+          "statement": "The topic had display name Synthetic review notices when GetTopicAttributes was requested."
+        }
+      ],
+      "id": "heldout-topic-label-denial",
+      "notes": "Entirely invented source records. Caller and returned credentials have different roles. Shared IP values do not establish identity or approval.",
+      "question": "Investigate this topic metadata request. Recover the original caller and credential issuer, find useful later activity across source addresses, and separate the recorded write outcome from the topic's later attribute state.",
+      "relevant_event_ids": [
+        "70000000-0000-4000-8000-000000003301",
+        "70000000-0000-4000-8000-000000003302",
+        "70000000-0000-4000-8000-000000003303",
+        "70000000-0000-4000-8000-000000003304"
+      ],
+      "seed_event_id": "70000000-0000-4000-8000-000000003303",
+      "split": "heldout"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "caller_history",
+          "expected_status": "supported",
+          "reason": "The original caller key links the context request and the issuer across source addresses.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003401",
+            "70000000-0000-4000-8000-000000003402"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003401",
+              "field": "eventName",
+              "value": "DescribeLogStreams"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003401",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV7H0002"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003402",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV7H0002"
+            }
+          ]
+        },
+        {
+          "claim_id": "child_used_caller",
+          "expected_status": "refuted",
+          "reason": "The seed used the returned session credential, which differs from the issuer caller credential.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003402",
+            "70000000-0000-4000-8000-000000003403"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003402",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIASYNTHETICV7H0002"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003403",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIASYNTHETICV7H0002"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003403",
+              "field": "eventName",
+              "value": "DeleteRetentionPolicy"
+            }
+          ]
+        },
+        {
+          "claim_id": "expiration_removal_requested",
+          "expected_status": "supported",
+          "reason": "The request asks to remove the policy; this is not certification of later retention settings.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003403"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003403",
+              "field": "eventName",
+              "value": "DeleteRetentionPolicy"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003403",
+              "field": "requestParameters.logGroupName",
+              "value": "/synthetic/v7/pipeline-records"
+            }
+          ]
+        },
+        {
+          "claim_id": "later_no_expiration",
+          "expected_status": "uncertain",
+          "reason": "The log-group read response is not logged; a matching prefix does not provide the returned group state.",
+          "required_event_ids": [
+            "70000000-0000-4000-8000-000000003403",
+            "70000000-0000-4000-8000-000000003404"
+          ],
+          "required_observations": [
+            {
+              "event_id": "70000000-0000-4000-8000-000000003403",
+              "field": "requestParameters.logGroupName",
+              "value": "/synthetic/v7/pipeline-records"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003404",
+              "field": "requestParameters.logGroupNamePrefix",
+              "value": "/synthetic/v7/pipeline-records"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003404",
+              "field": "eventName",
+              "value": "DescribeLogGroups"
+            },
+            {
+              "event_id": "70000000-0000-4000-8000-000000003404",
+              "field": "responseElements",
+              "value": null
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v7/heldout-retention-removal-chain.json",
+      "fixture_sha256": "b6cb113522f36b6b8399e3959ccde19a0970048da0776885bcaa28f41c3d5574",
+      "hypotheses": [
+        {
+          "claim_id": "caller_history",
+          "statement": "The issuer's caller credential also signed the DescribeLogStreams event."
+        },
+        {
+          "claim_id": "child_used_caller",
+          "statement": "The DeleteRetentionPolicy request used the issuer's caller credential."
+        },
+        {
+          "claim_id": "expiration_removal_requested",
+          "statement": "The recorded request asked AWS to remove the retention policy from the log group."
+        },
+        {
+          "claim_id": "later_no_expiration",
+          "statement": "The log group had no retention expiration when DescribeLogGroups was requested."
+        }
+      ],
+      "id": "heldout-retention-removal-chain",
+      "notes": "Entirely invented source records. Caller and returned credentials have different roles. Shared IP values do not establish identity or approval.",
+      "question": "Investigate this retention-policy request. Distinguish the credential used to obtain the session from the returned signer credential, recover original caller history and related later reads, and separate removal intent from later retention state.",
+      "relevant_event_ids": [
+        "70000000-0000-4000-8000-000000003401",
+        "70000000-0000-4000-8000-000000003402",
+        "70000000-0000-4000-8000-000000003403",
+        "70000000-0000-4000-8000-000000003404"
+      ],
+      "seed_event_id": "70000000-0000-4000-8000-000000003403",
+      "split": "heldout"
+    }
+  ],
+  "data_origin": "Entirely invented fresh source records, with no private data, actual account, real incident, or redistributed public sample. All resource and credential identifiers are synthetic.",
+  "design_notes": "Four compact cases for caller-versus-returned credential direction, useful original context and later queries across time and source-address changes, and claim-specific field links. Requested settings and affected-resource identifiers do not establish later state or business approval.",
+  "fixture_license": "MIT (same as repository)",
+  "freeze_policy": "Freeze independently reviewed source hashes before the first fresh model inference. Never edit a recorded suite against model outcomes. Preserve all older suites and results.",
+  "schema_version": "1",
+  "semantics_sources": [
+    "https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html",
+    "https://docs.aws.amazon.com/kms/latest/developerguide/ct-enablekey.html",
+    "https://docs.aws.amazon.com/sns/latest/api/API_SetTopicAttributes.html",
+    "https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteRetentionPolicy.html"
+  ],
+  "split_policy": "Development and heldout labels record original assignment. Keep these original labels after future exposure and track subsequent use separately.",
+  "suite_id": "tracetrail-synthetic-v7"
+}

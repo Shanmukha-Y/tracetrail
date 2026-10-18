@@ -152,3 +152,38 @@ This outcome supplies no business approval or actor-intent evidence. The v6
 rubric keeps approval and intent uncertain when the supplied records lack that
 evidence, including when an API request has no recorded error. See
 [DeleteTopic errors](https://docs.aws.amazon.com/sns/latest/api/API_DeleteTopic.html).
+
+## Additional API response rules
+
+Modern KMS `EnableKey` CloudTrail records include the affected key ARN in
+`responseElements.keyId`, although the operation does not return that ARN in
+its API response. AWS documents this enrichment for records from December
+2022 onward. It identifies the affected resource; it is not a key-state field
+or evidence of the key's state at a later read. See the
+[EnableKey CloudTrail example](https://docs.aws.amazon.com/kms/latest/developerguide/ct-enablekey.html).
+
+IAM `UpdateRole` accepts `MaxSessionDuration` in seconds, from 3600 through
+43200. A logged request parameter describes the setting submitted for the
+named target role. It does not independently establish the role's later
+configuration, the duration of an already-issued session, or business approval
+for the change. Keep the target role separate from the signing session's role.
+See [UpdateRole parameters](https://docs.aws.amazon.com/IAM/latest/APIReference/API_UpdateRole.html).
+
+SNS `SetTopicAttributes` accepts `DisplayName` and a string attribute value.
+Its documented `AuthorizationError` means access to the requested resource was
+denied. That denial concerns the recorded write; it does not establish the
+attribute's later value, including any value that existed before the request.
+An ordinary read-only `GetTopicAttributes` CloudTrail record has null response
+elements, rather than the live API's returned attributes. See
+[SetTopicAttributes parameters and errors](https://docs.aws.amazon.com/sns/latest/api/API_SetTopicAttributes.html)
+and the [CloudTrail response-field rules](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html).
+
+CloudWatch Logs `DeleteRetentionPolicy` requests removal of the named log
+group's retention policy. The API returns an empty HTTP body on success, so
+null logged response elements alone are not failure evidence. Log events do
+not expire when their group has no retention policy; establishing that later
+configuration still requires state evidence. A subsequent `DescribeLogGroups`
+request with a matching name prefix and a null logged response does not supply
+the returned group's retention setting. See
+[DeleteRetentionPolicy](https://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DeleteRetentionPolicy.html)
+and the [CloudTrail response-field rules](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html).
