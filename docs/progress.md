@@ -1,6 +1,6 @@
 # Progress and release checks
 
-The repository stays private until the release checks pass. Workflow Sentinel is complete and was not changed.
+TraceTrail is an experimental portfolio project. The reliability checks below remain open. The user authorized public repository access on October 19, 2026. Workflow Sentinel is complete and was not changed.
 
 ## Implemented
 
@@ -135,7 +135,8 @@ from these actual capability results.
   between annotation support and semantic correctness.
 - Add independent cases, repeated runs and human source review. All current
   cases are exposed for future work informed by these results.
-- Keep the repository private. Offline LangSmith works; hosted export stays
+- Keep the project labeled experimental while these reliability checks remain open.
+  Offline LangSmith works; hosted export stays
   disabled and is not needed for the local scope.
 
 ## October 17: explicit planning choices and query scope

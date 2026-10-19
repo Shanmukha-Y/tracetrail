@@ -2,7 +2,9 @@
 
 TraceTrail investigates a suspicious event in local CloudTrail JSON. It uses an Ollama model to choose evidence queries, tests alternative explanations, and builds a timeline with citations to exact records. LangChain supplies the model and tools. LangGraph controls the investigation state and query budget.
 
-The application, inference, logs, traces, and evaluations run locally. It does not connect to AWS. It has no remediation or attack tools. The source repository is private while the release checks remain open.
+TraceTrail is an experimental portfolio project. It can make unsupported conclusions and stop before it has checked useful evidence. Published evaluation fixtures are synthetic. See the [measured limitations and known failures](docs/v8-evidence-review.md). Its reports require source review; it has not been validated for production incident response.
+
+The application, inference, logs, traces, and evaluations run locally. It does not connect to AWS. It has no remediation or attack tools.
 
 ## Run it
 

@@ -44,7 +44,7 @@ This scorer checks source-bound support requirements. It does not prove that
 the model's chosen link role entails its conclusion. It does not validate
 free prose, query relevance, approval, intent, causality, or completeness of
 the investigation. Assistant source reviews are labeled as such. Independent
-human review remains a release requirement.
+human review remains necessary before reliability claims.
 
 ## Offline SDK replay
 

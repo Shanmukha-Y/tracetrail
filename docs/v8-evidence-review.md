@@ -120,7 +120,8 @@ exact and exercised in actual inference, but it does not resolve premature
 stopping, false scope declarations or unsupported prose. Different suites and
 the new scorer also prevent a version-to-version support claim.
 
-The repository stays private. Further work needs complete finding links,
+At the time of this October 18 review, the repository was private.
+Further work needs complete finding links,
 better use of unresolved local evidence, repeated independent cases and human
 source review. Machine budget counters and exact source facts remain separate
 from model judgments.
