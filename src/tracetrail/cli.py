@@ -21,6 +21,7 @@ import ollama
 from tracetrail.agent import MODELS, OLLAMA_URL, PROTOCOL, investigate
 from tracetrail.evaluation import load_cases, score_run
 from tracetrail.local_model import verify_local_weights
+from tracetrail.resources import ResourceSampler
 from tracetrail.store import CloudTrailStore, Query
 from tracetrail.support_evaluation import SCORER_ID, score_claim_support
 
@@ -53,10 +54,10 @@ def fresh_result_path(requested: Path) -> Path:
 
 
 @contextmanager
-def model_session(name: str):
+def model_session(name: str, measure_resources: bool = False):
     """Serialize model use across TraceTrail processes; release this model after use."""
     if name not in MODELS:
-        raise ValueError("Use one of the three approved local model tags")
+        raise ValueError("Use one of the approved local model tags")
     lock_path = Path("/tmp/tracetrail-ollama.lock")
     fd = os.open(lock_path, os.O_CREAT | os.O_RDWR, 0o600)
     with os.fdopen(fd, "w") as lock:
@@ -75,9 +76,40 @@ def model_session(name: str):
             raise RuntimeError(
                 "Another model is loaded. Unload it before the sequential comparison"
             )
+        sampler = None
+        if measure_resources:
+            try:
+                sampler = ResourceSampler(name)
+                sampler.start()
+            except Exception as exc:
+                info["resources"] = {
+                    "measurement": "local-resource-sampling-v1",
+                    "status": "unavailable",
+                    "error_count": 1,
+                    "errors": [{"phase": "start", "error_type": type(exc).__name__}],
+                }
         try:
             yield info
         finally:
+            if sampler is not None:
+                try:
+                    startup = info.get("resources")
+                    info["resources"] = sampler.stop()
+                    if startup is not None:
+                        info["resources"]["status"] = "partial"
+                        info["resources"]["error_count"] += startup["error_count"]
+                        info["resources"]["errors"] = startup["errors"]
+                except Exception as exc:
+                    startup = info.get("resources", {})
+                    info["resources"] = {
+                        "measurement": "local-resource-sampling-v1",
+                        "status": "unavailable",
+                        "error_count": startup.get("error_count", 0) + 1,
+                        "errors": [
+                            *startup.get("errors", []),
+                            {"phase": "stop", "error_type": type(exc).__name__},
+                        ],
+                    }
             try:
                 info["loaded_models"] = [
                     item.model_dump(mode="json")
@@ -92,9 +124,11 @@ def model_session(name: str):
                 info["cleanup_error"] = {"error_type": type(exc).__name__}
 
 
-def run_case(case: dict, root: Path, model: str, strategy: str) -> dict:
+def run_case(
+    case: dict, root: Path, model: str, strategy: str, measure_resources: bool = False
+) -> dict:
     fixture = root / case["fixture"]
-    with model_session(model) as info:
+    with model_session(model, **({"measure_resources": True} if measure_resources else {})) as info:
         store = CloudTrailStore.load(fixture)
         result = investigate(
             store,

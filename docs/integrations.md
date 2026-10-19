@@ -31,6 +31,9 @@ The tested runtime uses Python 3.11. Compatible metadata does not prove model
 quality. The stored inference results and tests provide separate evidence.
 Installed versions and the pinned LangSmith evaluation signature and source
 were checked again on 2026-10-18. No package was changed.
+The October 19 pilot froze the installed versions and complete lockfile again;
+its five-model cohort uses the same integration pins. See the
+[pilot protocol](../evaluation/protocol-model-pilot-v1.json).
 
 ## LangChain and Ollama
 
@@ -219,6 +222,15 @@ approval conclusions. The preserved v5 results describe the earlier contract
 without model-authored field links.
 
 ## Local traces
+
+The October 19 [five-model pilot](model-pilot-results.md) preserves 40 original
+graph traces with 988 chain, 90 model, 90 parser and 94 tool spans. The raw
+histories and independent recursive span counts agree on the 90 actual model
+calls and 94 original tool calls. Its real offline LangSmith SDK replay
+evaluated 40 saved outputs and emitted 840 prefixed feedback items. The replay
+traces contain the exact saved outputs and no new model or tool calls.
+`upload_results` and `inference_rerun` are false. No hosted project, account,
+API key, export destination or server UI was configured.
 
 `local_context()` disables automatic LangSmith tracing with
 `tracing_context(enabled=False, parent=False)`. It also clears inherited

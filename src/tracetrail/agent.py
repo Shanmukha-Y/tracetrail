@@ -27,7 +27,13 @@ from tracetrail.store import CloudTrailStore
 from tracetrail.telemetry import local_context, serialize_local_trace
 
 REFERENCE_MODEL = "qwen3.8:27b-q4_K_M"
-MODELS = (REFERENCE_MODEL, "gemma4:31b-it-q4_K_M", "mistral-small3.2:24b")
+MODELS = (
+    REFERENCE_MODEL,
+    "gemma4:31b-it-q4_K_M",
+    "mistral-small3.2:24b",
+    "gemma4:e2b-it-q4_K_M",
+    "gemma4:12b-it-q4_K_M",
+)
 OLLAMA_URL = "http://127.0.0.1:11434"
 PROTOCOL = {
     "version": "tracetrail-v8",
@@ -227,7 +233,7 @@ class InvestigationState(TypedDict):
 
 def make_model(name: str) -> ChatOllama:
     if name not in MODELS:
-        raise ValueError("Use one of the three approved local model tags")
+        raise ValueError("Use one of the approved local model tags")
     verify_local_weights(name)
     return ChatOllama(
         model=name,

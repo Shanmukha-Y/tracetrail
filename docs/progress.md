@@ -2,16 +2,123 @@
 
 TraceTrail is an experimental portfolio project. The reliability checks below remain open. The user authorized public repository access on October 19, 2026. Workflow Sentinel is complete and was not changed.
 
+Dated instructions to keep the repository private describe earlier checkpoints.
+The October 19 publication authorization supersedes those access restrictions;
+it does not close the reliability checks.
+
 ## Implemented
 
 - Local CloudTrail JSON ingestion with exact record citations, indexed queries, and explicit budgets.
 - LangChain Ollama structured output and read-only evidence tools.
 - A stateful LangGraph investigation with bounded query and model calls.
 - Observed field validation, hypothesis status, cited timelines, raw failure retention, and private local files.
-- Three installed local model tags, sequential inference, raw remote-routing checks, proxy and redirect guards, and no ambient credential use.
+- Five approved local model tags, sequential inference, raw remote-routing checks, proxy and redirect guards, and no ambient credential use.
 - Real local graph traces and genuine offline LangSmith SDK evaluation with blocked HTTP.
 - Preserved earlier synthetic suites and a frozen two-case v4 suite with field support annotations.
 - CI for lint, formatting, and tests without inference or hosted tracing.
+
+## October 19: matched local model pilot
+
+The user requested comparisons across deployments with different capabilities.
+The cohort now adds `gemma4:e2b-it-q4_K_M` and `gemma4:12b-it-q4_K_M`
+to Qwen 27B, Mistral 24B and Gemma 31B. Both new models were downloaded from
+the official registry after licence, storage and hardware checks. The other
+three weights were reused. All five exact local licence texts identify Apache
+2.0. See the [public inventory](../evaluation/model-inventory-pilot-v1.json)
+and [deployment notes](model-cohort.md). Parameter size is not an intelligence
+ranking.
+
+The [pilot protocol](../evaluation/protocol-model-pilot-v1.json) was frozen
+before inference at 21:54:59 UTC. Its SHA-256 is
+`8fbea96221f8948ffe9303a4e41cd9decee0a353262866bbcd5cfb7c35d15643`.
+It pins 18 runtime, dependency and rubric inputs, eight schemas, the unchanged
+v8 prompt, all five effective weight digests and listed variants, package and
+server versions, and the two exposed v7 development cases. The historical
+scorer and the primary `claim-support-v1` scorer are unchanged. A tagged
+planning-action schema is deferred so it cannot confound this comparison.
+The frozen runtime passed 703 tests, lint and formatting before inference.
+
+The staged runner saves each assigned attempt with a unique cell identity,
+atomic private writes and a canonical payload hash. Resume checks the same
+source, schema, dependencies, model identities and ordered plan. It preserves
+failures and interrupted attempts. Both methods run within every model;
+method order is counterbalanced across cases and repeats.
+
+Optional sampling records separate Ollama allocation accounting and macOS
+process-tree RSS. It has bounded reads and sample counts, a joined worker
+before unload, explicit gaps and foreign-model flags. These are sampled
+maxima with overlapping memory views, not measured peak VRAM or a total formed
+by adding RSS and reported GPU allocation. Resource errors do not rewrite the
+raw investigation result.
+
+The first ten actual cells took 1,002.8001 seconds. The predeclared formula
+`1.2 * 4 * S` forecast 4,813.4403 seconds for 40 cells. Required measurements
+were complete and no foreign model was observed, so the recorded gate selected
+40. The first ten remain in the analysis. Their immutable local snapshot is
+`local-results/model-pilot-v1.stage1.json`, SHA-256
+`42c89705c4709769d0dcf4e5425c106af2a7f76cadb088a62d1aa7150e6d964b`.
+Expansion uses runtime and measurement availability, not answer quality.
+The 5,400-second accumulated wall limit stops new launches; an in-flight
+bounded run may finish after it. See the [pilot guide](model-pilot.md).
+
+The [semantic review rules](../evaluation/pilot-semantic-review-v1.md) were
+frozen before these outputs. They separate returned-evidence warrant, exact
+declared support, full-source truth, retrieval gaps, avoidable uncertainty,
+and material prose. Assistant second checks preserve disagreements. These
+known synthetic cases and same-seed repeats do not supply independent human
+validation, generalization intervals or a model winner.
+
+All 40 assigned investigations finished, using 90 actual Ollama model calls
+and 94 read-only tool calls. The accumulated whole-cell wall time was
+4,057.8170 seconds, or 67.63 minutes. Twenty-two processes passed structural
+checks; 18 remain invalid. The batch status remains `incomplete` because of
+those failures, while `attempted_all_target_cells` is true. There were no
+replacement attempts. All five models were unloaded after use; the final
+Ollama process list contained no loaded model.
+
+The real offline LangSmith SDK evaluated all 40 saved outputs and emitted
+840 prefixed feedback values, with uploads disabled and no inference rerun.
+The separate auditor verified all cells, original trace counts, exact sources,
+wire inputs, query replays, resource accounting and all 21 primary counters.
+Its 94 source-query replays are verification work, outside the original
+agent's 94 tool calls. Final code checks passed 734 tests, lint and formatting.
+Tests use marked mocks and are separate from these actual model measurements.
+
+Final raw SHA-256:
+`6c4faf86e2a374e0636850350372029ae8fe400ef120a91af10a0d8d36afb60d`.
+Final SDK SHA-256:
+`4085b9aab0920d6faaca0ca105a3a6c53b79ae29d3b6dfc4fca369416bfff95a`.
+Final independent verification SHA-256:
+`edb2075cafcc76fdf7a59d4a4d84d5f96a8927df78ead36ecd3785fb1a7a8995`.
+
+All 160 fixed-claim slots received source-aware assistant reviews. One early
+E2B adaptive KMS preliminary draft was applied before target inspection; its
+history is preserved, corrected returned-evidence judgments were locked before
+the full-source check, and a second assistant rechecked both KMS reports.
+The [pilot guide](model-pilot.md) and
+[results review](model-pilot-results.md) disclose this procedure deviation.
+No model output, source fixture, runtime or mechanical score was changed.
+
+The [checked public numeric summary](../evaluation/results-model-pilot-v1.json)
+has SHA-256
+`427119be39d68ac530ee7299269f900d8ff1a56dbff328a68c293029d9afe69e`.
+It separates 44 warranted definite decisions, 10 false definite decisions,
+8 unsupported definite decisions, 2 avoidable uncertainties, 56 retrieval-limited
+unknowns and 40 source-limited unknowns. Only 6/160 findings satisfy the complete
+primary own-link contract; 124/520 required atoms receive primary credit.
+The second assistant checked 33 selected reports and 132 slots, retaining ten
+prose-severity disagreements. Primary and adjudicated prose counts remain
+separate; they have no emitted-assertion denominator.
+
+All 20 canonical repeat-content pairs matched. A separate comparison also
+found identical failure lists in each pair.
+The memory records have 3,693 samples and no read errors or foreign model.
+Gemma's server-reported `size` and `size_vram` are much smaller than package
+bytes and RSS; this unresolved runner-accounting discrepancy is explicit in
+the results and is not described as low true residency or peak VRAM.
+The proposed eight-fresh-case follow-up is 80 core runs, or at most 100 with
+preselected repeats. Pilot-derived forecasts with 20 percent allowance are
+162.31 and 202.89 minutes. This follow-up has not run or been scheduled.
 
 ## October 18: credential context and finding-level measurement
 
@@ -946,4 +1053,4 @@ Local disk traces and offline LangSmith SDK evaluation are the intended integrat
 
 ## Support metric interpretation
 
-The `unsupported_claims` counter reports failures of the strict field and citation annotations. A missing required observation or citation can fail this check even when the status label is correct. It is not a count of proven semantic hallucinations. The scorer does not evaluate planner reasons or narrative limitations. Development-only human review found incomplete search windows, premature finishes, and language that overstated what an absent API error establishes. These remain release risks.
+The `unsupported_claims` counter reports failures of the strict field and citation annotations. A missing required observation or citation can fail this check even when the status label is correct. It is not a count of proven semantic hallucinations. The scorer does not evaluate planner reasons or narrative limitations. Development-only assistant source review found incomplete search windows, premature finishes, and language that overstated what an absent API error establishes. These remain release risks.

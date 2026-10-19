@@ -1,5 +1,33 @@
 # Frozen local evaluation
 
+## October 19 five-model development pilot
+
+The [pilot protocol](protocol-model-pilot-v1.json) freezes five exact local
+deployments, both methods within each model, two exposed v7 development cases,
+two paired repeats, 18 runtime/dependency/rubric inputs and eight schemas.
+The v8 prompts, tools, planning/report schemas, budgets and scorers are unchanged.
+The staged schedule used runtime and measurement availability, not answer
+quality, to expand to 40 assigned investigations.
+
+The [checked numeric results](results-model-pilot-v1.json) retain all 40 cells,
+90 actual model calls, 94 actual tool calls and 160 fixed-claim slots. There
+are 22 valid and 18 invalid processes. The primary own-link contract credits
+6/160 complete findings and 124/520 required atoms. Assistant source review
+separately classifies 44 warranted definite decisions, 10 false definite,
+8 unsupported definite, 2 avoidable uncertainties, 56 retrieval-limited
+unknowns and 40 source-limited unknowns. These are different measurements,
+not interchangeable accuracy scores.
+
+The real offline SDK evaluated all 40 saved outputs with 840 prefixed feedback
+values and no uploads or inference rerun. Separate source-query replays and
+counter arithmetic verify the stored evidence; they are not new agent calls.
+See the [full results and review limitations](../docs/model-pilot-results.md)
+for paired values, resource-accounting anomalies, complete failure retention,
+review disagreements and a preserved preliminary-review correction.
+The [reproduction guide](../docs/model-pilot.md) uses the dedicated pilot runner.
+These known cases and greedy repeats do not provide fresh held-out evidence,
+generalization intervals, a size trend or independent human validation.
+
 ## October 18 protocol v8 and finding-level support
 
 The v7 suite has four independently authored synthetic cases, two per split,
@@ -67,6 +95,14 @@ uv run tracetrail compare --manifest evaluation/cases-v7.json \
 uv run tracetrail local-evaluate local-results/comparison-v8.json \
   --scorer claim-support-v1
 ```
+
+These historical commands describe the October 18 source. That runtime is
+preserved at publication commit
+[`27a9af1`](https://github.com/Shanmukha-Y/tracetrail/tree/27a9af117bb845170031558b272b3dc180357ace).
+Check the v8 source hashes when reproducing it. The current checkout expands
+the approved cohort; its generic `compare` command does not reproduce the
+original 16-cell assignment. Use the dedicated frozen pilot runner for the
+October 19 study.
 
 The comparison returns nonzero if any process is invalid or failed, while
 saving every cell. Offline replay recomputes the recorded contract and refuses

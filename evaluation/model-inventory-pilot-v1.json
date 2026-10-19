@@ -1,0 +1,388 @@
+{
+  "captured_at": "2026-10-19T21:49:56.966129+00:00",
+  "deployment_limits": [
+    "Equal generation controls do not equalize model training, tokenizers, runners, or packaged MTP settings.",
+    "Parameter labels, package sizes, and advertised context are metadata, not measured intelligence.",
+    "No inference was performed to collect this inventory."
+  ],
+  "host": {
+    "cpu": "Apple M4 Max",
+    "filesystem_available_bytes": 475667292160,
+    "machine": "arm64",
+    "physical_memory_bytes": 51539607552,
+    "system": "Darwin"
+  },
+  "metadata_selection": "Public model architecture/accounting metadata only; no paths, tokenizer contents, modelfiles, licence text, process arguments, or credentials.",
+  "models": [
+    {
+      "capabilities": [
+        "completion",
+        "vision",
+        "audio",
+        "tools",
+        "thinking"
+      ],
+      "details": {
+        "families": [
+          "gemma4"
+        ],
+        "family": "gemma4",
+        "format": "gguf",
+        "parameter_size": "4.6B",
+        "parent_model": "gemma4-validation-20260929:e2b-imatrix-attention-q6-q8-draft2",
+        "quantization_level": "Q4_K_M",
+        "runner": "llamacpp"
+      },
+      "expected_runtime_digest": "b37049369adfe3d2b653af0ab301a062ca5cbe96ace6aa0d3f2559ee9b563fc2",
+      "license_sha256": "7339fa418c9ad3e8e12e74ad0fd26a9cc4be8703f9c110728a992b193be85cb2",
+      "listed_digests": [
+        "b37049369adfe3d2b653af0ab301a062ca5cbe96ace6aa0d3f2559ee9b563fc2"
+      ],
+      "listed_records": [
+        {
+          "capabilities": [
+            "completion",
+            "vision",
+            "audio",
+            "tools",
+            "thinking"
+          ],
+          "details": {
+            "context_length": 131072,
+            "embedding_length": 1536,
+            "families": [
+              "gemma4"
+            ],
+            "family": "gemma4",
+            "format": "gguf",
+            "parameter_size": "4.6B",
+            "parent_model": "gemma4-validation-20260929:e2b-imatrix-attention-q6-q8-draft2",
+            "quantization_level": "Q4_K_M",
+            "runner": "llamacpp"
+          },
+          "digest": "b37049369adfe3d2b653af0ab301a062ca5cbe96ace6aa0d3f2559ee9b563fc2",
+          "model": "gemma4:e2b-it-q4_K_M",
+          "modified_at": "2026-10-19T17:48:08.30817335-04:00",
+          "name": "gemma4:e2b-it-q4_K_M",
+          "size": 4587156505
+        }
+      ],
+      "model_info": {
+        "gemma4.block_count": 35,
+        "gemma4.context_length": 131072,
+        "gemma4.embedding_length": 1536,
+        "general.architecture": "gemma4",
+        "general.file_type": 15,
+        "general.license": "apache-2.0",
+        "general.parameter_count": 4647450147,
+        "general.quantization_version": 2,
+        "general.size_label": "4.6B"
+      },
+      "modelfile_sha256": "69357435ee1fe22f4848aba3db5671bf4e96b9ecc73fc0cecc8a4f93ecb7c550",
+      "name": "gemma4:e2b-it-q4_K_M",
+      "parameters": "draft_num_predict              3\ntemperature                    1\ntop_k                          64\ntop_p                          0.95",
+      "template_sha256": "b507b9c2f6ca642bffcd06665ea7c91f235fd32daeefdf875a0f938db05fb315"
+    },
+    {
+      "capabilities": [
+        "completion",
+        "vision",
+        "audio",
+        "tools",
+        "thinking"
+      ],
+      "details": {
+        "families": [
+          "gemma4"
+        ],
+        "family": "gemma4",
+        "format": "gguf",
+        "parameter_size": "11.9B",
+        "parent_model": "imatrix-20260927-12b/model-q4_K_M.gguf",
+        "quantization_level": "Q4_K_M",
+        "runner": "llamacpp"
+      },
+      "expected_runtime_digest": "6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b",
+      "license_sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594",
+      "listed_digests": [
+        "6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b"
+      ],
+      "listed_records": [
+        {
+          "capabilities": [
+            "completion",
+            "vision",
+            "audio",
+            "tools",
+            "thinking"
+          ],
+          "details": {
+            "context_length": 262144,
+            "embedding_length": 3840,
+            "families": [
+              "gemma4"
+            ],
+            "family": "gemma4",
+            "format": "gguf",
+            "parameter_size": "11.9B",
+            "parent_model": "imatrix-20260927-12b/model-q4_K_M.gguf",
+            "quantization_level": "Q4_K_M",
+            "runner": "llamacpp"
+          },
+          "digest": "6114515d63c17436a7c0417d82820ac65ad643e2806c5a3c89cb62846436ed0b",
+          "model": "gemma4:12b-it-q4_K_M",
+          "modified_at": "2026-10-19T17:49:33.791976318-04:00",
+          "name": "gemma4:12b-it-q4_K_M",
+          "size": 8021618941
+        }
+      ],
+      "model_info": {
+        "gemma4.block_count": 48,
+        "gemma4.context_length": 262144,
+        "gemma4.embedding_length": 3840,
+        "general.architecture": "gemma4",
+        "general.file_type": 15,
+        "general.license": "apache-2.0",
+        "general.parameter_count": 11907350576,
+        "general.quantization_version": 2,
+        "general.size_label": "12B"
+      },
+      "modelfile_sha256": "46c09b5a82842fd9677fa593b3f90a9f8262b707a6bdfa2d44a9e5915cb731f9",
+      "name": "gemma4:12b-it-q4_K_M",
+      "parameters": "draft_num_predict              3\ntemperature                    1\ntop_k                          64\ntop_p                          0.95",
+      "template_sha256": "b507b9c2f6ca642bffcd06665ea7c91f235fd32daeefdf875a0f938db05fb315"
+    },
+    {
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "details": {
+        "families": [
+          "qwen35"
+        ],
+        "family": "qwen35",
+        "format": "gguf",
+        "parameter_size": "27.3B",
+        "parent_model": "",
+        "quantization_level": "Q4_K_M"
+      },
+      "expected_runtime_digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+      "license_sha256": "4c6a8e842ef0d8504549facfb03f1273a8d0022991519bc1888522cc1a5517d1",
+      "listed_digests": [
+        "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+      ],
+      "listed_records": [
+        {
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ],
+          "details": {
+            "context_length": 262144,
+            "embedding_length": 5120,
+            "families": [
+              "qwen35"
+            ],
+            "family": "qwen35",
+            "format": "gguf",
+            "parameter_size": "27.3B",
+            "parent_model": "",
+            "quantization_level": "Q4_K_M",
+            "runner": "ggml"
+          },
+          "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+          "model": "qwen3.8:27b-q4_K_M",
+          "modified_at": "2026-10-13T09:43:49.132910661-04:00",
+          "name": "qwen3.8:27b-q4_K_M",
+          "size": 17741872132
+        }
+      ],
+      "model_info": {
+        "general.architecture": "qwen35",
+        "general.file_type": 15,
+        "general.license": "apache-2.0",
+        "general.parameter_count": 27320697856,
+        "general.quantization_version": 2,
+        "general.size_label": "27B",
+        "qwen35.block_count": 65,
+        "qwen35.context_length": 262144,
+        "qwen35.embedding_length": 5120
+      },
+      "modelfile_sha256": "df76a4c0115381f71d2fa37c35e310db8d5e671e57905edd03dd60f840eea37c",
+      "name": "qwen3.8:27b-q4_K_M",
+      "parameters": "min_p                          0\npresence_penalty               0\nrepeat_penalty                 1\ntemperature                    1\ntop_k                          20\ntop_p                          0.95",
+      "template_sha256": "b507b9c2f6ca642bffcd06665ea7c91f235fd32daeefdf875a0f938db05fb315"
+    },
+    {
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools"
+      ],
+      "details": {
+        "families": [
+          "mistral3",
+          "clip"
+        ],
+        "family": "mistral3",
+        "format": "gguf",
+        "parameter_size": "24.0B",
+        "parent_model": "",
+        "quantization_level": "Q4_K_M",
+        "runner": "llamacpp"
+      },
+      "expected_runtime_digest": "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06",
+      "license_sha256": "43070e2d4e532684de521b885f385d0841030efa2b1a20bafb76133a5e1379c1",
+      "listed_digests": [
+        "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06",
+        "8a6b95e5273b333acdbb10a8aedb3f82a5a35a036e0d966c58d1b8558acdeb13"
+      ],
+      "listed_records": [
+        {
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools"
+          ],
+          "details": {
+            "context_length": 131072,
+            "embedding_length": 5120,
+            "families": [
+              "mistral3",
+              "clip"
+            ],
+            "family": "mistral3",
+            "format": "gguf",
+            "parameter_size": "24.0B",
+            "parent_model": "",
+            "quantization_level": "Q4_K_M",
+            "runner": "llamacpp"
+          },
+          "digest": "57bbe3480604be532b76a11087b4028a73e251a22c34380527281039a3967a06",
+          "model": "mistral-small3.2:24b",
+          "modified_at": "2026-10-13T10:56:35.570195974-04:00",
+          "name": "mistral-small3.2:24b",
+          "size": 15177404711
+        },
+        {
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools"
+          ],
+          "details": {
+            "context_length": 131072,
+            "embedding_length": 5120,
+            "families": [
+              "mistral3"
+            ],
+            "family": "mistral3",
+            "format": "gguf",
+            "parameter_size": "24.0B",
+            "parent_model": "",
+            "quantization_level": "Q4_K_M",
+            "runner": "ggml"
+          },
+          "digest": "8a6b95e5273b333acdbb10a8aedb3f82a5a35a036e0d966c58d1b8558acdeb13",
+          "model": "mistral-small3.2:24b",
+          "modified_at": "2026-10-13T10:56:35.570195974-04:00",
+          "name": "mistral-small3.2:24b",
+          "size": 15177384862
+        }
+      ],
+      "model_info": {
+        "general.architecture": "mistral3",
+        "general.file_type": 15,
+        "general.parameter_count": 23572403200,
+        "general.quantization_version": 2,
+        "mistral3.block_count": 40,
+        "mistral3.context_length": 131072,
+        "mistral3.embedding_length": 5120
+      },
+      "modelfile_sha256": "04faeb5d575e7978a1d1707baa5d6917fb68e29c6c7b3dd86099d975c602d9f5",
+      "name": "mistral-small3.2:24b",
+      "parameters": "temperature                    0.15",
+      "template_sha256": "706c4d1164f7f1bbce2a852f2bc9cfa66b98d24f79300b9034388e07fcda98c8"
+    },
+    {
+      "capabilities": [
+        "completion",
+        "vision",
+        "tools",
+        "thinking"
+      ],
+      "details": {
+        "families": [
+          "gemma4"
+        ],
+        "family": "gemma4",
+        "format": "gguf",
+        "parameter_size": "30.7B",
+        "parent_model": "dhiltgen/gemma4:31b-it-mtp-q4_K_M-llamacpp",
+        "quantization_level": "Q4_K_M",
+        "runner": "llamacpp"
+      },
+      "expected_runtime_digest": "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97",
+      "license_sha256": "7339fa418c9ad3e8e12e74ad0fd26a9cc4be8703f9c110728a992b193be85cb2",
+      "listed_digests": [
+        "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97"
+      ],
+      "listed_records": [
+        {
+          "capabilities": [
+            "completion",
+            "vision",
+            "tools",
+            "thinking"
+          ],
+          "details": {
+            "context_length": 262144,
+            "embedding_length": 5376,
+            "families": [
+              "gemma4"
+            ],
+            "family": "gemma4",
+            "format": "gguf",
+            "parameter_size": "30.7B",
+            "parent_model": "dhiltgen/gemma4:31b-it-mtp-q4_K_M-llamacpp",
+            "quantization_level": "Q4_K_M",
+            "runner": "llamacpp"
+          },
+          "digest": "17ba34c06c801ba22f6047bab21ced9429c6d43e0e42ecf339b0f3e5a61e8d97",
+          "model": "gemma4:31b-it-q4_K_M",
+          "modified_at": "2026-10-13T10:37:43.936686877-04:00",
+          "name": "gemma4:31b-it-q4_K_M",
+          "size": 20385458234
+        }
+      ],
+      "model_info": {
+        "gemma4.block_count": 60,
+        "gemma4.context_length": 262144,
+        "gemma4.embedding_length": 5376,
+        "general.architecture": "gemma4",
+        "general.file_type": 15,
+        "general.license": "apache-2.0",
+        "general.parameter_count": 30697345596,
+        "general.quantization_version": 2,
+        "general.size_label": "31B"
+      },
+      "modelfile_sha256": "f18345480c0c8173c0de2a0e1c5cb376f1ac9741485f62e3a2e05bad244ab60a",
+      "name": "gemma4:31b-it-q4_K_M",
+      "parameters": "top_p                          0.95\ndraft_num_predict              3\ntemperature                    1\ntop_k                          64",
+      "template_sha256": "b507b9c2f6ca642bffcd06665ea7c91f235fd32daeefdf875a0f938db05fb315"
+    }
+  ],
+  "ollama_version": "0.40.0",
+  "private_inventory_sha256": "17f179b7f5e8f370eff36af800777d6c5ae627b91267937b03679e1938b1ac5b",
+  "safety": {
+    "hosted_uploads": false,
+    "loopback_only": true,
+    "one_model_at_a_time": true,
+    "remote_routing": false
+  }
+}

@@ -2,7 +2,7 @@
 
 TraceTrail investigates a suspicious event in local CloudTrail JSON. It uses an Ollama model to choose evidence queries, tests alternative explanations, and builds a timeline with citations to exact records. LangChain supplies the model and tools. LangGraph controls the investigation state and query budget.
 
-TraceTrail is an experimental portfolio project. It can make unsupported conclusions and stop before it has checked useful evidence. Published evaluation fixtures are synthetic. See the [measured limitations and known failures](docs/v8-evidence-review.md). Its reports require source review; it has not been validated for production incident response.
+TraceTrail is an experimental portfolio project. It can make unsupported conclusions and stop before it has checked useful evidence. Published evaluation fixtures are synthetic. See the [measured limitations and known failures](docs/model-pilot-results.md). Its reports require source review; it has not been validated for production incident response.
 
 The application, inference, logs, traces, and evaluations run locally. It does not connect to AWS. It has no remediation or attack tools.
 
@@ -15,7 +15,7 @@ uv sync --frozen
 uv run tracetrail demo --manifest evaluation/cases-v7.json --case dev-role-duration-direction
 ```
 
-The default model is `qwen3.8:27b-q4_K_M`. The approved comparison models are `gemma4:31b-it-q4_K_M` and `mistral-small3.2:24b`. These tags must already resolve to local GGUF weights. TraceTrail checks raw Ollama metadata for remote routing, rejects other tags, ignores proxy settings and ambient API credentials, and disables HTTP redirects. It does not download models. Model use is sequential, with a process lock and an unload after each run. Stop other model sessions before a comparison.
+The default model is `qwen3.8:27b-q4_K_M`. The approved local cohort also includes `gemma4:e2b-it-q4_K_M`, `gemma4:12b-it-q4_K_M`, `gemma4:31b-it-q4_K_M`, and `mistral-small3.2:24b`. See the [exact model deployments](docs/model-cohort.md). These tags must already resolve to local GGUF weights. TraceTrail checks raw Ollama metadata for remote routing, rejects other tags, ignores proxy settings and ambient API credentials, and disables HTTP redirects. It does not download models. Model use is sequential, with a process lock and an unload after each run. Stop other model sessions before a comparison.
 
 The default demo writes `local-results/demo.json` with private file permissions. This directory is excluded from Git. The report contains the model's findings, exact field observations, a timeline, query history, errors, model metadata, and local execution traces. Failed model outputs remain visible. A new run uses a new filename when the requested result file already exists. An invalid or truncated output does not produce a replacement report.
 
@@ -89,7 +89,28 @@ Local trace files and offline SDK evaluation are the project's LangSmith integra
 
 The [frozen synthetic suites](evaluation/README.md) preserve exact fixtures and annotations. The current v7 suite has two development cases and two held-out cases, independently authored and frozen before protocol v8 inference. All earlier suites are exposed regression data. Original split labels remain historical after exposure. The CLI default still uses v2 for compatibility; pass `--manifest evaluation/cases-v7.json` to select v7. All events, accounts, credentials and names are invented. The fixtures represent API sequences, not real incidents. Earlier fixture bytes and measured results remain available. See [CloudTrail semantics and limits](docs/cloudtrail.md).
 
-The adaptive method lets the model choose queries. The fixed method always searches the seed identity, source address, and access key in a one-hour window on each side of the seed. Both methods use the same evidence tools, record limits, report prompt, and report schema. The adaptive method also makes planning calls. Those calls count toward its latency and model cost. All three models receive the same frozen prompts, cases, schemas, and budgets. Qwen is the reference for the method comparison.
+The adaptive method lets the model choose queries. The fixed method always searches the seed identity, source address, and access key in a one-hour window on each side of the seed. Both methods use the same evidence tools, record limits, report prompt, and report schema. The adaptive method also makes planning calls. Those calls count toward its latency and model cost. Each model within a frozen comparison receives the same application prompts, cases, schemas, and budgets. Qwen is the reference for the method comparison.
+
+The October 19 [five-model development pilot](docs/model-pilot-results.md) ran 40 actual investigations on two exposed synthetic cases, with both methods within every model and two paired repeats. It used 90 model calls and 94 tool calls. Twenty-two processes passed structural checks; all 18 invalid attempts remain. The real offline LangSmith SDK replay produced 840 feedback values, verified against the saved outputs.
+
+Each row below has four assignments and 16 requested claim slots. Source-aware assistant review separates warranted definite conclusions from false and unsupported ones. Proper uncertainty has separate categories in the full report; these counts are not an accuracy score.
+
+| Model and method | Valid processes | Warranted definite | False definite | Unsupported definite | Mean cell seconds |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Gemma E2B adaptive | 0/4 | 0 | 0 | 4 | 15.90 |
+| Gemma E2B fixed | 0/4 | 2 | 2 | 4 | 11.87 |
+| Gemma 12B adaptive | 2/4 | 6 | 2 | 0 | 130.79 |
+| Gemma 12B fixed | 4/4 | 2 | 2 | 0 | 35.31 |
+| Qwen 27B adaptive | 4/4 | 8 | 2 | 0 | 219.20 |
+| Qwen 27B fixed | 4/4 | 2 | 0 | 0 | 68.28 |
+| Mistral 24B adaptive | 2/4 | 8 | 2 | 0 | 144.70 |
+| Mistral 24B fixed | 0/4 | 2 | 0 | 0 | 44.58 |
+| Gemma 31B adaptive | 2/4 | 12 | 0 | 0 | 279.15 |
+| Gemma 31B fixed | 4/4 | 2 | 0 | 0 | 64.67 |
+
+The complete review also records 2 avoidable uncertainties, 56 retrieval-limited unknowns and 40 source-limited unknowns. Only 6/160 findings meet the complete primary field-link contract, covering 124/520 required atoms in valid processes. A semantic conclusion and complete declared support are separate measurements. The [per-cell numeric results](evaluation/results-model-pilot-v1.json) retain failures, paired differences, resource measurements, review disagreements and artifact hashes. The [review limitations](docs/model-pilot-results.md#review-provenance-and-limitations) disclose a corrected preliminary review draft and the absence of independent human validation.
+
+See the [reproduction guide](docs/model-pilot.md) and [proposed fresh-case study](docs/benchmark-plan.md). Same-seed repeats measure observed stability; two exposed case clusters and parameter counts do not establish intelligence, a model winner or production reliability. Historical comparisons below retain their original assignments.
 
 The frozen [v8 protocol fingerprint](evaluation/protocol-v8.json) records 13 source files, eight schemas, the prompt, scorer and manifest hashes. V8 adds the observed credential map and a short direction-specific planning instruction. Report instructions, schemas, exact projection, fixed searches, budgets and the historical scorer retain their prior contracts. Both methods receive the added context. The map and instruction change together, so their effects cannot be isolated. Runtime validation receives no answer annotations or case-specific support rules.
 
