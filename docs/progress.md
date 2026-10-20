@@ -46,11 +46,13 @@ unchanged.
 The first actual launch request was blocked by the local foreign-model
 preflight. Ollama had another application's Qwen 9B digest
 `c97eb11d70b1acdc88af01eef566c1fe4f7fbe93eb1afc06871132f293ff425a`
-loaded, with activity extending its expiry. No model was evicted. The private
-batch has zero attempted cells and permissions `0600`; no new inference,
-SDK replay, trace count or performance result is claimed. Execution is pending
-a clear Ollama server, and the operator has been asked to pause the competing
-session. Resume the same batch after the loaded-model state changes.
+loaded. The original expiry observations established residency, not current
+generation or ownership. No model was evicted. The private batch has zero
+attempted cells and permissions `0600`; no new inference, SDK replay, trace
+count or performance result is claimed. Execution is pending completion of
+the other workload and a successful normal preflight. The follow-up below
+supersedes the earlier request to pause that session. Resume the same batch
+after the other work finishes and normal model residency permits it.
 
 The [reproduction and interpretation guide](heldout-v9.md) separates first-use
 provenance from later reproductions, and returned-record coverage from report
@@ -59,6 +61,38 @@ one-hour window. They are a constructed scope stress/control pair. A broad
 adaptive advantage, model winner or production reliability cannot follow from
 this sample. The [roadmap](../ROADMAP.md) keeps the larger study and independent
 human review open. Workflow Sentinel and Caseboard were not changed.
+
+## October 20: read-only concurrency follow-up
+
+Ollama's [process-status API](https://docs.ollama.com/api/ps) lists loaded models.
+It exposes no busy flag, active-request count, owner or caller identity. In the
+[pinned scheduler source](https://github.com/ollama/ollama/blob/v0.40.0/server/sched.go),
+expiry can change after a request finishes or be calculated from current time
+when internal expiry is zero. Expiry movement alone does not establish active
+generation. The earlier interpretation was too strong.
+
+Read-only process and socket checks supplied separate evidence of ongoing
+work. A study client held an established loopback connection to Ollama, which
+held a connection to the loaded model runner. Between 13:55:43 and 13:55:51 UTC,
+the runner's CPU time increased from 272:34.03 to 272:57.14, or 23.11 CPU seconds
+over about 8.08 elapsed seconds. This is evidence of ongoing model-runner work,
+not merely weights retained in idle memory. These observations do not identify
+the exact token-generation phase or prove future completion.
+
+The private process/cwd/socket audit is
+`local-results/ollama-concurrency-20261020T1356.json`, SHA-256
+`b116dcb0ea238dcc9ba3c933987cce9383b2ae93f6bd13901828d007b6eb82f9`.
+It has permissions `0600`. No other project's logs, inputs or result files
+were opened. No generation, unload, stop or pause request was sent, no process
+was signalled, and no other project was changed. The frozen study still has
+zero attempted cells, and its protocol SHA-256 remains unchanged.
+
+Leave the other workload running. Before TraceTrail resumes, obtain completion
+coordination from its owner or observe its normal completion, let the foreign
+model unload normally, and pass the unchanged local resource preflight. A
+loaded model alone would not establish activity or ownership; an idle CPU
+sample or an open keep-alive socket alone would not establish safe completion.
+No performance or new offline SDK result is claimed.
 
 ## October 20: automated test limit
 

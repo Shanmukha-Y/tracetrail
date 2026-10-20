@@ -60,9 +60,11 @@ API semantics, exact annotations and uncertainty limits.
 
 ## Reproduction
 
-Use the pinned environment and installed local Qwen weights. Stop other model
-sessions first. The runner refuses a foreign loaded model and never unloads
-another application's model. Logs, model outputs, and trace trees stay in
+Use the pinned environment and installed local Qwen weights. Reserve the server after other workloads finish. The runner refuses a foreign
+loaded model and never unloads another application's model. Model residency
+from `/api/ps` does not establish active generation or ownership. Process and
+connection checks can add time-bound evidence, but completion needs separate
+coordination or observation before normal preflight. Logs, model outputs, and trace trees stay in
 ignored private local files. No hosted LangSmith project or server is used.
 
 ```sh
