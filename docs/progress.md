@@ -17,6 +17,26 @@ it does not close the reliability checks.
 - Preserved earlier synthetic suites and a frozen two-case v4 suite with field support annotations.
 - CI for lint, formatting, and tests without inference or hosted tracing.
 
+## October 20: automated test limit
+
+The collected suite is reduced from 734 cases in 23 modules to 50 cases in
+16 modules, including parameter variants. Forty-seven existing cases remain;
+687 old cases were removed and three focused checks were added. Root
+`conftest.py` counts items before deselection and fails collection above 50.
+No test was disabled, excluded, moved or merged into a scenario loop.
+The [inventory and coverage tradeoffs](test-coverage.md) name the retained
+boundaries and the direct regression coverage that was dropped.
+
+All 50 cases pass, with lint and formatting passing. Production code,
+dependencies, scripts, fixtures, protocols and model evidence match all
+73 original file hashes. The existing auditor verified the saved 40-cell
+pilot and its SDK replay again, including the original 90 model calls and
+94 tool calls. The audit made 94 separate read-only source-query replays,
+with no new inference or SDK evaluation. Its private verification SHA-256 is
+`512e1e2904851d95947c35c5851a86405096ef6c96e665bbd5157a617eaa63f2`.
+Earlier test counts below describe the earlier revisions. No new benchmark
+was run. Workflow Sentinel was not changed.
+
 ## October 19: matched local model pilot
 
 The user requested comparisons across deployments with different capabilities.

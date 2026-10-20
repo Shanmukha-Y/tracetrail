@@ -30,7 +30,7 @@ def metadata():
     }
 
 
-@pytest.mark.parametrize("remote_field", ["remote_host", "remote_model"])
+@pytest.mark.parametrize("remote_field", ["remote_model"])
 def test_raw_remote_tag_rejected_before_model_details(monkeypatch, remote_field):
     item = metadata()
     item[remote_field] = "synthetic-remote-routing"
@@ -47,7 +47,7 @@ def test_raw_remote_tag_rejected_before_model_details(monkeypatch, remote_field)
     assert calls == ["/api/tags"]
 
 
-@pytest.mark.parametrize("remote_field", ["remote_host", "remote_model"])
+@pytest.mark.parametrize("remote_field", ["remote_host"])
 def test_remote_model_details_rejected_before_version_or_inference(monkeypatch, remote_field):
     calls = []
 
@@ -65,51 +65,13 @@ def test_remote_model_details_rejected_before_version_or_inference(monkeypatch, 
     assert calls == ["/api/tags", "/api/show"]
 
 
-@pytest.mark.parametrize("changes", [{"size": 123}, {"details": {"format": "remote"}}])
-def test_metadata_without_large_local_gguf_weights_is_rejected(monkeypatch, changes):
-    item = {**metadata(), **changes}
-
-    def fake_metadata(route, payload=None):
-        if route == "/api/tags":
-            return {"models": [item]}
-        assert route == "/api/show"
-        return {"details": {"format": "gguf"}}
-
-    monkeypatch.setattr(local_model, "local_json", fake_metadata)
-    with pytest.raises(ValueError, match="local GGUF weights"):
-        local_model.verify_local_weights(agent.MODELS[0])
-
-
-def test_local_weight_metadata_preserves_frozen_digest(monkeypatch):
-    calls = []
-
-    def fake_metadata(route, payload=None):
-        calls.append((route, payload))
-        if route == "/api/tags":
-            return {"models": [metadata()]}
-        if route == "/api/show":
-            return {"details": {"format": "gguf"}}
-        assert route == "/api/version"
-        return {"version": "synthetic-test-version"}
-
-    monkeypatch.setattr(local_model, "local_json", fake_metadata)
-    result = local_model.verify_local_weights(agent.MODELS[0])
-    assert result["listed_digests"] == ["synthetic-test-digest"]
-    assert result["remote_routing"] is False
-    assert calls == [
-        ("/api/tags", None),
-        ("/api/show", {"model": agent.MODELS[0]}),
-        ("/api/version", None),
-    ]
-
-
 def test_metadata_transport_ignores_proxy_credentials_and_redirects(monkeypatch):
     monkeypatch.setenv("HTTPS_PROXY", "http://example.invalid:3128")
     monkeypatch.setenv("HTTP_PROXY", "http://example.invalid:3128")
     monkeypatch.setenv("OLLAMA_API_KEY", "synthetic-test-secret-never-used")
     captured = {}
 
-    class TestOnlyResponse:
+    class FakeResponse:
         def __enter__(self):
             return self
 
@@ -120,15 +82,15 @@ def test_metadata_transport_ignores_proxy_credentials_and_redirects(monkeypatch)
             assert 0 < limit <= 4 * 1024 * 1024
             return json.dumps({"models": []}).encode()
 
-    class TestOnlyOpener:
+    class FakeOpener:
         def open(self, request, *, timeout):
             captured["request"] = request
             assert timeout <= 10
-            return TestOnlyResponse()
+            return FakeResponse()
 
     def fake_opener(*handlers):
         captured["handlers"] = handlers
-        return TestOnlyOpener()
+        return FakeOpener()
 
     monkeypatch.setattr(local_model, "build_opener", fake_opener)
     assert local_model.local_json("/api/tags") == {"models": []}
@@ -140,15 +102,6 @@ def test_metadata_transport_ignores_proxy_credentials_and_redirects(monkeypatch)
     redirect = next(h for h in captured["handlers"] if isinstance(h, local_model._NoRedirect))
     with pytest.raises(ValueError, match="cannot redirect"):
         redirect.redirect_request(request, None, 307, "redirect", {}, "https://example.invalid")
-
-
-def test_unknown_metadata_route_rejected_before_transport(monkeypatch):
-    def forbidden_opener(*args):
-        raise AssertionError("An unsupported route reached the transport")
-
-    monkeypatch.setattr(local_model, "build_opener", forbidden_opener)
-    with pytest.raises(ValueError, match="Unsupported metadata route"):
-        local_model.local_json("https://example.invalid/api/tags")
 
 
 def test_unapproved_model_rejected_before_preflight_or_client(monkeypatch):

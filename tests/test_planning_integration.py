@@ -20,10 +20,8 @@ CALLER_KEY = "SYNTHETIC_PLANNING_CALLER_KEY"
 HYPOTHESES = [{"claim_id": "approval", "statement": "The observed activity had business approval."}]
 
 
-class TestOnlyPlanningModel:
+class FakePlanningModel:
     """Validate each exact queued response with the real requested wire schema."""
-
-    __test__ = False
 
     def __init__(self, responses):
         self.responses = deque(responses)
@@ -35,7 +33,7 @@ class TestOnlyPlanningModel:
         assert include_raw is True
         owner = self
 
-        class TestOnlyInvoker:
+        class FakeInvoker:
             def invoke(self, messages, config=None):
                 payload = json.loads(messages[-1].content)
                 owner.calls.append({"schema": schema, "payload": payload})
@@ -51,7 +49,7 @@ class TestOnlyPlanningModel:
                     return {"raw": raw, "parsed": None, "parsing_error": exc}
                 return {"raw": raw, "parsed": parsed, "parsing_error": None}
 
-        return TestOnlyInvoker()
+        return FakeInvoker()
 
 
 @dataclass
@@ -188,11 +186,6 @@ def custom_choice(query):
     return lambda payload: plan(payload, action="query_events", query=deepcopy(query))
 
 
-def continuation_choice(payload):
-    (continuation,) = payload["coverage"]["continuations"]
-    return plan(payload, action="query_events", continuation_id=continuation["id"])
-
-
 def seed_report(payload):
     """A test-only uncertain report, separate from the planning response schema."""
     ref = payload["seed"]["ref"]
@@ -212,7 +205,7 @@ def seed_report(payload):
 
 
 def run_graph(observed, responses):
-    model = TestOnlyPlanningModel(responses)
+    model = FakePlanningModel(responses)
     result = investigate(
         observed.store,
         "seed",
@@ -223,29 +216,6 @@ def run_graph(observed, responses):
     )
     assert result["test_only"] is True
     return result, model
-
-
-def test_honest_finish_can_leave_all_local_pivots_and_three_queries_unused(tmp_path, monkeypatch):
-    observed = observed_store(tmp_path, monkeypatch)
-    result, model = run_graph(observed, [honest_finish, seed_report])
-
-    assert result["status"] == "completed"
-    assert result["stop_reason"] == "model_finish"
-    assert result["query_count"] == 0
-    assert result["model_calls"] == 2
-    assert observed.queries == []
-    assert observed.gets == ["seed"]
-    assert result["tool_history"] == []
-    assert len(result["evidence"]) == 1
-    assert result["failures"] == []
-    assert [call["schema"] for call in model.calls] == [Decision, ReportSelection]
-    assert model.calls[-1]["payload"]["remaining_queries"] == 3
-    assert model.calls[-1]["payload"]["stop_reason"] == "model_finish"
-    decision = result["decision_history"][0]
-    assert decision["ledger"][0]["evidence_refs"] == [result["evidence"][0]["ref"]]
-    assert decision["dispositions"][0]["disposition"] == "deferred"
-    assert json.loads(result["model_history"][0]["output"]) == model.raw_responses[0]
-    assert model.raw_responses[0]["ledger"][0]["evidence_refs"] == ["E0"]
 
 
 def invalid_decision(payload, defect):
@@ -273,18 +243,7 @@ def invalid_decision(payload, defect):
     return response
 
 
-@pytest.mark.parametrize(
-    "defect",
-    [
-        "unknown_candidate",
-        "unknown_continuation",
-        "two_query_branches",
-        "missing_dispositions",
-        "unsearched_called_tested",
-        "unknown_ledger_evidence",
-        "extra_schema_field",
-    ],
-)
+@pytest.mark.parametrize("defect", ["two_query_branches", "extra_schema_field"])
 def test_invalid_plan_is_preserved_without_a_query_fallback_or_repair(
     tmp_path, monkeypatch, defect
 ):
@@ -333,93 +292,6 @@ def test_candidate_selection_executes_only_that_observed_filter_once(tmp_path, m
     assert candidate["attempts"][0]["attempt_id"] == "Q0"
     assert candidate["attempts"][0]["args"] == observed.queries[0]
     assert len(model.calls[0]["payload"]["coverage"]["candidates"]) > 1
-    assert result["failures"] == []
-
-
-def test_custom_query_keeps_its_and_filters_time_scope_limit_and_offset(tmp_path, monkeypatch):
-    observed = observed_store(tmp_path, monkeypatch, count=4)
-    query = {
-        "principal": PRINCIPAL,
-        "access_key": CALLER_KEY,
-        "source_ip": "192.0.2.10",
-        "event_name": "ListBuckets",
-        "start_time": "2026-01-01T09:00:00Z",
-        "end_time": "2026-01-01T11:00:00Z",
-        "limit": 1,
-        "offset": 1,
-    }
-    result, model = run_graph(observed, [custom_choice(query), honest_finish, seed_report])
-
-    assert result["status"] == "completed"
-    assert result["query_count"] == 1
-    assert observed.queries == [Query.model_validate(query).model_dump(mode="json")]
-    assert result["tool_history"][0]["args"] == observed.queries[0]
-    assert result["tool_history"][0]["result"]["matched"] == 2
-    assert result["tool_history"][0]["result"]["records"][0]["event_id"] == "record-3"
-    assert model.raw_responses[0]["query"] == query
-    assert model.raw_responses[0]["candidate_id"] is None
-    assert model.raw_responses[0]["continuation_id"] is None
-    assert result["failures"] == []
-
-
-def test_get_event_remains_an_explicit_counted_choice_without_a_search(tmp_path, monkeypatch):
-    observed = observed_store(tmp_path, monkeypatch)
-    result, model = run_graph(
-        observed,
-        [
-            lambda payload: plan(payload, action="get_event", identifier="record-1"),
-            honest_finish,
-            seed_report,
-        ],
-    )
-
-    assert result["status"] == "completed"
-    assert result["query_count"] == 1
-    assert result["model_calls"] == 3
-    assert observed.queries == []
-    assert observed.gets == ["seed", "record-1"]
-    assert result["tool_history"][0]["name"] == "get_event"
-    assert result["tool_history"][0]["args"] == {"identifier": "record-1"}
-    assert result["tool_history"][0]["result"]["event_id"] == "record-1"
-    assert len(result["evidence"]) == 2
-    assert model.calls[1]["payload"]["remaining_queries"] == 2
-    assert result["failures"] == []
-
-
-def test_continuation_uses_only_the_pending_page_and_preserves_prior_scope(tmp_path, monkeypatch):
-    observed = observed_store(tmp_path, monkeypatch, count=23)
-    query = {
-        "principal": PRINCIPAL,
-        "access_key": CALLER_KEY,
-        "start_time": "2026-01-01T09:00:00Z",
-        "end_time": "2026-01-01T11:00:00Z",
-        "limit": 20,
-    }
-    result, model = run_graph(
-        observed, [custom_choice(query), continuation_choice, honest_finish, seed_report]
-    )
-
-    assert result["status"] == "completed"
-    assert result["query_count"] == 2
-    assert result["model_calls"] == 4
-    expected = Query.model_validate(query).model_dump(mode="json")
-    assert observed.queries == [expected, {**expected, "offset": 20}]
-    assert observed.gets == ["seed"]
-    first, second = result["tool_history"]
-    assert first["result"]["truncated"] is True
-    assert first["result"]["next_offset"] == 20
-    assert len(first["result"]["records"]) == 20
-    assert second["result"]["truncated"] is False
-    assert second["result"]["next_offset"] is None
-    assert len(second["result"]["records"]) == 3
-    assert len(result["evidence"]) == 23
-    (pending,) = model.calls[1]["payload"]["coverage"]["continuations"]
-    assert pending["attempt_id"] == "Q0"
-    assert pending["query"] == observed.queries[1]
-    assert model.raw_responses[1]["continuation_id"] == pending["id"]
-    assert model.raw_responses[1]["query"] is None
-    assert model.calls[2]["payload"]["coverage"]["continuations"] == []
-    assert model.calls[2]["payload"]["remaining_queries"] == 1
     assert result["failures"] == []
 
 

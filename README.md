@@ -140,3 +140,9 @@ uv run pytest -q
 ```
 
 Unit tests use clearly marked test-only models. They verify budgets, evidence integrity, failures, local transport, and offline evaluation. They are separate from real Ollama capability evidence. CI runs these checks without a model or cloud inference. [Progress and release checks](docs/progress.md) record the actual local runs and remaining work.
+
+The current suite has 50 collected cases, including parameter variants. A
+collection guard rejects more than 50. See the [test inventory and coverage
+tradeoffs](docs/test-coverage.md) for the reduction from 734 cases. Historical
+benchmark test counts describe the earlier revisions; model measurements and
+their artifacts remain unchanged.
