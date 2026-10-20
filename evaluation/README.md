@@ -1,5 +1,21 @@
 # Frozen local evaluation
 
+## October 20 frozen first-use method check
+
+The [v9 manifest](cases-v9.json) adds two new assistant-authored synthetic
+held-out cases: an explicitly denied boundary-removal request and a read-only
+inventory sequence. A separate pre-inference source check validated all typed
+annotations and query reachability. This is not independent human validation.
+
+The [frozen protocol](protocol-heldout-v9.json) keeps the production v8 runtime
+and exact Qwen deployment unchanged. It assigns both methods on each case with
+two paired repeats, for eight runs, 32 claim slots and 100 required atoms.
+The cases deliberately stress the fixed one-hour search window; they are not
+a representative incident sample. The [reproduction guide](../docs/heldout-v9.md)
+describes the independent source check, frozen metrics, failure retention and
+local-only execution. No v9 model result is claimed until actual inference
+and matching offline SDK evidence are verified.
+
 ## October 19 five-model development pilot
 
 The [pilot protocol](protocol-model-pilot-v1.json) freezes five exact local

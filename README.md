@@ -110,7 +110,11 @@ Each row below has four assignments and 16 requested claim slots. Source-aware a
 
 The complete review also records 2 avoidable uncertainties, 56 retrieval-limited unknowns and 40 source-limited unknowns. Only 6/160 findings meet the complete primary field-link contract, covering 124/520 required atoms in valid processes. A semantic conclusion and complete declared support are separate measurements. The [per-cell numeric results](evaluation/results-model-pilot-v1.json) retain failures, paired differences, resource measurements, review disagreements and artifact hashes. The [review limitations](docs/model-pilot-results.md#review-provenance-and-limitations) disclose a corrected preliminary review draft and the absence of independent human validation.
 
-See the [reproduction guide](docs/model-pilot.md) and [proposed fresh-case study](docs/benchmark-plan.md). Same-seed repeats measure observed stability; two exposed case clusters and parameter counts do not establish intelligence, a model winner or production reliability. Historical comparisons below retain their original assignments.
+The next [bounded first-use method check](docs/heldout-v9.md) freezes two new
+synthetic cases and eight Qwen assignments. Its separate [roadmap](ROADMAP.md)
+tracks execution and remaining evidence.
+
+See the [reproduction guide](docs/model-pilot.md) and [proposed larger fresh-case study](docs/benchmark-plan.md). Same-seed repeats measure observed stability; two exposed case clusters and parameter counts do not establish intelligence, a model winner or production reliability. Historical comparisons below retain their original assignments.
 
 The frozen [v8 protocol fingerprint](evaluation/protocol-v8.json) records 13 source files, eight schemas, the prompt, scorer and manifest hashes. V8 adds the observed credential map and a short direction-specific planning instruction. Report instructions, schemas, exact projection, fixed searches, budgets and the historical scorer retain their prior contracts. Both methods receive the added context. The map and instruction change together, so their effects cannot be isolated. Runtime validation receives no answer annotations or case-specific support rules.
 

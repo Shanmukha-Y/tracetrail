@@ -317,10 +317,10 @@ and reported in the local artifact.
 
 ## LangSmith SDK and platform UI
 
-The [LangSmith SDK license](https://github.com/langchain-ai/langsmith-sdk/blob/main/LICENSE)
+The [LangSmith SDK license](https://github.com/langchain-ai/langsmith-sdk/blob/v0.14.8/LICENSE)
 is MIT. The LangSmith server and web UI are separate products. The
 [official self-hosting guide](https://docs.langchain.com/langsmith/self-hosted)
-checked on 2026-10-13 describes self-hosting as an Enterprise add-on that
+checked again on 2026-10-20 describes self-hosting as an Enterprise add-on that
 requires a license. That server is outside TraceTrail's local scope.
 
 TraceTrail's disk traces and offline SDK evaluation work without a server,

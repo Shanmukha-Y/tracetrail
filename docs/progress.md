@@ -17,6 +17,48 @@ it does not close the reliability checks.
 - Preserved earlier synthetic suites and a frozen two-case v4 suite with field support annotations.
 - CI for lint, formatting, and tests without inference or hosted tracing.
 
+## October 20: frozen fresh-case method check
+
+The next study is bounded to two new assistant-authored synthetic cases and
+Qwen as the reference. The current production prompt, schemas, tools, scorer,
+model settings and query budget are unchanged. Both methods run on each case
+with two predeclared paired repeats, for eight assignments. A separate
+pre-inference source review checked every annotation, unique event ID and
+query reachability. The cases contain 13 records, seven relevant records,
+eight hypotheses and 25 required atoms. Assigned denominators are 32 claim
+slots, 100 required atoms and 28 relevant-event slots.
+
+The [protocol](../evaluation/protocol-heldout-v9.json) was frozen at
+13:44:08 UTC before any v9 inference. Its SHA-256 is
+`ccbb1bc19e18d09390f7eb2d2e75bb7b27c51294e4327a909d6d814e93bccc1d`.
+Commit `430db25` records the freeze. It pins 22 source/dependency/rubric inputs,
+eight schemas, package versions, model identity, source fixtures and an exact
+counterbalanced eight-cell plan. The 2,700-second accumulated cell-wall limit
+can stop new launches; it never selects work by scores.
+
+The new runner and source checks passed all 50 tests, lint and formatting
+before the freeze. Four active-runner tests replace three older pilot checks
+and one old exporter check. The [coverage inventory](test-coverage.md) names
+these tradeoffs. The production runtime and previous model artifacts remain
+unchanged.
+
+The first actual launch request was blocked by the local foreign-model
+preflight. Ollama had another application's Qwen 9B digest
+`c97eb11d70b1acdc88af01eef566c1fe4f7fbe93eb1afc06871132f293ff425a`
+loaded, with activity extending its expiry. No model was evicted. The private
+batch has zero attempted cells and permissions `0600`; no new inference,
+SDK replay, trace count or performance result is claimed. Execution is pending
+a clear Ollama server, and the operator has been asked to pause the competing
+session. Resume the same batch after the loaded-model state changes.
+
+The [reproduction and interpretation guide](heldout-v9.md) separates first-use
+provenance from later reproductions, and returned-record coverage from report
+selection. Both cases deliberately place useful context outside fixed search's
+one-hour window. They are a constructed scope stress/control pair. A broad
+adaptive advantage, model winner or production reliability cannot follow from
+this sample. The [roadmap](../ROADMAP.md) keeps the larger study and independent
+human review open. Workflow Sentinel and Caseboard were not changed.
+
 ## October 20: automated test limit
 
 The collected suite is reduced from 734 cases in 23 modules to 50 cases in
