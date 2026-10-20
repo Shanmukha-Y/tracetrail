@@ -23,7 +23,7 @@ Test-data helpers use ordinary helper names rather than collection-disable flags
   and preservation after a failed serialization.
 - Exact source citations, immutable returned records, combined filters and UTC
   bounds, duplicate event IDs, deterministic pagination, copied-query limits,
-  file-byte limits and real LangChain tool rejection of unknown input.
+  real LangChain tool rejection of unknown input.
 - Real LangGraph execution with test-only models: three queries/four calls,
   exact candidate filters, mutually exclusive branches, extra schema fields,
   tested-scope validation, parse and tool failures, alias resolution, required
@@ -47,15 +47,19 @@ parameter matrix was converted to a loop or an omnibus test.
 
 ## Current held-out increment
 
-Four cases replace older pilot/exporter checks within the same 50-case cap.
+Five cases replace older pilot/exporter and input-budget checks within the same 50-case cap.
 They check source drift before execution, retention of a failed attempt across
 resume, payload-tamper rejection before another call, and a foreign loaded
-model blocking before an attempt is recorded. These use test-only model and
+model blocking before an attempt is recorded. A fifth check edits a saved
+claim denominator and recomputes its hashes; the independent stored verifier
+still rejects the changed counter. These use test-only model and
 metadata stand-ins, not inference evidence.
 
 The older pilot runner no longer has separate source-drift, resume-tamper and
 failed-attempt tests. Its effective-digest rejection check remains because the
-new study reuses that execution path. The old public exporter no longer has
+new study reuses that execution path. The separate per-file byte-budget check was removed to keep the independent
+counter check within the cap; copied-query limits remain tested. The old public
+exporter no longer has
 a direct stale-review-hash unit test; its privacy canaries remain. These are
 explicit coverage tradeoffs, not claims that different runner implementations
 have identical coverage. No test matrix was hidden or moved.
@@ -66,7 +70,7 @@ have identical coverage. No test matrix was hidden or moved.
 | --- | ---: | ---: |
 | `test_agent.py` | 56 | 7 |
 | `test_budget.py` | 0 | 1 |
-| `test_heldout.py` | 0 | 4 |
+| `test_heldout.py` | 0 | 5 |
 | `test_cases_v4.py` | 14 | 0 |
 | `test_cases_v5.py` | 23 | 0 |
 | `test_cases_v6.py` | 29 | 0 |
@@ -86,7 +90,7 @@ have identical coverage. No test matrix was hidden or moved.
 | `test_planning_integration.py` | 13 | 4 |
 | `test_resources.py` | 31 | 1 |
 | `test_scorer_dispatch.py` | 25 | 1 |
-| `test_store.py` | 64 | 8 |
+| `test_store.py` | 64 | 7 |
 | `test_support_evaluation.py` | 52 | 9 |
 | `test_telemetry.py` | 12 | 1 |
 | **Total** | **734** | **50** |

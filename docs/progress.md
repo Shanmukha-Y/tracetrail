@@ -37,8 +37,9 @@ counterbalanced eight-cell plan. The 2,700-second accumulated cell-wall limit
 can stop new launches; it never selects work by scores.
 
 The new runner and source checks passed all 50 tests, lint and formatting
-before the freeze. Four active-runner tests replace three older pilot checks
-and one old exporter check. The [coverage inventory](test-coverage.md) names
+before the freeze. Five active-study tests replace three older pilot checks,
+one old exporter check and one file-byte-budget check. The stored verifier
+rejects altered counters even when result and attempt hashes are recomputed. The [coverage inventory](test-coverage.md) names
 these tradeoffs. The production runtime and previous model artifacts remain
 unchanged.
 

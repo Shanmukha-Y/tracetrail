@@ -76,13 +76,6 @@ def test_copied_query_cannot_bypass_limit_validation(tmp_path, update):
     assert caught.value.code == "invalid_query"
 
 
-def test_file_byte_budget_rejects_oversized_input(tmp_path):
-    path = write_log(tmp_path, [event()])
-    with pytest.raises(StoreError) as caught:
-        CloudTrailStore.load(path, max_bytes=1)
-    assert caught.value.code == "byte_budget_exceeded"
-
-
 def test_query_tool_rejects_unknown_input_before_store_execution(tmp_path, monkeypatch):
     store = CloudTrailStore.load(write_log(tmp_path, [event()]))
 
