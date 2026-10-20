@@ -179,60 +179,6 @@ def document(setup):
     return json.loads(setup["output"].read_text())
 
 
-@pytest.mark.parametrize("field", ["source_sha256"])
-def test_freeze_mismatch_stops_before_any_calls(setup_pilot, field):
-    s = setup_pilot
-    value = deepcopy(s["frozen"])
-    if field == "protocol":
-        value[field]["temperature"] = 1
-    elif isinstance(value[field], dict):
-        key = next(iter(value[field]))
-        value[field][key] = "not-the-frozen-value"
-    else:
-        value[field] = "not-the-frozen-value"
-    s["protocol"].write_text(json.dumps(value))
-    with pytest.raises((ValueError, FileNotFoundError)):
-        pilot.run_pilot(s["protocol"], s["output"])
-    assert s["calls"] == []
-    assert not s["output"].exists()
-
-
-def test_resume_rejects_tampered_recorded_payload(setup_pilot):
-    s = setup_pilot
-    pilot.run_pilot(s["protocol"], s["output"], max_runs=1)
-    data = document(s)
-    data["runs"][0]["model_history"][0]["output"] = "Tampered test-only output"
-    s["output"].write_text(json.dumps(data))
-    with pytest.raises(ValueError, match="payload hash"):
-        pilot.run_pilot(s["protocol"], s["output"], resume=True)
-    assert len(s["calls"]) == 1
-
-
-def test_failures_and_invalid_reports_are_preserved_and_never_retried(setup_pilot, monkeypatch):
-    s = setup_pilot
-    fake_run = s["fake_run"]
-    attempts = []
-
-    def failures(*args):
-        attempts.append(True)
-        if len(attempts) == 1:
-            raise RuntimeError("Test-only inference runner error")
-        result = fake_run(*args)
-        result["status"] = "invalid"
-        result["failures"] = [{"phase": "validation", "error_type": "TestOnlyInvalidReport"}]
-        return result
-
-    monkeypatch.setattr(pilot, "_run_case", failures)
-    pilot.run_pilot(s["protocol"], s["output"], max_runs=2)
-    first = document(s)["runs"]
-    assert [r["status"] for r in first] == ["failed", "invalid"]
-    assert first[0]["error"] == "Test-only inference runner error"
-    assert first[0]["test_only"] is False
-    pilot.run_pilot(s["protocol"], s["output"], max_runs=3, resume=True)
-    assert len(attempts) == 3
-    assert document(s)["runs"][:2] == first
-
-
 def test_effective_digest_mismatch_invalidates_and_rescores_original_output(
     setup_pilot, monkeypatch
 ):

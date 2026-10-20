@@ -1,0 +1,298 @@
+{
+  "cases": [
+    {
+      "annotations": [
+        {
+          "claim_id": "issued_signer",
+          "expected_status": "supported",
+          "reason": "Exact returned-to-signer credential equality links issuance to the seed; it does not identify a human operator.",
+          "required_event_ids": [
+            "90000000-0000-4000-8000-000000009102",
+            "90000000-0000-4000-8000-000000009103"
+          ],
+          "required_observations": [
+            {
+              "event_id": "90000000-0000-4000-8000-000000009102",
+              "field": "eventName",
+              "value": "AssumeRole"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009102",
+              "field": "responseElements.credentials.accessKeyId",
+              "value": "ASIAV9SESSION0000001"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009103",
+              "field": "userIdentity.accessKeyId",
+              "value": "ASIAV9SESSION0000001"
+            }
+          ]
+        },
+        {
+          "claim_id": "removal_completed",
+          "expected_status": "refuted",
+          "reason": "The explicit authorization denial contradicts completion of this recorded removal request.",
+          "required_event_ids": [
+            "90000000-0000-4000-8000-000000009103"
+          ],
+          "required_observations": [
+            {
+              "event_id": "90000000-0000-4000-8000-000000009103",
+              "field": "eventName",
+              "value": "DeleteUserPermissionsBoundary"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009103",
+              "field": "requestParameters.userName",
+              "value": "batch-export-reader-91"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009103",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            }
+          ]
+        },
+        {
+          "claim_id": "later_boundary_absent",
+          "expected_status": "uncertain",
+          "reason": "The denied write did not remove the boundary. The ordinary read log omits returned user state, so the prior or later boundary configuration remains unknown.",
+          "required_event_ids": [
+            "90000000-0000-4000-8000-000000009103",
+            "90000000-0000-4000-8000-000000009104"
+          ],
+          "required_observations": [
+            {
+              "event_id": "90000000-0000-4000-8000-000000009103",
+              "field": "requestParameters.userName",
+              "value": "batch-export-reader-91"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009103",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009104",
+              "field": "eventName",
+              "value": "GetUser"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009104",
+              "field": "requestParameters.userName",
+              "value": "batch-export-reader-91"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009104",
+              "field": "responseElements",
+              "value": null
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_cleanup",
+          "expected_status": "uncertain",
+          "reason": "A review-like session name and an authorization failure provide no business approval or actor-intent evidence.",
+          "required_event_ids": [
+            "90000000-0000-4000-8000-000000009102",
+            "90000000-0000-4000-8000-000000009103"
+          ],
+          "required_observations": [
+            {
+              "event_id": "90000000-0000-4000-8000-000000009102",
+              "field": "requestParameters.roleSessionName",
+              "value": "quarterly-review-91"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009103",
+              "field": "requestParameters.userName",
+              "value": "batch-export-reader-91"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009103",
+              "field": "errorCode",
+              "value": "AccessDenied"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v9/heldout-boundary-review-denial.json",
+      "fixture_sha256": "e311030e9ee4812bc8880a2b153afe10a0cff9947670a70cf0855967bfc8f72f",
+      "hypotheses": [
+        {
+          "claim_id": "issued_signer",
+          "statement": "The seed was signed with the credential returned by the AssumeRole event."
+        },
+        {
+          "claim_id": "removal_completed",
+          "statement": "The recorded DeleteUserPermissionsBoundary request removed the target user permissions boundary."
+        },
+        {
+          "claim_id": "later_boundary_absent",
+          "statement": "The target user had no permissions boundary when the later GetUser request was made."
+        },
+        {
+          "claim_id": "approved_cleanup",
+          "statement": "The boundary-removal attempt was approved routine maintenance."
+        }
+      ],
+      "id": "heldout-boundary-review-denial",
+      "notes": "Newly authored synthetic case, held out from model and prompt development. Review-like names are deliberately ambiguous. An explicit API denial is not a tool-query failure. No independent human validation.",
+      "question": "Investigate this boundary-related request. Describe its credential context and outcomes, and assess the supplied alternative explanations using the available records.",
+      "relevant_event_ids": [
+        "90000000-0000-4000-8000-000000009101",
+        "90000000-0000-4000-8000-000000009102",
+        "90000000-0000-4000-8000-000000009103",
+        "90000000-0000-4000-8000-000000009104"
+      ],
+      "seed_event_id": "90000000-0000-4000-8000-000000009103",
+      "split": "heldout"
+    },
+    {
+      "annotations": [
+        {
+          "claim_id": "same_inventory_signer",
+          "expected_status": "supported",
+          "reason": "Exact signer IDs link the two records across the changed source address and wider time range.",
+          "required_event_ids": [
+            "90000000-0000-4000-8000-000000009201",
+            "90000000-0000-4000-8000-000000009202"
+          ],
+          "required_observations": [
+            {
+              "event_id": "90000000-0000-4000-8000-000000009201",
+              "field": "eventName",
+              "value": "GetCallerIdentity"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009201",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIAV9INVENTORY00001"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009202",
+              "field": "userIdentity.accessKeyId",
+              "value": "AKIAV9INVENTORY00001"
+            }
+          ]
+        },
+        {
+          "claim_id": "seed_changed_policy",
+          "expected_status": "refuted",
+          "reason": "GetRole is a read operation. This exact seed is not a policy mutation.",
+          "required_event_ids": [
+            "90000000-0000-4000-8000-000000009202"
+          ],
+          "required_observations": [
+            {
+              "event_id": "90000000-0000-4000-8000-000000009202",
+              "field": "eventName",
+              "value": "GetRole"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009202",
+              "field": "readOnly",
+              "value": true
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009202",
+              "field": "requestParameters.roleName",
+              "value": "QuarterlyInventoryReader63"
+            }
+          ]
+        },
+        {
+          "claim_id": "managed_policy_present",
+          "expected_status": "uncertain",
+          "reason": "The logged read has no returned list. The live API can return an empty list, so making the request does not establish a nonempty attachment list.",
+          "required_event_ids": [
+            "90000000-0000-4000-8000-000000009203"
+          ],
+          "required_observations": [
+            {
+              "event_id": "90000000-0000-4000-8000-000000009203",
+              "field": "eventName",
+              "value": "ListAttachedRolePolicies"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009203",
+              "field": "requestParameters.roleName",
+              "value": "QuarterlyInventoryReader63"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009203",
+              "field": "responseElements",
+              "value": null
+            }
+          ]
+        },
+        {
+          "claim_id": "approved_inventory",
+          "expected_status": "uncertain",
+          "reason": "Routine-looking user and agent labels do not establish approval, intent, or the absence of other unobserved activity.",
+          "required_event_ids": [
+            "90000000-0000-4000-8000-000000009202"
+          ],
+          "required_observations": [
+            {
+              "event_id": "90000000-0000-4000-8000-000000009202",
+              "field": "userIdentity.userName",
+              "value": "routine-inventory-63"
+            },
+            {
+              "event_id": "90000000-0000-4000-8000-000000009202",
+              "field": "userAgent",
+              "value": "aws-cli/2.31.0 TraceTrail-synthetic-v9 inventory-review"
+            }
+          ]
+        }
+      ],
+      "fixture": "fixtures/v9/heldout-readonly-inventory.json",
+      "fixture_sha256": "75cc15d74027f299ba8d9a0a68ddd7a3cf51f7ea321e46df4f017fb40dd711f4",
+      "hypotheses": [
+        {
+          "claim_id": "same_inventory_signer",
+          "statement": "The GetCallerIdentity event and the seed used the same signing credential."
+        },
+        {
+          "claim_id": "seed_changed_policy",
+          "statement": "The recorded GetRole seed changed the target role policy."
+        },
+        {
+          "claim_id": "managed_policy_present",
+          "statement": "At least one managed policy was attached to the target role when ListAttachedRolePolicies was requested."
+        },
+        {
+          "claim_id": "approved_inventory",
+          "statement": "The observed role inventory was approved routine work."
+        }
+      ],
+      "id": "heldout-readonly-inventory",
+      "notes": "Newly authored benign-shaped synthetic control, held out from model and prompt development. All six supplied operations are read-only, but neither approval nor a globally benign incident label follows. No independent human validation.",
+      "question": "Investigate this role-information request and the available credential context. Assess the supplied explanations, and distinguish observed API activity from resource state and business approval.",
+      "relevant_event_ids": [
+        "90000000-0000-4000-8000-000000009201",
+        "90000000-0000-4000-8000-000000009202",
+        "90000000-0000-4000-8000-000000009203"
+      ],
+      "seed_event_id": "90000000-0000-4000-8000-000000009202",
+      "split": "heldout"
+    }
+  ],
+  "data_origin": "Two newly authored assistant synthetic cases. No private logs, real incidents, real credentials, or redistributed sample records were used. Addresses use documentation ranges and account 000000000000 is a synthetic sentinel.",
+  "design_notes": "A denied boundary-removal request with ambiguous routine context and a read-only inventory control. Record identity, credential direction, explicit API failure, source-limited state and source-limited approval stay separate. No runtime prompt or schema changes are part of case design.",
+  "fixture_license": "MIT (same as repository)",
+  "freeze_policy": "Freeze exact case, rubric, fixture, runtime and model identities before first inference. Do not revise annotations against outputs. Preserve invalid attempts and all declared denominators.",
+  "schema_version": "1",
+  "semantics_sources": [
+    "https://docs.aws.amazon.com/IAM/latest/APIReference/API_DeleteUserPermissionsBoundary.html",
+    "https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetUser.html",
+    "https://docs.aws.amazon.com/IAM/latest/APIReference/API_GetRole.html",
+    "https://docs.aws.amazon.com/IAM/latest/APIReference/API_ListAttachedRolePolicies.html",
+    "https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html",
+    "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html",
+    "https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_access-denied.html"
+  ],
+  "split_policy": "Both cases are heldout from model and prompt development before their first use. The author and source reviewers know the cases; this is not a blinded study or independent human validation. Mark them exposed for later runtime changes after first inference.",
+  "suite_id": "tracetrail-synthetic-v9-first-use"
+}

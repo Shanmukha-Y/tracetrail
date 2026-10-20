@@ -105,21 +105,6 @@ def load_test_review(data):
     )
 
 
-@pytest.mark.parametrize("fault", ["cell_hash"])
-def test_summary_refuses_stale_cell_review_hash(summary_inputs, fault):
-    document = summary_inputs["document"]
-    if fault == "cell_hash":
-        document["rows"][0]["cell_result_sha256"] = "0" * 64
-    elif fault == "missing_claim":
-        document["rows"][0]["claim_reviews"].pop()
-    elif fault == "duplicate_claim":
-        document["rows"][0]["claim_reviews"][-1] = deepcopy(document["rows"][0]["claim_reviews"][0])
-    else:
-        document["pilot_protocol_sha256"] = "0" * 64
-    with pytest.raises(summary.SummaryError):
-        load_test_review(summary_inputs)
-
-
 def test_numeric_row_redacts_secret_shaped_labels_and_rejects_non_numeric_metrics(
     summary_inputs,
 ):

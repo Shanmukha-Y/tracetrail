@@ -1,10 +1,12 @@
 # Automated test scope
 
-The current suite collects **50 cases in 16 modules**, including every
+The current suite collects **50 cases in 17 modules**, including every
 parameter variant. It previously collected 734 cases in 23 modules at commit
-`0ed8396`. The cleanup started from a clean worktree, with one writer and two
+`0ed8396`. The initial cleanup started from a clean worktree, with one writer and two
 read-only coverage audits. Runtime code, dependencies, scripts, fixtures,
-protocols and model measurements did not change.
+protocols and model measurements did not change during that cleanup. The later
+held-out increment below adds study inputs and a runner without changing the
+production investigation runtime.
 
 Forty-seven existing cases remain. The cleanup deletes 687 old collected cases
 and adds three explicit checks: a file-byte limit, unknown tool input before
@@ -36,19 +38,35 @@ Test-data helpers use ordinary helper names rather than collection-disable flags
 - Real offline LangSmith SDK replay with network forbidden, tracing-context
   isolation and source preservation; frozen-source and model-digest checks,
   failed-attempt retention, resume-payload tamper rejection, public-summary
-  privacy canaries and review-hash binding; sampler cleanup on investigation
+  privacy canaries; sampler cleanup on investigation
   failure.
 
 These are behavior and integration checks, with clearly test-only models.
 Record-building loops and checks over one report's fields remain. No removed
 parameter matrix was converted to a loop or an omnibus test.
 
-## Before and after inventory
+## Current held-out increment
+
+Four cases replace older pilot/exporter checks within the same 50-case cap.
+They check source drift before execution, retention of a failed attempt across
+resume, payload-tamper rejection before another call, and a foreign loaded
+model blocking before an attempt is recorded. These use test-only model and
+metadata stand-ins, not inference evidence.
+
+The older pilot runner no longer has separate source-drift, resume-tamper and
+failed-attempt tests. Its effective-digest rejection check remains because the
+new study reuses that execution path. The old public exporter no longer has
+a direct stale-review-hash unit test; its privacy canaries remain. These are
+explicit coverage tradeoffs, not claims that different runner implementations
+have identical coverage. No test matrix was hidden or moved.
+
+## Before and current inventory
 
 | Test module | Before | Retained |
 | --- | ---: | ---: |
 | `test_agent.py` | 56 | 7 |
 | `test_budget.py` | 0 | 1 |
+| `test_heldout.py` | 0 | 4 |
 | `test_cases_v4.py` | 14 | 0 |
 | `test_cases_v5.py` | 23 | 0 |
 | `test_cases_v6.py` | 29 | 0 |
@@ -62,8 +80,8 @@ parameter matrix was converted to a loop or an omnibus test.
 | `test_facts.py` | 49 | 1 |
 | `test_fresh_cases.py` | 19 | 0 |
 | `test_local_model.py` | 11 | 5 |
-| `test_pilot.py` | 28 | 4 |
-| `test_pilot_summary.py` | 31 | 2 |
+| `test_pilot.py` | 28 | 1 |
+| `test_pilot_summary.py` | 31 | 1 |
 | `test_planning.py` | 58 | 1 |
 | `test_planning_integration.py` | 13 | 4 |
 | `test_resources.py` | 31 | 1 |

@@ -1,0 +1,247 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009101",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-09-26T09:10:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009101",
+      "requestParameters": null,
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.151",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9",
+      "userIdentity": {
+        "accessKeyId": "AKIAV9DENIED00000001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/cedar-ops-ticket",
+        "principalId": "AIDA90000000000000001",
+        "type": "IAMUser",
+        "userName": "cedar-ops-ticket"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009102",
+      "eventName": "AssumeRole",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-09-26T09:40:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009102",
+      "requestParameters": {
+        "durationSeconds": 14400,
+        "roleArn": "arn:aws:iam::000000000000:role/BoundaryReviewDesk91",
+        "roleSessionName": "quarterly-review-91"
+      },
+      "responseElements": {
+        "assumedRoleUser": {
+          "arn": "arn:aws:sts::000000000000:assumed-role/BoundaryReviewDesk91/quarterly-review-91",
+          "assumedRoleId": "AROA90000000000000001:quarterly-review-91"
+        },
+        "credentials": {
+          "accessKeyId": "ASIAV9SESSION0000001",
+          "expiration": "2026-09-26T13:40:00Z"
+        }
+      },
+      "sourceIPAddress": "198.51.100.152",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9",
+      "userIdentity": {
+        "accessKeyId": "AKIAV9DENIED00000001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/cedar-ops-ticket",
+        "principalId": "AIDA90000000000000001",
+        "type": "IAMUser",
+        "userName": "cedar-ops-ticket"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "errorCode": "AccessDenied",
+      "errorMessage": "Synthetic authorization denial for the requested IAM action.",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009103",
+      "eventName": "DeleteUserPermissionsBoundary",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-26T12:20:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": false,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009103",
+      "requestParameters": {
+        "userName": "batch-export-reader-91"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.153",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9",
+      "userIdentity": {
+        "accessKeyId": "ASIAV9SESSION0000001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/BoundaryReviewDesk91/quarterly-review-91",
+        "principalId": "AROA90000000000000001:quarterly-review-91",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-09-26T09:40:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/BoundaryReviewDesk91",
+            "principalId": "AROA90000000000000001",
+            "type": "Role",
+            "userName": "BoundaryReviewDesk91"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009104",
+      "eventName": "GetUser",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-26T13:30:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009104",
+      "requestParameters": {
+        "userName": "batch-export-reader-91"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.154",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9",
+      "userIdentity": {
+        "accessKeyId": "ASIAV9SESSION0000001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/BoundaryReviewDesk91/quarterly-review-91",
+        "principalId": "AROA90000000000000001:quarterly-review-91",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-09-26T09:40:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/BoundaryReviewDesk91",
+            "principalId": "AROA90000000000000001",
+            "type": "Role",
+            "userName": "BoundaryReviewDesk91"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009105",
+      "eventName": "GetUser",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-26T12:21:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009105",
+      "requestParameters": {
+        "userName": "ledger-reader-52"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.153",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9",
+      "userIdentity": {
+        "accessKeyId": "AKIAV9NOISE000000001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/ledger-metadata-reader",
+        "principalId": "AIDA90000000000000002",
+        "type": "IAMUser",
+        "userName": "ledger-metadata-reader"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009106",
+      "eventName": "ListUsers",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-26T12:23:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009106",
+      "requestParameters": {
+        "pathPrefix": "/analytics/"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "198.51.100.155",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9",
+      "userIdentity": {
+        "accessKeyId": "ASIAV9NOISE000000001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:sts::000000000000:assumed-role/BoundaryReviewDesk91/parallel-inventory-92",
+        "principalId": "AROA90000000000000001:parallel-inventory-92",
+        "sessionContext": {
+          "attributes": {
+            "creationDate": "2026-09-26T12:00:00Z",
+            "mfaAuthenticated": "false"
+          },
+          "sessionIssuer": {
+            "accountId": "000000000000",
+            "arn": "arn:aws:iam::000000000000:role/BoundaryReviewDesk91",
+            "principalId": "AROA90000000000000001",
+            "type": "Role",
+            "userName": "BoundaryReviewDesk91"
+          }
+        },
+        "type": "AssumedRole"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009107",
+      "eventName": "GetRole",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-26T13:31:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009107",
+      "requestParameters": {
+        "roleName": "LedgerMetadataReader52"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.154",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9",
+      "userIdentity": {
+        "accessKeyId": "AKIAV9NOISE000000001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/ledger-metadata-reader",
+        "principalId": "AIDA90000000000000002",
+        "type": "IAMUser",
+        "userName": "ledger-metadata-reader"
+      }
+    }
+  ]
+}

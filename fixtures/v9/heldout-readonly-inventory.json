@@ -1,0 +1,169 @@
+{
+  "Records": [
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009201",
+      "eventName": "GetCallerIdentity",
+      "eventSource": "sts.amazonaws.com",
+      "eventTime": "2026-09-27T07:25:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009201",
+      "requestParameters": null,
+      "responseElements": null,
+      "sourceIPAddress": "198.51.100.161",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9 inventory-review",
+      "userIdentity": {
+        "accessKeyId": "AKIAV9INVENTORY00001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/routine-inventory-63",
+        "principalId": "AIDA90000000000000063",
+        "type": "IAMUser",
+        "userName": "routine-inventory-63"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009202",
+      "eventName": "GetRole",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-27T10:00:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009202",
+      "requestParameters": {
+        "roleName": "QuarterlyInventoryReader63"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.162",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9 inventory-review",
+      "userIdentity": {
+        "accessKeyId": "AKIAV9INVENTORY00001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/routine-inventory-63",
+        "principalId": "AIDA90000000000000063",
+        "type": "IAMUser",
+        "userName": "routine-inventory-63"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009203",
+      "eventName": "ListAttachedRolePolicies",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-27T11:35:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009203",
+      "requestParameters": {
+        "maxItems": 100,
+        "roleName": "QuarterlyInventoryReader63"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.163",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9 inventory-review",
+      "userIdentity": {
+        "accessKeyId": "AKIAV9INVENTORY00001",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/routine-inventory-63",
+        "principalId": "AIDA90000000000000063",
+        "type": "IAMUser",
+        "userName": "routine-inventory-63"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009204",
+      "eventName": "GetRole",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-27T10:02:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009204",
+      "requestParameters": {
+        "roleName": "SeparateCostReader64"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "192.0.2.162",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9",
+      "userIdentity": {
+        "accessKeyId": "AKIAV9COST0000000064",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/separate-cost-reader-64",
+        "principalId": "AIDA90000000000000064",
+        "type": "IAMUser",
+        "userName": "separate-cost-reader-64"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009205",
+      "eventName": "ListAccountAliases",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-27T09:55:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009205",
+      "requestParameters": {},
+      "responseElements": null,
+      "sourceIPAddress": "198.51.100.164",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9",
+      "userIdentity": {
+        "accessKeyId": "AKIAV9COST0000000064",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/separate-cost-reader-64",
+        "principalId": "AIDA90000000000000064",
+        "type": "IAMUser",
+        "userName": "separate-cost-reader-64"
+      }
+    },
+    {
+      "awsRegion": "us-east-1",
+      "eventCategory": "Management",
+      "eventID": "90000000-0000-4000-8000-000000009206",
+      "eventName": "ListRoleTags",
+      "eventSource": "iam.amazonaws.com",
+      "eventTime": "2026-09-27T11:36:00Z",
+      "eventType": "AwsApiCall",
+      "eventVersion": "1.09",
+      "managementEvent": true,
+      "readOnly": true,
+      "recipientAccountId": "000000000000",
+      "requestID": "99000000-0000-4000-8000-000000009206",
+      "requestParameters": {
+        "roleName": "SeparateCostReader64"
+      },
+      "responseElements": null,
+      "sourceIPAddress": "203.0.113.163",
+      "userAgent": "aws-cli/2.31.0 TraceTrail-synthetic-v9",
+      "userIdentity": {
+        "accessKeyId": "AKIAV9COST0000000064",
+        "accountId": "000000000000",
+        "arn": "arn:aws:iam::000000000000:user/separate-cost-reader-64",
+        "principalId": "AIDA90000000000000064",
+        "type": "IAMUser",
+        "userName": "separate-cost-reader-64"
+      }
+    }
+  ]
+}

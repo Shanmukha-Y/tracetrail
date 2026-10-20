@@ -1,0 +1,273 @@
+{
+  "baseline_contract": {
+    "path": "evaluation/protocol-v8.json",
+    "sha256": "e025493b6f2309d86c9339b4217a7bf1aedbbd51aa209d837d1e75e8f4cefcca"
+  },
+  "case_fixtures": {
+    "heldout-boundary-review-denial": {
+      "path": "fixtures/v9/heldout-boundary-review-denial.json",
+      "sha256": "e311030e9ee4812bc8880a2b153afe10a0cff9947670a70cf0855967bfc8f72f"
+    },
+    "heldout-readonly-inventory": {
+      "path": "fixtures/v9/heldout-readonly-inventory.json",
+      "sha256": "75cc15d74027f299ba8d9a0a68ddd7a3cf51f7ea321e46df4f017fb40dd711f4"
+    }
+  },
+  "case_ids": [
+    "heldout-boundary-review-denial",
+    "heldout-readonly-inventory"
+  ],
+  "case_manifest": {
+    "path": "evaluation/cases-v9.json",
+    "sha256": "7e05155266fb629a27d21e4e2d2d2e3d8a2ec0228ba395dbe3a23b33ebdeb93e"
+  },
+  "case_split_at_freeze": "heldout",
+  "cell_plan": [
+    {
+      "case_id": "heldout-boundary-review-denial",
+      "cell_id": "r1-c1-adaptive",
+      "model": "qwen3.8:27b-q4_K_M",
+      "plan_index": 1,
+      "repeat": 1,
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "heldout-boundary-review-denial",
+      "cell_id": "r1-c1-fixed",
+      "model": "qwen3.8:27b-q4_K_M",
+      "plan_index": 2,
+      "repeat": 1,
+      "strategy": "fixed"
+    },
+    {
+      "case_id": "heldout-readonly-inventory",
+      "cell_id": "r1-c2-fixed",
+      "model": "qwen3.8:27b-q4_K_M",
+      "plan_index": 3,
+      "repeat": 1,
+      "strategy": "fixed"
+    },
+    {
+      "case_id": "heldout-readonly-inventory",
+      "cell_id": "r1-c2-adaptive",
+      "model": "qwen3.8:27b-q4_K_M",
+      "plan_index": 4,
+      "repeat": 1,
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "heldout-boundary-review-denial",
+      "cell_id": "r2-c1-fixed",
+      "model": "qwen3.8:27b-q4_K_M",
+      "plan_index": 5,
+      "repeat": 2,
+      "strategy": "fixed"
+    },
+    {
+      "case_id": "heldout-boundary-review-denial",
+      "cell_id": "r2-c1-adaptive",
+      "model": "qwen3.8:27b-q4_K_M",
+      "plan_index": 6,
+      "repeat": 2,
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "heldout-readonly-inventory",
+      "cell_id": "r2-c2-adaptive",
+      "model": "qwen3.8:27b-q4_K_M",
+      "plan_index": 7,
+      "repeat": 2,
+      "strategy": "adaptive"
+    },
+    {
+      "case_id": "heldout-readonly-inventory",
+      "cell_id": "r2-c2-fixed",
+      "model": "qwen3.8:27b-q4_K_M",
+      "plan_index": 8,
+      "repeat": 2,
+      "strategy": "fixed"
+    }
+  ],
+  "cell_plan_sha256": "0b41eaeca01171ed3143ad49ee471deb486b38190b24321a1891f74a0b7149a0",
+  "evaluation": {
+    "numeric_metric_keys": [
+      "annotated_claim_count",
+      "finding_count",
+      "raw_supported_claim_count",
+      "raw_supported_claim_rate",
+      "process_valid_supported_claim_count",
+      "process_valid_supported_claim_rate",
+      "required_atom_count",
+      "raw_covered_atom_count",
+      "raw_required_atom_coverage",
+      "process_valid_covered_atom_count",
+      "process_valid_required_atom_coverage",
+      "correct_status_count",
+      "correct_status_rate",
+      "process_valid",
+      "invalid_evidence_count",
+      "invalid_link_count",
+      "extra_declared_atom_count",
+      "extra_citation_count",
+      "unexpected_finding_count",
+      "duplicate_claim_count",
+      "missing_claim_count"
+    ],
+    "primary_scorer": "claim-support-v1",
+    "scorer_id": "claim-support-v1",
+    "source_sha256": "a0b6a7ac7fdbabf664d85fd98afea77e289b562c8bc991939a975aa9087f3f50"
+  },
+  "frozen_at": "2026-10-20T13:44:08.022012+00:00",
+  "in_flight_run_may_complete_after_ceiling": true,
+  "limitations": [
+    "Two assistant-authored synthetic case clusters, not independent human validation.",
+    "Study documentation must establish first-use timing; this runner cannot certify prior exposure.",
+    "Same-seed greedy repeats measure observed stability, not independent tasks.",
+    "No prompt, schema, budget, tool or source repair after heldout outputs.",
+    "All eight assigned cells and all requested claim slots keep their denominators.",
+    "Semantic review is separate from exact mechanical annotation support.",
+    "Resource sampling does not establish exclusive hardware use or true peak memory."
+  ],
+  "model": {
+    "digest": "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e",
+    "listed_digests": [
+      "25b843619e944cd0ae6069f94ff4e5e26a16e109ccbc0a66a0f05979ed70098e"
+    ],
+    "name": "qwen3.8:27b-q4_K_M",
+    "ollama_version": "0.40.0"
+  },
+  "model_inventory": {
+    "path": "evaluation/model-inventory-pilot-v1.json",
+    "sha256": "7ec3f9f1f209e2742a1ce83fd09bdcbce4ef2fb093e46a88656511439b89c6f3"
+  },
+  "ollama_version": "0.40.0",
+  "outcome_based_expansion": false,
+  "phase": "frozen-synthetic-heldout-method-comparison",
+  "planned_runs": 8,
+  "prompt_sha256": "5d801a719e65e23a28deb1ee8088416c20fe9bb5d0c7d599098a11993ec0828a",
+  "protocol": {
+    "chronology": "utc-order-and-signed-seconds-from-seed",
+    "citation_encoding": "local-alias-to-file-hash-index",
+    "credential_context": "returned-record-credential-map-v1",
+    "finding_support": "model-authored-field-links-v1",
+    "max_projected_bytes": 1000000,
+    "max_projected_observations": 2000,
+    "max_prompt_payload_bytes": 48000,
+    "max_queries": 3,
+    "model_timeout_seconds": 150,
+    "num_ctx": 16384,
+    "num_predict": 3200,
+    "observation_source": "selected-record-projection-v1",
+    "planning": "claim-ledger-and-explicit-pivot-choice-v1",
+    "query_limit": 20,
+    "run_deadline_seconds": 600,
+    "seed": 42,
+    "structured_method": "json_schema",
+    "temperature": 0,
+    "thinking": false,
+    "version": "tracetrail-v8"
+  },
+  "protocol_id": "tracetrail-heldout-v9",
+  "repeats": 2,
+  "returned_record_metrics": {
+    "includes_supplied_seed": true,
+    "invalid_process_retains_raw_retrieval_metrics": true,
+    "precision_empty_denominator_value": 0,
+    "recall_denominator": "all frozen relevant_event_ids",
+    "source_valid_unique_records_only": true
+  },
+  "safety": {
+    "generator_model_calls": 0,
+    "hosted_uploads": false,
+    "local_only": true
+  },
+  "schema_sha256": {
+    "claim_plan": "02f6febc6b962fcf3c0aeda196227aa9ee641c80e837b413a5e1395a580b38dd",
+    "decision": "06c7453fdf366e5664ef07eb0f89eeb05610287085adf592277bde5021e20ddf",
+    "evidence_link": "b4cdf4f393c532ebee652dd46e0400e4d13a4b4e4a1bd225a8aa169d1b3848a9",
+    "materialized_analysis": "496dfde561e3cd91cb9cabfdaeb5b8b8477ef96004833684bc8e242280d94914",
+    "model_finding": "16eee8a59d424e7afdfc2efabe6ea153ec40cf9369266ba0a833efe04dfc66aa",
+    "model_report_selection": "53b27ddfb3b20c52bd882e0ad4febd283075e692327b5d33696e1d8a4c3b54e3",
+    "pivot_disposition": "91f5db5e788b80a0b5c7d2cefc7823e16377ce8638c7398fdc63363e7725ed41",
+    "query": "11cec0cf3fed8037b0ab09a36a43212a58b07f57f77f3521e50d5bdba35772ad"
+  },
+  "schema_version": "1",
+  "semantic_rubric": {
+    "path": "evaluation/heldout-v9-rubric.md",
+    "sha256": "fad5122541375cf1b796578f07b2b78d4b9c9eb416d89258558fb4d4b9f5dea7"
+  },
+  "soft_launch_ceiling_seconds": 2700,
+  "source_sha256": {
+    "evaluation/heldout-v9-rubric.md": "fad5122541375cf1b796578f07b2b78d4b9c9eb416d89258558fb4d4b9f5dea7",
+    "pyproject.toml": "59708c6a5ee3d6afd48f7667f40b2a3cb8a4ad2dfc23ba36429464700c759f99",
+    "scripts/_v8_evaluation_contract.py": "fcace2ef17de32cb7c4465b4e9ae28d07e7e96ce3a52fd8038aeb3fa0e64645c",
+    "scripts/freeze_model_pilot_v1.py": "579754e1f7856d0f35407bc00333733d1cc19f994cfc1b3a7e4aacde8816d046",
+    "scripts/heldout_v9.py": "c9d8ee244ab902f49052405ac27b3c61703416584e9fd80289717642b802ec02",
+    "scripts/verify_model_pilot_v1.py": "469ac59b9498dc206c598580ed2709355e16629187ece347c19324e4a74da4da",
+    "src/tracetrail/__init__.py": "3453b39ea3b1b7b85a24e0b95fd2a27a1b98222d2bad0765a31bfd17512e69fc",
+    "src/tracetrail/agent.py": "9f9117d69e45641ab23c44b0fe689c8263cf16822c800a4b78b6430a9e02b36d",
+    "src/tracetrail/claims.py": "cb75c7c7c34c8cff70fd7c11ce49808d386d52deaf2fc9fca4c3701d5327bf26",
+    "src/tracetrail/cli.py": "68b8d3820eeae15be5ac9b8a86b7898d9845444934a4fe6cff82e31267fbe0c0",
+    "src/tracetrail/coverage.py": "4690845f8fc685a54011d6f7c64cd1c0b4e45aa6b44b36a47ad7327e15688b6e",
+    "src/tracetrail/credential_map.py": "b25b9f3abe50f8753cc53482850da88acd0935f5b84f3467726d57c2547eaf78",
+    "src/tracetrail/evaluation.py": "e755383bc49e87edfceede571cf886382aec7ec3a2465637711dd8e9ba4bcce1",
+    "src/tracetrail/facts.py": "739e665de4754be64bef8e9370de37f71b69b05fa9344f59cc0ee402a8e0c355",
+    "src/tracetrail/local_model.py": "a2a24421f791a99532e4d9df64cdc3144430aa65d058b9b1ac32942f14d28abd",
+    "src/tracetrail/pilot.py": "23ba9ee20724e9dd20a0c20761dc3251bbca2141f0e07c4263ac2107bf5e6239",
+    "src/tracetrail/planning.py": "5d8493315d117382afb84298a03419a05020f47d4dc5bb78b77201e1087a62fe",
+    "src/tracetrail/resources.py": "e10f9508321193764ea4c5b85404d5c518d9c30314be5feacb283502a0f6c399",
+    "src/tracetrail/store.py": "cd0a17f28dc80a2c301ad63d37f31dda02075140a542cd4b40ff110cfe514a02",
+    "src/tracetrail/support_evaluation.py": "a0b6a7ac7fdbabf664d85fd98afea77e289b562c8bc991939a975aa9087f3f50",
+    "src/tracetrail/telemetry.py": "91dbf30a2381c2eb0490143d8151cdd1d95c6c5e067d7f223d656a53c87a1082",
+    "uv.lock": "7f49c6db1a401ac09ae0aa0089dad2127476b1562e382083b2bdfc3e30e57312"
+  },
+  "versions": {
+    "annotated-types": "0.8.0",
+    "anyio": "4.15.1",
+    "certifi": "2026.7.22",
+    "charset-normalizer": "3.5.2",
+    "distro": "1.9.0",
+    "h11": "0.16.0",
+    "httpcore": "1.0.9",
+    "httpcore2": "2.13.1",
+    "httpx": "0.28.1",
+    "httpx2": "2.13.1",
+    "idna": "3.20",
+    "iniconfig": "2.3.1",
+    "jsonpatch": "1.35",
+    "jsonpointer": "3.2.1",
+    "langchain": "1.4.5",
+    "langchain-core": "1.6.10",
+    "langchain-ollama": "1.1.0",
+    "langchain-protocol": "0.0.19",
+    "langgraph": "1.2.15",
+    "langgraph-checkpoint": "4.3.0",
+    "langgraph-prebuilt": "1.1.0",
+    "langgraph-sdk": "0.4.7",
+    "langsmith": "0.14.8",
+    "ollama": "0.6.3",
+    "orjson": "3.13.0",
+    "ormsgpack": "1.12.2",
+    "packaging": "26.3",
+    "pluggy": "1.6.0",
+    "pydantic": "2.14.1",
+    "pydantic-core": "2.50.1",
+    "pygments": "2.21.0",
+    "pytest": "9.0.2",
+    "pyyaml": "6.0.3",
+    "requests": "2.34.2",
+    "requests-toolbelt": "1.0.0",
+    "ruff": "0.15.6",
+    "sniffio": "1.3.1",
+    "tenacity": "9.2.1",
+    "tracetrail": "0.1.0",
+    "truststore": "0.10.5",
+    "typing-extensions": "4.16.0",
+    "typing-inspection": "0.4.4",
+    "urllib3": "2.8.0",
+    "uuid-utils": "0.17.1",
+    "websockets": "16.1.1",
+    "xxhash": "4.0.1",
+    "zstandard": "0.25.0"
+  }
+}
