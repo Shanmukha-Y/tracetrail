@@ -17,6 +17,51 @@ it does not close the reliability checks.
 - Preserved earlier synthetic suites and a frozen two-case v4 suite with field support annotations.
 - CI for lint, formatting, and tests without inference or hosted tracing.
 
+## October 21: resource status in artifact reports
+
+The reporting-only extension `scripts/report_heldout_v9.py` fixes a gap in the
+frozen export path. The original verifier checked that resource aggregates
+matched their samples but discarded the checked status. A truthful resource
+failure or foreign-model observation could therefore disappear from the public
+numeric rows. New exports retain sampling status, read gaps, numeric error
+counts, target observations, foreign-model flags, sample-limit information and
+available timing gaps.
+
+Artifact verification is separate from measurement eligibility. Missing sensor
+observations remain unknown; zero stored samples do not mean zero workload.
+Rows with partial sampling or observed contention remain in the report with
+their original capability scores, process status, costs and denominators.
+The descriptive eligibility checks add no latency cutoff and certify neither
+exclusive hardware use nor true peak memory.
+
+The original v9 runner, protocol and every one of the 27 pinned inputs remain
+byte-for-byte unchanged. The protocol SHA-256 is still
+`ccbb1bc19e18d09390f7eb2d2e75bb7b27c51294e4327a909d6d814e93bccc1d`.
+The new reporter is outside the frozen runtime and records its separate ID,
+source hash and original protocol/runner hashes. It is a reporting extension
+after the freeze, not a replacement inference protocol or scorer.
+
+Five focused reporting cases replace five lower-priority collected cases.
+The [coverage inventory](test-coverage.md#resource-reporting-replacements)
+names the lost direct checks and retained integration boundaries. All 50
+collected cases pass; lint and formatting pass. The export test uses clearly
+marked constructed data and frozen-boundary stand-ins, not model inference.
+
+The actual CLI verified the existing private 0/8 prefix with the new reporter.
+It correctly reports artifact verification as passed, measurement status as
+`not_evaluated`, eligibility as false, and all eight planned assignments.
+The private `0600` report is
+`local-results/heldout-v9.resources-v1.verification.json`, SHA-256
+`904a022397e587146e4678e8a20051a7f59fb35c0aec12fc8789056edbcde197`.
+This is a prefix audit, not performance evidence. No model or new experiment
+SDK evaluation ran. The inference study remains pending while Ollama is
+occupied by other work. No other workload was interrupted or changed.
+
+The [updated reproduction guide](heldout-v9.md#resource-reporting-extension)
+uses the new verification and summary commands. Final public summary export
+still requires all eight attempts and the matching genuine offline SDK replay.
+Workflow Sentinel and Caseboard were not changed.
+
 ## October 20: frozen fresh-case method check
 
 The next study is bounded to two new assistant-authored synthetic cases and

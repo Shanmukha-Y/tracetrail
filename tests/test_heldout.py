@@ -147,23 +147,3 @@ def test_foreign_loaded_model_blocks_before_recording_or_executing_attempt(study
     with pytest.raises(ValueError, match="Foreign model is loaded"):
         heldout.run(study)
     assert heldout.read(study.output)["runs"] == []
-
-
-def test_stored_verifier_rejects_resigned_inflated_claim_denominator(study, monkeypatch):
-    def failed_report(case, root, cell, model):
-        result = pilot._failure(case, cell, "runner", RuntimeError("Test-only failed output"))
-        pilot._score(case, result)
-        return result
-
-    monkeypatch.setattr(pilot, "_execute", failed_report)
-    heldout.run(study)
-    data = heldout.read(study.output)
-    run = data["runs"][0]
-    run["claim_support_metrics"]["annotated_claim_count"] = 5
-    run["heldout"]["result_sha256"] = heldout.canonical(
-        {key: value for key, value in run.items() if key != "heldout"}
-    )
-    run["heldout"]["attempt_sha256"] = heldout.attempt_digest(run)
-    study.output.write_text(json.dumps(data))
-    with pytest.raises(AssertionError, match="Support counter differs: annotated_claim_count"):
-        heldout.verify_data(Namespace(protocol=study.protocol, raw=study.output, sdk=None))

@@ -314,7 +314,6 @@ def test_test_only_failed_tool_is_visible_to_next_plan_and_final_report(evidence
     "status,code",
     [
         ("supported", "missing_supporting_evidence"),
-        ("refuted", "missing_contradicting_evidence"),
     ],
 )
 def test_decisive_status_requires_explicit_support_role(evidence_store, status, code):

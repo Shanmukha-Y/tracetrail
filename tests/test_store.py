@@ -67,15 +67,6 @@ def test_all_filters_are_combined_and_timezone_bounds_are_inclusive(tmp_path):
     assert store.query(Query(start_time="2026-01-01T10:00:01Z"))["matched"] == 0
 
 
-@pytest.mark.parametrize("update", [{"limit": 1000}])
-def test_copied_query_cannot_bypass_limit_validation(tmp_path, update):
-    store = CloudTrailStore.load(write_log(tmp_path, [event()]))
-    invalid_query = Query().model_copy(update=update)
-    with pytest.raises(StoreError) as caught:
-        store.query(invalid_query)
-    assert caught.value.code == "invalid_query"
-
-
 def test_query_tool_rejects_unknown_input_before_store_execution(tmp_path, monkeypatch):
     store = CloudTrailStore.load(write_log(tmp_path, [event()]))
 

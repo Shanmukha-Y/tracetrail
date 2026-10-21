@@ -83,6 +83,11 @@ Each investigation captures real LangChain/LangGraph execution spans in a local 
 
 New batches explicitly select `claim-support-v1`. This scorer checks each finding's own field links against exact selected, returned source records and typed annotations. Global projected facts cannot fill missing links. Raw support and process-valid primary support stay separate; invalid runs earn zero primary credit and keep their denominators. Historical `metrics` retain the original scorer. New values use `claim_support_metrics`, with separate prefixed SDK feedback and a scorer source fingerprint. See the [measurement contracts](docs/measurement.md). Exact annotation support still does not prove semantic correctness.
 
+The [v9 reporting extension](docs/heldout-v9.md#resource-reporting-extension)
+retains sampling gaps and foreign-model observations in new exports. Artifact
+verification and usable resource measurements are separate; a verified file
+does not certify uncontended hardware or true peak memory.
+
 Local trace files and offline SDK evaluation are the project's LangSmith integration. They need no LangSmith account, API key, hosted project, or server. TraceTrail disables ambient and inherited tracing settings, and the offline SDK client rejects HTTP requests. The separate LangSmith server and web UI are outside this local project's scope. See [verified integration details](docs/integrations.md).
 
 ## Compare methods and models

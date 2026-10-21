@@ -77,12 +77,12 @@ uv run python scripts/heldout_v9.py run \
   --protocol evaluation/protocol-heldout-v9.json \
   --output local-results/heldout-v9-reproduction.json
 uv run tracetrail local-evaluate local-results/heldout-v9-reproduction.json
-uv run python scripts/heldout_v9.py verify \
+uv run python scripts/report_heldout_v9.py verify \
   --protocol evaluation/protocol-heldout-v9.json \
   --raw local-results/heldout-v9-reproduction.json \
   --sdk local-results/heldout-v9-reproduction.claim-support-v1.langsmith-local.json \
   --output local-results/heldout-v9-reproduction.verification.json
-uv run python scripts/heldout_v9.py summary \
+uv run python scripts/report_heldout_v9.py summary \
   --protocol evaluation/protocol-heldout-v9.json \
   --raw local-results/heldout-v9-reproduction.json \
   --sdk local-results/heldout-v9-reproduction.claim-support-v1.langsmith-local.json \
@@ -105,6 +105,47 @@ makes no new inference. The stored-artifact verifier checks source records,
 actual wire inputs, query transcripts, trace counts, model identity, and
 independently derived primary counters. Audit query replays are separate from
 the original model's tool cost and behavior.
+
+## Resource reporting extension
+
+Use `scripts/report_heldout_v9.py` for new verification and summary exports.
+The original `scripts/heldout_v9.py` is pinned by the study freeze and remains
+unchanged. Its historical verification and export commands remain available.
+The extension calls those frozen checks and preserves their exact model
+metrics, assignments, failures, latencies and denominators. It adds resource
+reporting after verification and records a separate reporter version and
+source hash, alongside the original protocol and runner hashes.
+
+This is a reporting change after the study freeze, before any v9 inference.
+It does not replace the frozen protocol or claim that the new exporter was
+part of the original freeze. The original protocol SHA-256 remains
+`ccbb1bc19e18d09390f7eb2d2e75bb7b27c51294e4327a909d6d814e93bccc1d`.
+Every original pinned file must still pass its existing hash check. The new
+reporter is outside the frozen runtime source inventory.
+
+Artifact consistency and measurement eligibility are separate fields. Truthful
+partial sampling, unavailable metadata or observed foreign models can pass
+artifact verification. Exports must retain those states rather than present
+verification as clean resource conditions. Each row records sampling status,
+observed sample and read-gap counts, numeric error counts, target-model
+observations, foreign-model flags and whether the sample limit was reached.
+Missing observations remain unknown; they are not replaced with a claim of
+zero errors or no contention. `sample_count=0` for unavailable data means no
+stored samples, not measured zero workload. Sampling times include the observed maximum gap
+when available. No new gap cutoff or latency exclusion is applied.
+
+Eligibility describes only the recorded sampling checks. Even a clean row does
+not prove exclusive hardware use, absence of activity between samples, true
+peak memory, or pure inference latency. The separate memory views overlap on
+unified memory and must not be added. Resource flags never change capability
+scores, process validity, costs or which assignments remain in the report.
+
+A zero-row prefix is explicitly `not_evaluated`, with measurement eligibility
+false and all eight planned assignments still visible. A partial private audit
+is not a completed benchmark. Public summary export still requires all eight
+attempted assignments and the genuine matching offline SDK replay. Reporting
+commands perform no inference or SDK evaluation; their local source-query
+replays remain audit work outside the original agent tool counts.
 
 ## Interpretation
 
