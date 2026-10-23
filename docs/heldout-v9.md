@@ -67,12 +67,10 @@ connection checks can add time-bound evidence, but completion needs separate
 coordination or observation before normal preflight. Logs, model outputs, and trace trees stay in
 ignored private local files. No hosted LangSmith project or server is used.
 
+Use the committed protocol for reproduction:
+
 ```sh
 uv sync --frozen
-uv run python scripts/heldout_v9.py freeze \
-  --manifest evaluation/cases-v9.json \
-  --rubric evaluation/heldout-v9-rubric.md \
-  --output evaluation/protocol-heldout-v9.json
 uv run python scripts/heldout_v9.py run \
   --protocol evaluation/protocol-heldout-v9.json \
   --output local-results/heldout-v9-reproduction.json
@@ -89,10 +87,10 @@ uv run python scripts/report_heldout_v9.py summary \
   --output evaluation/results-heldout-v9-reproduction.json
 ```
 
-A committed protocol already exists after the original freeze. Reproduction
-uses that file. The freeze command refuses to replace it; use a new filename
-only when preparing a separately labelled study. Source or dependency changes
-invalidate the original freeze instead of silently selecting new controls.
+The `freeze` subcommand is for preparing a separately labelled new study. It
+requires an unused protocol filename and refuses to replace the committed
+protocol. Source or dependency changes invalidate the original freeze instead
+of silently selecting new controls.
 
 Use `run --resume` only on the same saved batch and protocol. `--max-runs N`
 sets a cumulative launch count, which can save a bounded prefix. Resume checks
