@@ -18,6 +18,8 @@ The actual run depends on exclusive sequential use of the local Ollama server.
 The runner blocks while another application's model is loaded. Preserve this
 boundary, the study freeze and all attempted failures. Publish results only
 from recorded inference and matching local offline SDK evaluation.
+Use the read-only server check in the reproduction guide before launch. The
+server version must match the frozen pin as well as normal model preflight.
 
 ## Next evidence
 

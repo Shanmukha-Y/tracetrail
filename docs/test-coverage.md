@@ -25,7 +25,7 @@ Test-data helpers use ordinary helper names rather than collection-disable flags
   bounds, duplicate event IDs, deterministic pagination,
   real LangChain tool rejection of unknown input.
 - Real LangGraph execution with test-only models: three queries/four calls,
-  exact candidate filters, mutually exclusive branches, extra schema fields,
+  exact candidate filters, mutually exclusive branches,
   tested-scope validation, parse and tool failures, alias resolution, required
   support roles and explicit uncertainty gaps.
 - Caller-versus-returned credential direction and reverse lookup; graph context
@@ -85,13 +85,25 @@ These replacements reduce those named direct regression checks; they do not
 claim equivalent coverage for every removed behavior. No parameter matrix was
 hidden inside a test loop.
 
+## Server-check replacement
+
+One explicit test of the external read-only server check replaces the planning
+graph's `extra_schema_field` variant. Synthetic version drift blocks launch,
+with network forbidden, no runner or model invocation, no output created and
+unchanged protocol bytes. Frozen-source verification uses the real checker.
+The planning graph still tests two conflicting query branches, raw response
+retention and absence of fallback or repair. Graph-level rejection of an extra
+planning field no longer has a direct test; strict unknown tool input remains
+covered. Unused test-only decision variants were removed, not moved or hidden.
+The suite remains 50 collected cases in 16 modules.
+
 ## Before and current inventory
 
 | Test module | Before | Retained |
 | --- | ---: | ---: |
 | `test_agent.py` | 56 | 6 |
 | `test_budget.py` | 0 | 1 |
-| `test_heldout.py` | 0 | 4 |
+| `test_heldout.py` | 0 | 5 |
 | `test_resource_reporting.py` | 0 | 5 |
 | `test_cases_v4.py` | 14 | 0 |
 | `test_cases_v5.py` | 23 | 0 |
@@ -109,7 +121,7 @@ hidden inside a test loop.
 | `test_pilot.py` | 28 | 1 |
 | `test_pilot_summary.py` | 31 | 0 |
 | `test_planning.py` | 58 | 1 |
-| `test_planning_integration.py` | 13 | 4 |
+| `test_planning_integration.py` | 13 | 3 |
 | `test_resources.py` | 31 | 1 |
 | `test_scorer_dispatch.py` | 25 | 1 |
 | `test_store.py` | 64 | 6 |

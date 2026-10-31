@@ -147,3 +147,36 @@ def test_foreign_loaded_model_blocks_before_recording_or_executing_attempt(study
     with pytest.raises(ValueError, match="Foreign model is loaded"):
         heldout.run(study)
     assert heldout.read(study.output)["runs"] == []
+
+
+def test_read_only_server_check_blocks_version_drift_without_an_attempt(study, monkeypatch, capsys):
+    from tracetrail import local_model
+
+    checker = heldout.module(
+        "test_only_server_check", REPOSITORY / "scripts/check_heldout_v9_server.py"
+    )
+    monkeypatch.setattr(checker, "FROZEN", heldout)
+    requests = []
+
+    def metadata(route):
+        requests.append(route)
+        assert route == "/api/version"
+        return {"version": "TEST_ONLY_SERVER_DRIFT"}
+
+    def forbidden(*args, **kwargs):
+        pytest.fail("A read-only server check reached a study attempt or model execution")
+
+    monkeypatch.setattr(local_model, "local_json", metadata)
+    monkeypatch.setattr(heldout, "run", forbidden)
+    monkeypatch.setattr(pilot, "_execute", forbidden)
+    protocol_bytes = study.protocol.read_bytes()
+    assert checker.main(["--protocol", str(study.protocol)]) == 1
+    result = json.loads(capsys.readouterr().out)
+    assert result["status"] == "blocked"
+    assert result["observed_ollama_version"] == "TEST_ONLY_SERVER_DRIFT"
+    assert result["expected_ollama_version"] == heldout.read(study.protocol)["ollama_version"]
+    assert result["inference_started"] is False
+    assert result["server_reserved"] is False
+    assert requests == ["/api/version"]
+    assert not study.output.exists()
+    assert study.protocol.read_bytes() == protocol_bytes

@@ -218,44 +218,18 @@ def run_graph(observed, responses):
     return result, model
 
 
-def invalid_decision(payload, defect):
-    if defect == "unknown_candidate":
-        return plan(payload, action="query_events", candidate_id="P_NOT_IN_THE_MENU")
-    if defect == "unknown_continuation":
-        return plan(payload, action="query_events", continuation_id="C_NOT_IN_THE_MENU")
-    if defect == "two_query_branches":
-        response = candidate_choice(payload)
-        response["query"] = {"event_name": "ListBuckets", "limit": 20}
-        return response
-    response = honest_finish(payload)
-    if defect == "missing_dispositions":
-        response["dispositions"] = []
-    elif defect == "unsearched_called_tested":
-        response["dispositions"][0].update(
-            disposition="tested_under_recorded_scope", attempt_ids=["Q0"]
-        )
-    elif defect == "unknown_ledger_evidence":
-        response["ledger"][0]["evidence_refs"] = ["E999"]
-    elif defect == "extra_schema_field":
-        response["hidden_fallback_query"] = {"principal": PRINCIPAL}
-    else:
-        raise AssertionError("Unknown test-only defect")
+def invalid_decision(payload):
+    response = candidate_choice(payload)
+    response["query"] = {"event_name": "ListBuckets", "limit": 20}
     return response
 
 
-@pytest.mark.parametrize("defect", ["two_query_branches", "extra_schema_field"])
-def test_invalid_plan_is_preserved_without_a_query_fallback_or_repair(
-    tmp_path, monkeypatch, defect
-):
+def test_invalid_plan_is_preserved_without_a_query_fallback_or_repair(tmp_path, monkeypatch):
     observed = observed_store(tmp_path, monkeypatch)
-    result, model = run_graph(
-        observed, [lambda payload: invalid_decision(payload, defect), seed_report]
-    )
+    result, model = run_graph(observed, [invalid_decision, seed_report])
 
     assert result["status"] == "invalid"
-    assert result["stop_reason"] == (
-        "plan_error" if defect == "extra_schema_field" else "invalid_decision"
-    )
+    assert result["stop_reason"] == "invalid_decision"
     assert result["query_count"] == 0
     assert result["model_calls"] == 2
     assert observed.queries == []

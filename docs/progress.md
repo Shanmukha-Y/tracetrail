@@ -17,6 +17,42 @@ it does not close the reliability checks.
 - Preserved earlier synthetic suites and a frozen two-case v4 suite with field support annotations.
 - CI for lint, formatting, and tests without inference or hosted tracing.
 
+## October 31: read-only server-version guard
+
+The local server was idle at the 13:39 UTC check: no loaded models or connected
+Ollama clients were observed, and the earlier study client was absent. The
+server now reports `0.40.13`, while both frozen version fields require
+`0.40.0`. The frozen runner checks this before inference, but after it records
+an attempted cell. A known mismatch would consume an assignment and stop
+resume with an unknown inference history. No assignment was launched.
+
+The new `scripts/check_heldout_v9_server.py` verifies the frozen files and
+installed Python versions without network access, then makes one read-only
+loopback `/api/version` request. A mismatch exits nonzero. The reproduction
+guide uses `&&` to guard the original run command. This check is an addition
+after the freeze, with a separate checker hash. It does not reserve the server,
+verify model identity or resource eligibility, write study output, load or
+unload weights, or replace the original per-cell checks and final audits.
+
+The actual CLI check at 13:44:46 UTC returned `blocked` with exit code 1 for
+`0.40.13` versus `0.40.0`. The saved batch remained byte-for-byte unchanged,
+with zero of eight assignments attempted. Its before/after SHA-256 was
+`af0061fb8432a5d86295da802c530decaa80730bec669c32ce0b0b381f315133`.
+The private `0600` metadata audit is
+`local-results/heldout-v9.server-check-20261031T134446Z.json`, SHA-256
+`7f2058a5761065f2c3fa72f42f26db2cb92d2b4d9d6fa24ecb0f7f28cc73beae`.
+This is environment evidence, not a model result or performance measurement.
+
+All 27 pinned files and the original protocol remain unchanged. One explicit
+synthetic version-mismatch regression replaces the planning graph's
+extra-schema-field variant; the [coverage inventory](test-coverage.md#server-check-replacement)
+names the lost direct check. All 50 collected tests pass. The shared server
+was not changed, and no other project data was read. The frozen study remains
+pending an environment that matches its original version pin. No new study
+inference, trace or offline SDK evaluation is claimed. The existing offline
+SDK replay test still passes with network access blocked; hosted tracing and
+platform UI remain outside the local-only integration.
+
 ## October 21: resource status in artifact reports
 
 The reporting-only extension `scripts/report_heldout_v9.py` fixes a gap in the

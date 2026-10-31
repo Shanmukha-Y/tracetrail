@@ -71,6 +71,8 @@ Use the committed protocol for reproduction:
 
 ```sh
 uv sync --frozen
+uv run python scripts/check_heldout_v9_server.py \
+  --protocol evaluation/protocol-heldout-v9.json && \
 uv run python scripts/heldout_v9.py run \
   --protocol evaluation/protocol-heldout-v9.json \
   --output local-results/heldout-v9-reproduction.json
@@ -91,6 +93,21 @@ The `freeze` subcommand is for preparing a separately labelled new study. It
 requires an unused protocol filename and refuses to replace the committed
 protocol. Source or dependency changes invalidate the original freeze instead
 of silently selecting new controls.
+
+The read-only server check was added after the freeze, outside the frozen
+runner. It verifies the pinned files and installed Python packages, then reads
+only loopback `/api/version`. The `&&` guard prevents launch if that version
+differs from either frozen server-version pin. The original runner checks the
+version before inference, but after recording an attempted assignment. Use the
+external check to avoid consuming an assignment for known environment drift.
+It writes no study output, starts no inference and does not load or unload
+models. Its output includes the protocol and separate checker hashes.
+
+A passing server check is a time-bound metadata observation. It does not
+reserve the server or establish model identity, resource eligibility or
+exclusive hardware use. Check workload completion and normal model unload
+separately; keep the original per-cell preflight and final audits. Do not
+change the frozen version pin or alter a shared server to bypass a mismatch.
 
 Use `run --resume` only on the same saved batch and protocol. `--max-runs N`
 sets a cumulative launch count, which can save a bounded prefix. Resume checks
