@@ -76,6 +76,20 @@ uv run python scripts/check_heldout_v9_server.py \
 uv run python scripts/heldout_v9.py run \
   --protocol evaluation/protocol-heldout-v9.json \
   --output local-results/heldout-v9-reproduction.json
+```
+
+Inspect the saved batch before continuing. Confirm its protocol identity,
+eight attempted assignments, status and retained failures. A nonzero runner
+exit can still contain all eight attempts with invalid reports; do not replace
+those attempts to improve the scores. If the server check blocked launch, any
+existing reproduction file is evidence from an earlier invocation. Evaluating
+that file is a stored-output replay, not a result of the blocked launch.
+
+Run the following commands only for the saved batch you have checked. Offline
+evaluation makes no new inference. Final summary export requires all eight
+attempts and the matching SDK artifact, even when some reports are invalid.
+
+```sh
 uv run tracetrail local-evaluate local-results/heldout-v9-reproduction.json
 uv run python scripts/report_heldout_v9.py verify \
   --protocol evaluation/protocol-heldout-v9.json \
